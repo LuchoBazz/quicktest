@@ -1,7 +1,29 @@
 use std::path::PathBuf;
 
-pub fn run(target_file: PathBuf, slow_file: PathBuf,
-        gen_file: PathBuf, timeout: i32, test_cases: i32) {
+pub fn run(_target_file: PathBuf, _slow_file: PathBuf,
+        _gen_file: PathBuf, _timeout: i32, _test_cases: i32) {
     
+    println!("{}", r#"
+             _
+ _ __   ___ | |_
+| '_ \ / _ \| __|
+| | | | (_) | |_
+|_| |_|\___/ \__|
+
+ _                 _                           _           _ 
+(_)_ __ ___  _ __ | | ___ _ __ ___   ___ _ __ | |_ ___  __| |
+| | '_ ` _ \| '_ \| |/ _ \ '_ ` _ \ / _ \ '_ \| __/ _ \/ _` |
+| | | | | | | |_) | |  __/ | | | | |  __/ | | | ||  __/ (_| |
+|_|_| |_| |_| .__/|_|\___|_| |_| |_|\___|_| |_|\__\___|\__,_|
+            |_|                                              
+
+            _                                                
+ _   _  ___| |_                                              
+| | | |/ _ \ __|                                             
+| |_| |  __/ |_                                              
+ \__, |\___|\__|                                             
+ |___/
+               
+   "#);
     unimplemented!();
 }
