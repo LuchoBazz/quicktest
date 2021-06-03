@@ -13,7 +13,6 @@ fn main() {
     // $ quicktest compare --target-file "main.cpp" --slow-file "slow.cpp" --gen-file "gen.cpp"
 
     let opt = Opt::from_args();
-    println!("{:#?}", opt);
 
     match opt {
         Opt::TLE { target_file, gen_file, test_cases, timeout} => {
