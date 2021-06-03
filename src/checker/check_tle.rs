@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 use std::env;
-use crate::runner::{config::default_gnucpp17, types::Compiler};
+use crate::runner::config::default_gnucpp17;
+use crate::runner::config::default_set_output_gnucpp17;
+use crate::runner::types::Compiler;
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
         _test_cases: i32, _timeout: i32) {
@@ -39,13 +41,11 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         "error.txt"
     );
 
-    let generator_file_cpp = default_gnucpp17(
+    let generator_file_cpp = default_set_output_gnucpp17(
         root,
         gen_file.to_str().unwrap(),
         &"gen.o",
-        &"input_gen.txt",
         &"input.txt",
-        "error_gen.txt"
     );
 
     target_file_cpp.compile();
@@ -54,6 +54,4 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     generator_file_cpp.execute();
     target_file_cpp.execute();
 
-    generator_file_cpp.clean();
-    target_file_cpp.clean();
 }

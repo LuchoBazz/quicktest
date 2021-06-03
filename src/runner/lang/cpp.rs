@@ -2,7 +2,7 @@ use std::io::Write;
 use std::process::Command;
 use std::process::Stdio;
 use std::path::PathBuf;
-use std::fs::{File, remove_file};
+use std::fs::File;
 
 use crate::runner::types::Compiler;
 
@@ -26,18 +26,18 @@ pub struct Cpp {
     /// Example -DLOCAL, -DONLINE_JUDGE, etc
     variables: Vec<&'static str>,
     
-    stdin: PathBuf,
+    stdin: Option<PathBuf>,
 
-    stdout: PathBuf,
+    stdout: Option<PathBuf>,
 
-    stderr: PathBuf,
+    stderr: Option<PathBuf>,
 }
 
 impl Cpp {
     pub fn new(program: &'static str, file_name: PathBuf,
             standard: &'static str, binary_file: PathBuf,
             flags: Vec<&'static str>, variables: Vec<&'static str>,
-            stdin: PathBuf, stdout: PathBuf, stderr: PathBuf) -> Cpp {
+            stdin: Option<PathBuf>, stdout: Option<PathBuf>, stderr: Option<PathBuf>) -> Cpp {
         
         Cpp {
             program: program,
@@ -50,23 +50,6 @@ impl Cpp {
             stdout: stdout,
             stderr: stderr
         }
-    }
-
-    pub fn clean(&self) {
-        match remove_file(self.stdin.to_str().unwrap()) {
-            Ok(o) => o,
-            Err(_) => println!("Error: No puedo eliminar el archivo stdin"),
-        };
-
-        match remove_file(self.stdout.to_str().unwrap()) {
-            Ok(o) => o,
-            Err(_) => println!("Error: No puedo eliminar el archivo stdout"),
-        };
-
-        match remove_file(self.stderr.to_str().unwrap()) {
-            Ok(o) => o,
-            Err(_) => println!("Error: No puedo eliminar el archivo stderr"),
-        };
     }
 }
 
@@ -85,16 +68,37 @@ impl Compiler for Cpp {
     }
 
     fn execute(&self) {
-        let input = File::open(self.stdin.to_str().unwrap()).unwrap();
-        let mut output = File::create(self.stdout.to_str().unwrap()).unwrap();
-        let mut err = File::create(self.stderr.to_str().unwrap()).unwrap();
 
-        let status = Command::new(self.binary_file.to_str().unwrap())
-            .stdin(Stdio::from(input))
-            .output()
-            .expect("Error executing C++");
+        let status = match &self.stdin {
+            Some(file) => {
+                let input = File::open(file.to_str().unwrap()).unwrap();
 
-        output.write_all(&status.stdout).unwrap();
-        err.write_all(&status.stderr).unwrap();
+                Command::new(self.binary_file.to_str().unwrap())
+                    .stdin(Stdio::from(input))
+                    .output()
+                    .expect("Error executing C++")
+            },
+            _ => {
+                Command::new(self.binary_file.to_str().unwrap())
+                    .output()
+                    .expect("Error executing C++")
+            }
+        };
+
+        match &self.stdout {
+            Some(file) => {
+                let mut output = File::create(file.to_str().unwrap()).unwrap();
+                output.write_all(&status.stdout).unwrap();
+            },
+            _ => (),
+        }
+
+        match &self.stderr {
+            Some(file) =>{
+                let mut err = File::create(file.to_str().unwrap()).unwrap();
+                err.write_all(&status.stderr).unwrap();
+            },
+            _ => (),
+        }
     }
 }
