@@ -1,11 +1,10 @@
-mod opt_structure;
-mod runner;
-mod run_tle;
-mod run_compare;
+mod cli;
+mod check_tle;
+mod compare;
 
 use structopt::StructOpt;
 
-use crate::opt_structure::Opt;
+use crate::cli::Opt;
 
 fn main() {
     // TLE
@@ -19,10 +18,10 @@ fn main() {
 
     match opt {
         Opt::TLE { target_file, gen_file, test_cases, timeout} => {
-            run_tle::run(target_file, gen_file, test_cases, timeout);
+            check_tle::run(target_file, gen_file, test_cases, timeout);
         },
         Opt::Compare { target_file, slow_file, gen_file, timeout, test_cases } => {
-            run_compare::run(target_file, slow_file, gen_file, timeout, test_cases);
+            compare::run(target_file, slow_file, gen_file, timeout, test_cases);
         }
     }
 }
