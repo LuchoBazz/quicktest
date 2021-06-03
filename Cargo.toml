@@ -14,3 +14,7 @@ edition = "2018"
 
 [dependencies]
 structopt = "0.3.21"
+
+[[bin]]
+name = "quicktest"
+path = "src/main.rs"
