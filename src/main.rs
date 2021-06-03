@@ -1,6 +1,5 @@
 mod cli;
-mod check_tle;
-mod compare;
+mod checker;
 
 use structopt::StructOpt;
 
@@ -18,10 +17,10 @@ fn main() {
 
     match opt {
         Opt::TLE { target_file, gen_file, test_cases, timeout} => {
-            check_tle::run(target_file, gen_file, test_cases, timeout);
+            checker::check_tle::run(target_file, gen_file, test_cases, timeout);
         },
         Opt::Compare { target_file, slow_file, gen_file, timeout, test_cases } => {
-            compare::run(target_file, slow_file, gen_file, timeout, test_cases);
+            checker::check_correctness::run(target_file, slow_file, gen_file, timeout, test_cases);
         }
     }
 }
