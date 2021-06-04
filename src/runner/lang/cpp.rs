@@ -71,9 +71,7 @@ impl Compiler for Cpp {
             .expect("Compiling C++ error");
     }
 
-    fn execute(&self, timeout: u64) -> Duration {
-
-        println!("\n\n");
+    fn execute(&self, timeout: u32) -> Duration {
 
         let now = Instant::now();
 
@@ -116,10 +114,7 @@ impl Compiler for Cpp {
         };
 
         let thread = std::thread::spawn(move || {
-            for i in 0..timeout {
-                
-                println!("processing... {}", i);
-                
+            for _ in 0..timeout {
                 if let Ok(Some(_)) = child.try_wait() {
                     if let Ok(response) = child.wait_with_output() {
                         match output_file {
@@ -141,7 +136,7 @@ impl Compiler for Cpp {
                     return;
                 }
 
-                std::thread::sleep(std::time::Duration::from_secs(1));
+                std::thread::sleep(std::time::Duration::from_millis(1));
             }
             child.kill().unwrap();
         });
@@ -151,7 +146,6 @@ impl Compiler for Cpp {
         let new_now = Instant::now();
 
         let time = new_now.duration_since(now);
-        println!("{:?}", time);
 
         time 
     }

@@ -1,26 +1,17 @@
 use std::path::PathBuf;
 use std::env;
+use std::time::Duration;
+
+use colored::*;
+use failure::ResultExt;
+use exitfailure::ExitFailure;
+
 use crate::runner::config::default_gnucpp17;
 use crate::runner::config::default_set_output_gnucpp17;
 use crate::runner::types::Compiler;
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
-        test_cases: i32, timeout: i32) {
-    
-    println!("{}", r#"
-             _
- _ __   ___ | |_
-| '_ \ / _ \| __|
-| | | | (_) | |_
-|_| |_|\___/ \__|
-
-  _                 _                           _           _ 
- (_)_ __ ___  _ __ | | ___ _ __ ___   ___ _ __ | |_ ___  __| |
- | | '_ ` _ \| '_ \| |/ _ \ '_ ` _ \ / _ \ '_ \| __/ _ \/ _` |
- | | | | | | | |_) | |  __/ | | | | |  __/ | | | ||  __/ (_| |
- |_|_| |_| |_| .__/|_|\___|_| |_| |_|\___|_| |_|\__\___|\__,_|
-             |_|      
-    "#);
+        test_cases: u32, timeout: u32) -> Result<(), ExitFailure> {
   
     let root = match env::current_dir() {
         Ok(it) => it,
@@ -52,10 +43,37 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
     generator_file_cpp.compile();
 
-    for _test_number in 0..test_cases {
-        let x = generator_file_cpp.execute(timeout as u64);
-        let y = target_file_cpp.execute(timeout as u64);
-        println!("{:?} {:?}", x, y);
+    for test_number in 0..test_cases {
+        let time_gen: Duration = generator_file_cpp.execute(timeout as u32);
+        let time_target: Duration = target_file_cpp.execute(timeout as u32);
+        
+        let mills_gen = time_target.as_millis();
+        let mills_target = time_target.as_millis();
+
+        
+        if time_gen >= Duration::from_millis(timeout as u64) {
+            // TLE Generator
+            println!("{} {}ms", "⛔ Generator Time Limit Exceeded :".to_string().red(), mills_gen);
+            let error = Err(failure::err_msg("very slow generator"));
+            return Ok(error.context("Generator TLE".to_string())?);
+        } 
+
+        if time_target >= Duration::from_millis(timeout as u64) {
+            // TLE Target file
+            // let error = Err(failure::err_msg("root cause failure"));
+            // return Ok(error.context("this is some context".to_string())?);
+            println!("{} {}ms", "⛔ Time Limit Exceeded :".bold().red(), mills_target);
+        } else {
+            println!(
+                "  {} [{}] {} {}ms",
+                test_number.to_string().bold().white(),
+                "OK".bold().green(),
+                "Finished in".bold().green(), mills_target
+            );
+        }
+
+        // remove files
     }
 
+    Ok(())
 }
