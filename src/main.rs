@@ -17,11 +17,9 @@ fn main() -> Result<(), ExitFailure> {
 
     let opt = Opt::from_args();
 
-    println!("{:?}", opt);
-
     let response = match opt {
-        Opt::TLE { target_file, gen_file, test_cases, timeout} => {
-            checker::check_tle::run(target_file, gen_file, test_cases, timeout)
+        Opt::TLE { target_file, gen_file, test_cases, timeout, tle_break} => {
+            checker::check_tle::run(target_file, gen_file, test_cases, timeout, tle_break)
         },
         Opt::Compare { target_file, slow_file, gen_file, timeout, test_cases } => {
             checker::check_correctness::run(target_file, slow_file, gen_file, timeout, test_cases)
