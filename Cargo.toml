@@ -1,12 +1,12 @@
 [package]
 name = "quicktest"
-version = "0.0.1-beta.0"
+version = "0.0.1-beta.1"
 authors = ["Luis Miguel Báez <es.luismiguelbaez@gmail.com>"]
 license = "MIT"
 description = "Command Line Interface (CLI) for stress testing in competitive programming contest"
 readme = "README.md"
 repository = "https://github.com/LuisMBaezCo/quicktest"
-keywords = ["cli", "stress-testing", "testing", "cp-tool"]
+keywords = ["cli", "stress-testing", "testing", "cp-tool", "testing-tool"]
 categories = ["cli"]
 edition = "2018"
 
@@ -14,6 +14,9 @@ edition = "2018"
 
 [dependencies]
 structopt = "0.3.21"
+colored = "2.0.0"
+failure = "0.1.8"
+exitfailure = "0.5.1"
 
 [[bin]]
 name = "quicktest"

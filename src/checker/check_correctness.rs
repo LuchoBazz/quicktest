@@ -1,7 +1,9 @@
 use std::path::PathBuf;
 
+use exitfailure::ExitFailure;
+
 pub fn run(_target_file: PathBuf, _slow_file: PathBuf,
-        _gen_file: PathBuf, _timeout: i32, _test_cases: i32) {
+        _gen_file: PathBuf, _timeout: u32, _test_cases: u32) -> Result<(), ExitFailure>  {
     
     println!("{}", r#"
              _
