@@ -5,7 +5,7 @@ use crate::runner::config::default_set_output_gnucpp17;
 use crate::runner::types::Compiler;
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
-        _test_cases: i32, _timeout: i32) {
+        test_cases: i32, timeout: i32) {
     
     println!("{}", r#"
              _
@@ -49,9 +49,13 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     );
 
     target_file_cpp.compile();
+
     generator_file_cpp.compile();
 
-    generator_file_cpp.execute();
-    target_file_cpp.execute();
+    for _test_number in 0..test_cases {
+        let x = generator_file_cpp.execute(timeout as u64);
+        let y = target_file_cpp.execute(timeout as u64);
+        println!("{:?} {:?}", x, y);
+    }
 
 }

@@ -3,8 +3,12 @@ use std::process::Command;
 use std::process::Stdio;
 use std::path::PathBuf;
 use std::fs::File;
+use std::sync::Arc;
+use std::sync::Mutex;
+use std::time::Duration;
 
 use crate::runner::types::Compiler;
+use std::time::Instant;
 
 pub struct Cpp {
 
@@ -67,38 +71,88 @@ impl Compiler for Cpp {
             .expect("Compiling C++ error");
     }
 
-    fn execute(&self) {
+    fn execute(&self, timeout: u64) -> Duration {
 
-        let status = match &self.stdin {
+        println!("\n\n");
+
+        let now = Instant::now();
+
+        let mut child = match &self.stdin {
             Some(file) => {
                 let input = File::open(file.to_str().unwrap()).unwrap();
 
-                Command::new(self.binary_file.to_str().unwrap())
+                let child = Command::new(self.binary_file.to_str().unwrap())
                     .stdin(Stdio::from(input))
-                    .output()
-                    .expect("Error executing C++")
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped())
+                    .spawn()
+                    .unwrap();
+                child
             },
             _ => {
-                Command::new(self.binary_file.to_str().unwrap())
-                    .output()
-                    .expect("Error executing C++")
+                let child = Command::new(self.binary_file.to_str().unwrap())
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped())
+                    .spawn()
+                    .unwrap();
+                child
             }
         };
 
-        match &self.stdout {
+        let output_file = match &self.stdout {
             Some(file) => {
-                let mut output = File::create(file.to_str().unwrap()).unwrap();
-                output.write_all(&status.stdout).unwrap();
+                let output = File::create(file.to_str().unwrap()).unwrap();
+                Some(Arc::new(Mutex::new(output)))
             },
-            _ => (),
-        }
+            _ => None,
+        };
 
-        match &self.stderr {
+        let err_file = match &self.stderr {
             Some(file) =>{
-                let mut err = File::create(file.to_str().unwrap()).unwrap();
-                err.write_all(&status.stderr).unwrap();
+                let err = File::create(file.to_str().unwrap()).unwrap();
+                Some(Arc::new(Mutex::new(err)))
             },
-            _ => (),
-        }
+            _ => None,
+        };
+
+        let thread = std::thread::spawn(move || {
+            for i in 0..timeout {
+                
+                println!("processing... {}", i);
+                
+                if let Ok(Some(_)) = child.try_wait() {
+                    if let Ok(response) = child.wait_with_output() {
+                        match output_file {
+                            Some(f) => {
+                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
+                                file.write_all(&response.stdout).unwrap();
+                            },
+                            None => (),
+                        }
+
+                        match err_file {
+                            Some(f) => {
+                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
+                                file.write_all(&response.stderr).unwrap();
+                            },
+                            None => (),
+                        }
+                    }
+                    return;
+                }
+
+                std::thread::sleep(std::time::Duration::from_secs(1));
+            }
+            child.kill().unwrap();
+        });
+
+        thread.join().unwrap();
+
+        let new_now = Instant::now();
+
+        let time = new_now.duration_since(now);
+        println!("{:?}", time);
+
+        time 
     }
 }
