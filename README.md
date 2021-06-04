@@ -1,5 +1,9 @@
 # ⛑ Quick Test - Command Line Interface (CLI) for stress testing in competitive programming contest
 
+
+
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![](https://docs.rs/quicktest/badge.svg)](https://docs.rs/crate/quicktest)
+
 ```
 quicktest 0.0.1-beta.0
 CLI for stress testing in competitive programming contest
@@ -38,6 +42,10 @@ OPTIONS:
     -n, --test-cases <test-cases>      Number of test cases [default: 10000]
     -o, --timeout <timeout>            Timeout TLE [default: 2000]
 ```
+
+## Supported Languages
+
+* C++17
 
 # License
 Licensed under either of these:
