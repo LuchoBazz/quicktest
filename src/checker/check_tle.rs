@@ -13,7 +13,7 @@ use crate::runner::config::default_set_output_gnucpp17;
 use crate::runner::types::Compiler;
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
-        test_cases: u32, timeout: u32, tle_break: bool) -> Result<(), ExitFailure> {
+        test_cases: u32, timeout: u32, tle_break: bool, save_cases: bool) -> Result<(), ExitFailure> {
     
     // verify that the target file exists
     match fs::File::open(target_file.to_str().unwrap()) {
@@ -100,7 +100,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             );
         
             // Verify that the folder tle_cases exists, in case it does not exist create it
-            if !Path::new("tle_cases").exists() {
+            if save_cases && !Path::new("tle_cases").exists() {
                 match fs::create_dir("tle_cases") {
                     Err(_) => {
                         let error = Err(failure::err_msg("Could not create folder tle_cases"));
@@ -111,13 +111,15 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             }
 
             // Save the input of the test case that gave status tle
-            let filename = format!("tle_cases/testcase{}.txt", tle_count);
+            if save_cases {
+                let filename = format!("tle_cases/testcase{}.txt", tle_count);
 
-            let mut file = fs::File::create(filename)
-                .expect("Error creating file tle_cases/testcase(n).txt");
+                let mut file = fs::File::create(filename)
+                    .expect("Error creating file tle_cases/testcase(n).txt");
 
-            file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
-
+                file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
+            }
+            
             // check if the tle_breck flag is high
             if tle_break {
                 // remove input, output and error files
