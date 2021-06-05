@@ -5,7 +5,7 @@
 [![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![](https://docs.rs/quicktest/badge.svg)](https://docs.rs/crate/quicktest)
 
 ```
-quicktest 0.0.1-beta.0
+quicktest 0.0.1-beta.1
 CLI for stress testing in competitive programming contest
 
 USAGE:
