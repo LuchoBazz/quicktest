@@ -1,0 +1,10 @@
+jobs:
+  build:
+    docker:
+      - image: cimg/rust:1.52.1
+    
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run: cargo test
