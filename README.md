@@ -2,7 +2,7 @@
 
 
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![](https://docs.rs/quicktest/badge.svg)](https://docs.rs/crate/quicktest)
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![](https://docs.rs/quicktest/badge.svg)](https://docs.rs/crate/quicktest)
 
 ```
 quicktest 0.0.1-beta.1
