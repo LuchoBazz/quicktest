@@ -48,7 +48,7 @@ OPTIONS:
         #[structopt(short = "n", long = "test-cases", default_value = "10000")]
         test_cases: u32,
 
-        /// TLE Break
+        /// Break if Time Limit Exceeded (TLE) occurs
         #[structopt(short = "b", long = "tle-break")]
         tle_break: bool,
 
@@ -64,7 +64,7 @@ OPTIONS:
         target_file: PathBuf,
 
         /// Slow File
-        #[structopt(short = "s", long = "slow-file", parse(from_os_str))]
+        #[structopt(short = "l", long = "slow-file", parse(from_os_str))]
         slow_file: PathBuf,
 
         /// Generator File
@@ -78,5 +78,13 @@ OPTIONS:
         /// Number of test cases
         #[structopt(short = "n", long = "test-cases", default_value = "10000")]
         test_cases: u32,
+
+        /// Break if Wrong Answer (WA) occurs
+        #[structopt(short = "b", long = "wa-break")]
+        wa_break: bool,
+
+        /// Save test cases
+        #[structopt(short = "s", long = "save-cases")]
+        save_cases: bool,
     },
 }
