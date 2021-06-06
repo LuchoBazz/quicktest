@@ -1,3 +1,9 @@
+/*
+ *  Quick Test: CLI for stress testing in competitive programming
+ *  Copyright (C) 2021  Luis Miguel Báez
+ *  License: MIT (See the LICENSE file in the repository root directory)
+ */
+
 // reference: https://mattgathu.github.io/2017/10/01/testing-rust-cli-apps.html
 
 static WITHOUT_ARGS_OUTPUT: &'static str = r#"
@@ -6,6 +12,7 @@ Check that <target-file> does not have the TLE status using random test cases ge
 
 USAGE:
     $ quicktest tle --target-file "code/main.cpp" --gen-file "code/gen.cpp" --timeout=1000 --test-cases=100
+
 FLAGS:
     -h, --help          Prints help information
     -s, --save-cases    Save test cases

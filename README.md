@@ -1,8 +1,29 @@
-# ⛑ Quick Test - Command Line Interface (CLI) for stress testing in competitive programming contest
+<h1 align="center">⛑ Quick Test CLI</h1>
 
+<p align="center">Command Line Interface (CLI) for stress testing in competitive programming</p>
 
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/crates/d/quicktest)](https://crates.io/crates/quicktest)
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![](https://docs.rs/quicktest/badge.svg)](https://docs.rs/crate/quicktest)
+### Installation
+
+If you already have Rust on your system:
+
+```sh
+cargo install --version 0.0.1-beta.1 quicktest
+```
+
+If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
+
+Shell (Linux, Mac):
+```sh
+curl https://sh.rustup.rs -sSf | sh  && cargo install --version 0.0.1-beta.1 quicktest
+```
+
+### Usage
+
+```sh
+quicktest --help
+```
 
 ```
 quicktest 0.0.1-beta.1
@@ -23,6 +44,10 @@ SUBCOMMANDS:
 ```
 
 ### TLE Subcommand
+
+```sh
+quicktest tle --help
+```
 
 ```
 quicktest tle
@@ -45,7 +70,9 @@ OPTIONS:
 
 ## Supported Languages
 
-* C++17
+| Language           |       Version          |
+|--------------------|------------------------|
+| C++                | -std=c++17             |
 
 # License
 Licensed under either of these:
