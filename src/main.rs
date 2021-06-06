@@ -20,11 +20,26 @@ fn main() -> Result<(), ExitFailure> {
     let response = match opt {
         Opt::TLE { target_file, gen_file, test_cases,
             timeout, tle_break, save_cases} => {
-            checker::check_tle::run(target_file, gen_file, test_cases, timeout, tle_break, save_cases)
+            checker::check_tle::run(
+                target_file,
+                gen_file,
+                test_cases,
+                timeout,
+                tle_break,
+                save_cases
+            )
         },
-        Opt::Compare { target_file, slow_file, gen_file,
+        Opt::Compare { target_file, correct_file, gen_file,
             timeout, test_cases, wa_break, save_cases} => {
-            checker::check_correctness::run(target_file, slow_file, gen_file, timeout, test_cases, wa_break, save_cases)
+            checker::check_correctness::run(
+                target_file,
+                correct_file,
+                gen_file,
+                timeout,
+                test_cases,
+                wa_break,
+                save_cases
+            )
         }
     };
 

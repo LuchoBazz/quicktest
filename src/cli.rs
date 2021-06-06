@@ -63,9 +63,9 @@ OPTIONS:
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
         target_file: PathBuf,
 
-        /// Slow File
-        #[structopt(short = "l", long = "slow-file", parse(from_os_str))]
-        slow_file: PathBuf,
+        /// Correct File
+        #[structopt(short = "c", long = "correct-file", parse(from_os_str))]
+        correct_file: PathBuf,
 
         /// Generator File
         #[structopt(short = "g", long = "gen-file", parse(from_os_str))]

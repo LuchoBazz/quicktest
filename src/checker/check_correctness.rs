@@ -20,7 +20,7 @@ use failure::ResultExt;
 use exitfailure::ExitFailure;
 use colored::*;
 
-pub fn run(target_file: PathBuf, slow_file: PathBuf,
+pub fn run(target_file: PathBuf, correct_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
         save_cases: bool) -> Result<(), ExitFailure>  {
     
@@ -34,12 +34,12 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
         _ => (),
     };
 
-    // verify that the slow file exists
-    match fs::File::open(slow_file.to_str().unwrap()) {
+    // verify that the correct file exists
+    match fs::File::open(correct_file.to_str().unwrap()) {
         Err(_) => {
             let error: Result<(), failure::Error> =
                 Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
-            return Ok(error.context("<slow-file> Not found".to_string())?);
+            return Ok(error.context("<correct-file> Not found".to_string())?);
         },
         _ => (),
     };
@@ -65,10 +65,10 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
         _ => unreachable!(),
     };
 
-    let slow_file_cpp: Cpp = default_gnucpp17(
+    let correct_file_cpp: Cpp = default_gnucpp17(
         root,
-        slow_file.to_str().unwrap(),
-        &"slow.o",
+        correct_file.to_str().unwrap(),
+        &"correct.o",
         &"quicktest_input.txt",
         &"expected_testcase.txt",
         "quicktest_error.txt"
@@ -91,7 +91,7 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
         &"quicktest_input.txt",
     );
 
-    slow_file_cpp.compile();
+    correct_file_cpp.compile();
 
     target_file_cpp.compile();
 
@@ -101,7 +101,7 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
 
     for test_number in 1..=test_cases {
         let time_gen: Duration = generator_file_cpp.execute(timeout as u32);
-        let time_slow: Duration = slow_file_cpp.execute(timeout as u32);
+        let time_correct: Duration = correct_file_cpp.execute(timeout as u32);
         let time_target: Duration = target_file_cpp.execute(timeout as u32);
 
         let mills_target: u128 = time_target.as_millis();
@@ -121,19 +121,19 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
             return Ok(error.context("Generator TLE".to_string())?);
         }
 
-        if time_slow >= Duration::from_millis(timeout as u64) {
-            // TLE Slow file
+        if time_correct >= Duration::from_millis(timeout as u64) {
+            // TLE Correct file
 
             println!(
                 "  {} [{}] {} {}ms",
                 test_number,
                 "TLE".bold().red(),
-                "Slow File give Time Limit Exceeded :".bold().red(),
+                "Correct File give Time Limit Exceeded :".bold().red(),
                 timeout
             );
 
-            let error: Result<(), failure::Error> = Err(failure::err_msg("Slow file give tle"));
-            return Ok(error.context("Slow File TLE".to_string())?);
+            let error: Result<(), failure::Error> = Err(failure::err_msg("Correct file very slow"));
+            return Ok(error.context("Correct File TLE".to_string())?);
         }
 
         if time_target >= Duration::from_millis(timeout as u64) {
@@ -177,7 +177,7 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
                 fs::remove_file(&"expected_testcase.txt")?;
                 fs::remove_file(&"main.o")?;
                 fs::remove_file(&"gen.o")?;
-                fs::remove_file(&"slow.o")?;
+                fs::remove_file(&"correct.o")?;
                 return Ok(());
             }
         } else {
@@ -200,7 +200,7 @@ pub fn run(target_file: PathBuf, slow_file: PathBuf,
 
     fs::remove_file(&"main.o")?;
     fs::remove_file(&"gen.o")?;
-    fs::remove_file(&"slow.o")?;
+    fs::remove_file(&"correct.o")?;
 
     Ok(())
 }
