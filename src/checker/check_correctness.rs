@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021  Luis Miguel Báez
+ *  Copyright (C) 2021 - Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -16,6 +16,17 @@ use crate::runner::config::default_gnucpp17;
 use crate::runner::config::default_set_output_gnucpp17;
 use crate::runner::lang::cpp::Cpp;
 use crate::runner::types::Compiler;
+use crate::util::file::file_exists;
+
+// Constants
+use crate::constants::CACHE_FOLDER;
+use crate::constants::TARGET_BINARY_FILE;
+use crate::constants::CORRECT_BINARY_FILE;
+use crate::constants::GEN_BINARY_FILE;
+use crate::constants::QTEST_INPUT_FILE;
+use crate::constants::QTEST_OUTPUT_FILE;
+use crate::constants::QTEST_ERROR_FILE;
+use crate::constants::QTEST_EXPECTED_FILE;
 
 use failure::ResultExt;
 use exitfailure::ExitFailure;
@@ -24,72 +35,84 @@ use colored::*;
 pub fn run(target_file: PathBuf, correct_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
         save_cases: bool) -> Result<(), ExitFailure>  {
+
+    // Check if the CACHE_FOLDER folder is already created
+    match fs::read_dir(CACHE_FOLDER) {
+        Ok(_) => (),
+        Err(_) => match fs::create_dir(CACHE_FOLDER) {
+            Ok(_) => (),
+            Err(_) => {
+                // If not, create the folder
+                let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't create internal cache files")));
+                return Ok(error.context("Error creating internal cache files".to_string())?);
+            }
+        },
+    }
     
     // verify that the target file exists
-    match fs::File::open(target_file.to_str().unwrap()) {
+    let file_name = target_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<target-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // verify that the correct file exists
-    match fs::File::open(correct_file.to_str().unwrap()) {
+    let file_name = correct_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<correct-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // verify that the generator file exists
-    match fs::File::open(gen_file.to_str().unwrap()) {
+    let file_name = gen_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", gen_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<gen-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // get root path
     let root: PathBuf = match env::current_dir() {
-        Ok(it) => it,
+        Ok(path) => path,
         _ => unreachable!(),
     };
 
     let root: &str = match root.to_str() {
-        Some(s) => s ,
+        Some(root_path) => root_path,
         _ => unreachable!(),
     };
 
     let correct_file_cpp: Cpp = default_gnucpp17(
         root,
         correct_file.to_str().unwrap(),
-        &"correct.o",
-        &"quicktest_input.txt",
-        &"expected_testcase.txt",
-        "quicktest_error.txt"
+        &CORRECT_BINARY_FILE,
+        &QTEST_INPUT_FILE,
+        &QTEST_EXPECTED_FILE,
+        QTEST_ERROR_FILE
     );
 
     let target_file_cpp: Cpp = default_gnucpp17(
         root,
         target_file.to_str().unwrap(),
-        &"main.o",
-        &"quicktest_input.txt",
-        &"quicktest_output.txt",
-        "quicktest_error.txt"
+        &TARGET_BINARY_FILE,
+        &QTEST_INPUT_FILE,
+        &QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE
     );
-
 
     let generator_file_cpp: Cpp = default_set_output_gnucpp17(
         root,
         gen_file.to_str().unwrap(),
-        &"gen.o",
-        &"quicktest_input.txt",
+        &GEN_BINARY_FILE,
+        &QTEST_INPUT_FILE,
     );
 
     correct_file_cpp.compile();
@@ -167,26 +190,28 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                 let filename: String = format!("test_cases/testcase_tle_{}.txt", tle_count);
                 let mut file = fs::File::create(filename)
                     .expect("Error creating file test_cases/testcase(i).txt");
-                file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
+                file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
             }
             
             // check if the wa_break flag is high
             if wa_break {
                 // remove input, output and error files
-                fs::remove_file(&"quicktest_input.txt")?;
-                fs::remove_file(&"quicktest_output.txt")?;
-                fs::remove_file(&"quicktest_error.txt")?;
-                fs::remove_file(&"expected_testcase.txt")?;
-                fs::remove_file(&"main.o")?;
-                fs::remove_file(&"gen.o")?;
-                fs::remove_file(&"correct.o")?;
+                fs::remove_file(&QTEST_INPUT_FILE)?;
+                fs::remove_file(&QTEST_OUTPUT_FILE)?;
+                fs::remove_file(&QTEST_ERROR_FILE)?;
+                fs::remove_file(&QTEST_EXPECTED_FILE)?;
+                fs::remove_file(&TARGET_BINARY_FILE)?;
+                fs::remove_file(&GEN_BINARY_FILE)?;
+                fs::remove_file(&CORRECT_BINARY_FILE)?;
                 return Ok(());
             }
         } else {
             // The time is in the allowed range
-
+            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
+            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
+            
             // Check WA Status
-            if compare_file(&format!("{}/quicktest_output.txt", root), &format!("{}/expected_testcase.txt", root), true) {
+            if compare_file(&file_out, &file_expected, true) {
                 // is OK
                 println!(
                     "  {} [{}] {} {}ms",
@@ -220,10 +245,19 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                     let filename: String = format!("test_cases/testcase_wa_{}.txt", wa_count);
                     let mut file = fs::File::create(filename)
                         .expect("Error creating file test_cases/testcase(i).txt");
-                    file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
+                    file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
                 }
 
                 if wa_break {
+                    // remove input, output and error files
+                    fs::remove_file(&QTEST_INPUT_FILE)?;
+                    fs::remove_file(&QTEST_OUTPUT_FILE)?;
+                    fs::remove_file(&QTEST_ERROR_FILE)?;
+                    fs::remove_file(&QTEST_EXPECTED_FILE)?;
+                    fs::remove_file(&TARGET_BINARY_FILE)?;
+                    fs::remove_file(&GEN_BINARY_FILE)?;
+                    fs::remove_file(&CORRECT_BINARY_FILE)?;
+
                     let error = Err(failure::err_msg(format!("Wrong answer on test {}", test_number)));
                     return Ok(error.context("WA Status".to_string())?);
                 }
@@ -231,16 +265,16 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         }
 
         // remove input, output and error files
-        fs::remove_file(&"quicktest_input.txt")?;
-        fs::remove_file(&"quicktest_output.txt")?;
-        fs::remove_file(&"quicktest_error.txt")?;
-        fs::remove_file(&"expected_testcase.txt")?;
+        fs::remove_file(&QTEST_INPUT_FILE)?;
+        fs::remove_file(&QTEST_OUTPUT_FILE)?;
+        fs::remove_file(&QTEST_ERROR_FILE)?;
+        fs::remove_file(&QTEST_EXPECTED_FILE)?;
         
     }
 
-    fs::remove_file(&"main.o")?;
-    fs::remove_file(&"gen.o")?;
-    fs::remove_file(&"correct.o")?;
+    fs::remove_file(&TARGET_BINARY_FILE)?;
+    fs::remove_file(&GEN_BINARY_FILE)?;
+    fs::remove_file(&CORRECT_BINARY_FILE)?;
 
     Ok(())
 }
