@@ -29,7 +29,7 @@ fn main() -> Result<(), ExitFailure> {
                 save_cases
             )
         },
-        Opt::Compare { target_file, correct_file, gen_file,
+        Opt::Cmp { target_file, correct_file, gen_file,
             timeout, test_cases, wa_break, save_cases} => {
             checker::check_correctness::run(
                 target_file,
