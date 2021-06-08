@@ -1,3 +1,9 @@
+/*
+ *  Quick Test: CLI for stress testing in competitive programming
+ *  Copyright (C) 2021  Luis Miguel Báez
+ *  License: MIT (See the LICENSE file in the repository root directory)
+ */
+
 use std::io::Write;
 use std::process::Command;
 use std::process::Stdio;
@@ -59,7 +65,7 @@ impl Cpp {
 
 impl Compiler for Cpp {
 
-    fn compile(&self) {
+    fn compile(&self) -> () {
         Command::new(self.program)
             .arg(self.standard)
             .args(&self.flags)
@@ -73,9 +79,9 @@ impl Compiler for Cpp {
 
     fn execute(&self, timeout: u32) -> Duration {
 
-        let now = Instant::now();
+        let now: Instant = Instant::now();
 
-        let mut child = match &self.stdin {
+        let mut child: std::process::Child = match &self.stdin {
             Some(file) => {
                 let input = File::open(file.to_str().unwrap()).unwrap();
 
@@ -97,7 +103,7 @@ impl Compiler for Cpp {
             }
         };
 
-        let output_file = match &self.stdout {
+        let output_file: Option<Arc<Mutex<File>>> = match &self.stdout {
             Some(file) => {
                 let output = File::create(file.to_str().unwrap()).unwrap();
                 Some(Arc::new(Mutex::new(output)))
@@ -105,7 +111,7 @@ impl Compiler for Cpp {
             _ => None,
         };
 
-        let err_file = match &self.stderr {
+        let err_file: Option<Arc<Mutex<File>>> = match &self.stderr {
             Some(file) =>{
                 let err = File::create(file.to_str().unwrap()).unwrap();
                 Some(Arc::new(Mutex::new(err)))
@@ -113,7 +119,7 @@ impl Compiler for Cpp {
             _ => None,
         };
 
-        let thread = std::thread::spawn(move || {
+        let thread: std::thread::JoinHandle<()> = std::thread::spawn(move || {
             for _ in 0..timeout {
                 if let Ok(Some(_)) = child.try_wait() {
                     if let Ok(response) = child.wait_with_output() {
@@ -135,7 +141,6 @@ impl Compiler for Cpp {
                     }
                     return;
                 }
-
                 std::thread::sleep(std::time::Duration::from_millis(1));
             }
             child.kill().unwrap();
@@ -143,9 +148,9 @@ impl Compiler for Cpp {
 
         thread.join().unwrap();
 
-        let new_now = Instant::now();
+        let new_now: Instant = Instant::now();
 
-        let time = new_now.duration_since(now);
+        let time: Duration = new_now.duration_since(now);
 
         time 
     }

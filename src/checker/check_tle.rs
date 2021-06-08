@@ -1,3 +1,9 @@
+/*
+ *  Quick Test: CLI for stress testing in competitive programming
+ *  Copyright (C) 2021  Luis Miguel Báez
+ *  License: MIT (See the LICENSE file in the repository root directory)
+ */
+
 use std::io::Write;
 use std::path::{PathBuf, Path};
 use std::time::Duration;
