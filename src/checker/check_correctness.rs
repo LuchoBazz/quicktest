@@ -317,25 +317,64 @@ pub fn compare_file(target_file: &String, correct_file: &String, ignore_space: b
 
     if ignore_space {
         // Remove spaces at the beginning and end of the file
-        // for target_content_vec
 
-        // TODO: check when the whole vector has blanks, because a Run Time Error is generated
+        // for target_content_vec
         while !target_content_vec.is_empty()
-            && *target_content_vec.back().unwrap()==' '||*target_content_vec.back().unwrap()=='\n' {
+            && (*target_content_vec.back().unwrap()==' '||*target_content_vec.back().unwrap()=='\n') {
             target_content_vec.pop_back();
         }
         while !target_content_vec.is_empty()
-            && *target_content_vec.front().unwrap()==' '||*target_content_vec.front().unwrap()=='\n' {
+            && (*target_content_vec.front().unwrap()==' '||*target_content_vec.front().unwrap()=='\n') {
             target_content_vec.pop_front();
         }
+
         // for correct_content_vec
         while !correct_content_vec.is_empty()
-            && *correct_content_vec.back().unwrap()==' '||*correct_content_vec.back().unwrap()=='\n' {
+            && (*correct_content_vec.back().unwrap()==' '||*correct_content_vec.back().unwrap()=='\n') {
             correct_content_vec.pop_back();
         }
         while !correct_content_vec.is_empty()
-            && *correct_content_vec.front().unwrap()==' '||*correct_content_vec.front().unwrap()=='\n' {
+            && (*correct_content_vec.front().unwrap()==' '||*correct_content_vec.front().unwrap()=='\n') {
             correct_content_vec.pop_front();
+        }
+
+        // replace "  " to " ", " \n" to "\n", "\n " to "\n" and "\n\n" to "\n"
+        let mut target_tmp = target_content_vec.clone();
+        let mut correct_tmp = correct_content_vec.clone();
+        target_content_vec.clear();
+        correct_content_vec.clear();
+
+        if !target_tmp.is_empty() {
+            target_content_vec.push_back(target_tmp.pop_front().unwrap());
+        }
+        while !target_tmp.is_empty() {
+            match (target_content_vec.back(), target_tmp.pop_front()) {
+                (Some(' '), Some('\n')) => {
+                    target_content_vec.pop_back();
+                    target_content_vec.push_back('\n');
+                },
+                (Some(' '), Some(' ')) => continue,
+                (Some('\n'), Some(' ')) => continue,
+                (Some('\n'), Some('\n')) => continue,
+                (Some(_), Some(ch)) => target_content_vec.push_back(ch),
+                _ => continue,
+            }
+        }
+        if !correct_tmp.is_empty() {
+            correct_content_vec.push_back(correct_tmp.pop_front().unwrap());
+        }
+        while !correct_tmp.is_empty() {
+            match (correct_content_vec.back(), correct_tmp.pop_front()) {
+                (Some(' '), Some('\n')) => {
+                    correct_content_vec.pop_back();
+                    correct_content_vec.push_back('\n');
+                },
+                (Some(' '), Some(' ')) => continue,
+                (Some('\n'), Some(' ')) => continue,
+                (Some('\n'), Some('\n')) => continue,
+                (Some(_), Some(ch)) => correct_content_vec.push_back(ch),
+                _ => continue,
+            }
         }
     }
 
