@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021  Luis Miguel Báez
+ *  Copyright (C) 2021 - Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -9,6 +9,8 @@ use structopt::StructOpt;
 pub mod cli;
 pub mod checker;
 pub mod runner;
+pub mod util;
+pub mod constants;
 
 use crate::cli::Opt;
 
