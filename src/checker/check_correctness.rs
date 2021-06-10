@@ -265,9 +265,19 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                     fs::remove_file(&QTEST_OUTPUT_FILE)?;
                     fs::remove_file(&QTEST_ERROR_FILE)?;
                     fs::remove_file(&QTEST_EXPECTED_FILE)?;
-                    fs::remove_file(&TARGET_BINARY_FILE)?;
-                    fs::remove_file(&GEN_BINARY_FILE)?;
-                    fs::remove_file(&CORRECT_BINARY_FILE)?;
+                    
+                    match file_exists(&TARGET_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+                        _ => (),
+                    }
+                    match file_exists(&GEN_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+                        _ => (),
+                    }
+                    match file_exists(&CORRECT_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&CORRECT_BINARY_FILE)?,
+                        _ => (),
+                    };
 
                     let error = Err(failure::err_msg(format!("Wrong answer on test {}", test_number)));
                     return Ok(error.context("WA Status".to_string())?);
@@ -283,9 +293,18 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         
     }
 
-    fs::remove_file(&TARGET_BINARY_FILE)?;
-    fs::remove_file(&GEN_BINARY_FILE)?;
-    fs::remove_file(&CORRECT_BINARY_FILE)?;
+    match file_exists(&TARGET_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+        _ => (),
+    }
+    match file_exists(&GEN_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+        _ => (),
+    }
+    match file_exists(&CORRECT_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&CORRECT_BINARY_FILE)?,
+        _ => (),
+    }
 
     Ok(())
 }

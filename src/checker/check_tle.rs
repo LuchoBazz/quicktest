@@ -15,6 +15,7 @@ use failure::ResultExt;
 use exitfailure::ExitFailure;
 
 use crate::runner::types::Language;
+use crate::util::file::file_exists;
 use crate::util::lang::{
     get_language_by_ext_default,
     get_language_by_ext_set_output
@@ -161,8 +162,15 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                 fs::remove_file(&QTEST_INPUT_FILE)?;
                 fs::remove_file(&QTEST_OUTPUT_FILE)?;
                 fs::remove_file(&QTEST_ERROR_FILE)?;
-                fs::remove_file(&TARGET_BINARY_FILE)?;
-                fs::remove_file(&GEN_BINARY_FILE)?;
+
+                match file_exists(&TARGET_BINARY_FILE) {
+                    Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+                    _ => (),
+                }
+                match file_exists(&GEN_BINARY_FILE) {
+                    Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+                    _ => (),
+                }
                return Ok(());
             }
         } else {
@@ -180,8 +188,15 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         fs::remove_file(&QTEST_ERROR_FILE)?;
     }
 
-    fs::remove_file(&TARGET_BINARY_FILE)?;
-    fs::remove_file(&GEN_BINARY_FILE)?;
+    match file_exists(&TARGET_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+        _ => (),
+    }
+    
+    match file_exists(&GEN_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+        _ => (),
+    }
 
     Ok(())
 }
