@@ -12,10 +12,11 @@ use std::env;
 use std::time::Duration;
 use std::io::Write;
 
-use crate::runner::config::default_gnucpp17;
-use crate::runner::config::default_set_output_gnucpp17;
+use crate::runner::lang::cpp::default::{
+    gnucpp17_default, gnucpp17_set_output
+};
 use crate::runner::lang::cpp::Cpp;
-use crate::runner::types::Compiler;
+use crate::runner::types::Language;
 use crate::util::file::file_exists;
 
 // Constants
@@ -90,36 +91,36 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         _ => unreachable!(),
     };
 
-    let correct_file_cpp: Cpp = default_gnucpp17(
+    let correct_file_cpp: Cpp = gnucpp17_default(
         root,
         correct_file.to_str().unwrap(),
         &CORRECT_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_EXPECTED_FILE,
-        QTEST_ERROR_FILE
+        &QTEST_ERROR_FILE
     );
 
-    let target_file_cpp: Cpp = default_gnucpp17(
+    let target_file_cpp: Cpp = gnucpp17_default(
         root,
         target_file.to_str().unwrap(),
         &TARGET_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE
+        &QTEST_ERROR_FILE
     );
 
-    let generator_file_cpp: Cpp = default_set_output_gnucpp17(
+    let generator_file_cpp: Cpp = gnucpp17_set_output(
         root,
         gen_file.to_str().unwrap(),
         &GEN_BINARY_FILE,
         &QTEST_INPUT_FILE,
     );
 
-    correct_file_cpp.compile();
+    correct_file_cpp.build();
 
-    target_file_cpp.compile();
+    target_file_cpp.build();
 
-    generator_file_cpp.compile();
+    generator_file_cpp.build();
 
     // TODO: if wa is true, remove testcase_tle_*.txt
 

@@ -14,9 +14,11 @@ use colored::*;
 use failure::ResultExt;
 use exitfailure::ExitFailure;
 
-use crate::runner::config::default_gnucpp17;
-use crate::runner::config::default_set_output_gnucpp17;
-use crate::runner::types::Compiler;
+use crate::runner::lang::cpp::default::{
+    gnucpp17_set_output
+};
+use crate::runner::types::Language;
+use crate::util::lang::get_language_by_ext_default;
 
 // Constants
 use crate::constants::CACHE_FOLDER;
@@ -70,25 +72,27 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         _ => unreachable!(),
     };
 
-    let target_file_cpp = default_gnucpp17(
+    let any: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
-        target_file.to_str().unwrap(),
+        target_file,
         &TARGET_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_OUTPUT_FILE,
         QTEST_ERROR_FILE
     );
+    let any = any.unwrap();
+    let target_file_cpp = any.as_ref();
 
-    let generator_file_cpp = default_set_output_gnucpp17(
+    let generator_file_cpp = gnucpp17_set_output(
         root,
         gen_file.to_str().unwrap(),
         &GEN_BINARY_FILE,
         &QTEST_INPUT_FILE,
     );
 
-    target_file_cpp.compile();
+    target_file_cpp.build();
 
-    generator_file_cpp.compile();
+    generator_file_cpp.build();
 
     let mut tle_count: u32 = 0;
 
@@ -177,3 +181,5 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
     Ok(())
 }
+
+
