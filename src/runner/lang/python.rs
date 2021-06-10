@@ -151,7 +151,7 @@ pub mod default {
 
     use super::Python;
     
-    pub fn python3(root: &str, file_name: &str,
+    pub fn python3_default(root: &str, file_name: &str,
             input_file: &str, output_file: &str,
             error_file: &str) -> Python {
     

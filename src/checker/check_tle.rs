@@ -14,11 +14,11 @@ use colored::*;
 use failure::ResultExt;
 use exitfailure::ExitFailure;
 
-use crate::runner::lang::cpp::default::{
-    gnucpp17_set_output
-};
 use crate::runner::types::Language;
-use crate::util::lang::get_language_by_ext_default;
+use crate::util::lang::{
+    get_language_by_ext_default,
+    get_language_by_ext_set_output
+};
 
 // Constants
 use crate::constants::CACHE_FOLDER;
@@ -72,33 +72,37 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         _ => unreachable!(),
     };
 
-    let any: Option<Box<dyn Language>> = get_language_by_ext_default(
+    // Get the language depending on the extension of the target_file
+    let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
         target_file,
         &TARGET_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE
+        &QTEST_ERROR_FILE
     );
-    let any = any.unwrap();
-    let target_file_cpp = any.as_ref();
+    let any_target: Box<dyn Language> = any_target.unwrap();
+    let target_file_lang: &dyn Language = any_target.as_ref();
 
-    let generator_file_cpp = gnucpp17_set_output(
+    // Get the language depending on the extension of the gen_file
+    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
         root,
-        gen_file.to_str().unwrap(),
+        gen_file,
         &GEN_BINARY_FILE,
         &QTEST_INPUT_FILE,
     );
+    let any_gen: Box<dyn Language> = any_gen.unwrap();
+    let generator_file_lang: &dyn Language = any_gen.as_ref();
 
-    target_file_cpp.build();
+    target_file_lang.build();
 
-    generator_file_cpp.build();
+    generator_file_lang.build();
 
     let mut tle_count: u32 = 0;
 
     for test_number in 1..=test_cases {
-        let time_gen: Duration = generator_file_cpp.execute(timeout as u32);
-        let time_target: Duration = target_file_cpp.execute(timeout as u32);
+        let time_gen: Duration = generator_file_lang.execute(timeout as u32);
+        let time_target: Duration = target_file_lang.execute(timeout as u32);
         
         let mills_target = time_target.as_millis();
         
