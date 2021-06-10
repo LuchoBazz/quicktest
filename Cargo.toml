@@ -1,6 +1,6 @@
 [package]
 name = "quicktest"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Luis Miguel Báez <es.luismiguelbaez@gmail.com>"]
 license = "MIT"
 description = "Command Line Interface (CLI) for stress testing in competitive programming contest"
@@ -17,6 +17,7 @@ structopt = "0.3.21"
 colored = "2.0.0"
 failure = "0.1.8"
 exitfailure = "0.5.1"
+glob = "0.3.0"
 
 [[bin]]
 name = "quicktest"

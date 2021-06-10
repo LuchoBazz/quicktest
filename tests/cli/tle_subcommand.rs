@@ -7,7 +7,7 @@
 // reference: https://mattgathu.github.io/2017/10/01/testing-rust-cli-apps.html
 
 static WITHOUT_ARGS_OUTPUT: &'static str =
-r#"quicktest-tle 0.2.0
+r#"quicktest-tle 0.2.1
 Check TLE
 
 USAGE:

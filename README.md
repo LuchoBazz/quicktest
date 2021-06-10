@@ -9,14 +9,14 @@
 If you already have Rust on your system:
 
 ```sh
-cargo install --version quicktest
+cargo install quicktest
 ```
 
 If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
 
 Shell (Linux, Mac):
 ```sh
-curl https://sh.rustup.rs -sSf | sh  && cargo install --version quicktest
+curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
 ```
 
 ### Usage
