@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021  Luis Miguel Báez
+ *  Copyright (C) 2021 - Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -12,10 +12,22 @@ use std::env;
 use std::time::Duration;
 use std::io::Write;
 
-use crate::runner::config::default_gnucpp17;
-use crate::runner::config::default_set_output_gnucpp17;
-use crate::runner::lang::cpp::Cpp;
-use crate::runner::types::Compiler;
+use crate::runner::types::Language;
+use crate::util::file::file_exists;
+
+// Constants
+use crate::constants::CACHE_FOLDER;
+use crate::constants::TARGET_BINARY_FILE;
+use crate::constants::CORRECT_BINARY_FILE;
+use crate::constants::GEN_BINARY_FILE;
+use crate::constants::QTEST_INPUT_FILE;
+use crate::constants::QTEST_OUTPUT_FILE;
+use crate::constants::QTEST_ERROR_FILE;
+use crate::constants::QTEST_EXPECTED_FILE;
+use crate::util::lang::{
+    get_language_by_ext_default,
+    get_language_by_ext_set_output
+};
 
 use failure::ResultExt;
 use exitfailure::ExitFailure;
@@ -24,79 +36,101 @@ use colored::*;
 pub fn run(target_file: PathBuf, correct_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
         save_cases: bool) -> Result<(), ExitFailure>  {
+
+    // Check if the CACHE_FOLDER folder is already created
+    match fs::read_dir(CACHE_FOLDER) {
+        Ok(_) => (),
+        Err(_) => match fs::create_dir(CACHE_FOLDER) {
+            Ok(_) => (),
+            Err(_) => {
+                // If not, create the folder
+                let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't create internal cache files")));
+                return Ok(error.context("Error creating internal cache files".to_string())?);
+            }
+        },
+    }
     
     // verify that the target file exists
-    match fs::File::open(target_file.to_str().unwrap()) {
+    let file_name = target_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<target-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // verify that the correct file exists
-    match fs::File::open(correct_file.to_str().unwrap()) {
+    let file_name = correct_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<correct-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // verify that the generator file exists
-    match fs::File::open(gen_file.to_str().unwrap()) {
+    let file_name = gen_file.to_str().unwrap();
+    match file_exists(file_name) {
+        Ok(_) => (),
         Err(_) => {
-            let error: Result<(), failure::Error> =
-                Err(failure::err_msg(format!("Can't open the file {}", gen_file.to_str().unwrap())));
+            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
             return Ok(error.context("<gen-file> Not found".to_string())?);
-        },
-        _ => (),
-    };
+        }
+    }
 
     // get root path
     let root: PathBuf = match env::current_dir() {
-        Ok(it) => it,
+        Ok(path) => path,
         _ => unreachable!(),
     };
 
     let root: &str = match root.to_str() {
-        Some(s) => s ,
+        Some(root_path) => root_path,
         _ => unreachable!(),
     };
 
-    let correct_file_cpp: Cpp = default_gnucpp17(
+    // Get the language depending on the extension of the correct_file
+    let any_correct: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
-        correct_file.to_str().unwrap(),
-        &"correct.o",
-        &"quicktest_input.txt",
-        &"expected_testcase.txt",
-        "quicktest_error.txt"
+        correct_file,
+        &CORRECT_BINARY_FILE,
+        &QTEST_INPUT_FILE,
+        &QTEST_EXPECTED_FILE,
+        &QTEST_ERROR_FILE
     );
+    let any_correct: Box<dyn Language> = any_correct.unwrap();
+    let correct_file_lang: &dyn Language = any_correct.as_ref();
 
-    let target_file_cpp: Cpp = default_gnucpp17(
+    // Get the language depending on the extension of the target_file
+    let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
-        target_file.to_str().unwrap(),
-        &"main.o",
-        &"quicktest_input.txt",
-        &"quicktest_output.txt",
-        "quicktest_error.txt"
+        target_file,
+        &TARGET_BINARY_FILE,
+        &QTEST_INPUT_FILE,
+        &QTEST_OUTPUT_FILE,
+        &QTEST_ERROR_FILE
     );
+    let any_target: Box<dyn Language> = any_target.unwrap();
+    let target_file_lang: &dyn Language = any_target.as_ref();
 
-
-    let generator_file_cpp: Cpp = default_set_output_gnucpp17(
+    // Get the language depending on the extension of the gen_file
+    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
         root,
-        gen_file.to_str().unwrap(),
-        &"gen.o",
-        &"quicktest_input.txt",
+        gen_file,
+        &GEN_BINARY_FILE,
+        &QTEST_INPUT_FILE,
     );
+    let any_gen: Box<dyn Language> = any_gen.unwrap();
+    let generator_file_lang: &dyn Language = any_gen.as_ref();
 
-    correct_file_cpp.compile();
 
-    target_file_cpp.compile();
+    correct_file_lang.build();
 
-    generator_file_cpp.compile();
+    target_file_lang.build();
+
+    generator_file_lang.build();
 
     // TODO: if wa is true, remove testcase_tle_*.txt
 
@@ -104,9 +138,9 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
     let mut wa_count: u32 = 0;
 
     for test_number in 1..=test_cases {
-        let time_gen: Duration = generator_file_cpp.execute(timeout as u32);
-        let time_correct: Duration = correct_file_cpp.execute(timeout as u32);
-        let time_target: Duration = target_file_cpp.execute(timeout as u32);
+        let time_gen: Duration = generator_file_lang.execute(timeout as u32);
+        let time_correct: Duration = correct_file_lang.execute(timeout as u32);
+        let time_target: Duration = target_file_lang.execute(timeout as u32);
 
         let mills_target: u128 = time_target.as_millis();
 
@@ -167,26 +201,28 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                 let filename: String = format!("test_cases/testcase_tle_{}.txt", tle_count);
                 let mut file = fs::File::create(filename)
                     .expect("Error creating file test_cases/testcase(i).txt");
-                file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
+                file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
             }
             
             // check if the wa_break flag is high
             if wa_break {
                 // remove input, output and error files
-                fs::remove_file(&"quicktest_input.txt")?;
-                fs::remove_file(&"quicktest_output.txt")?;
-                fs::remove_file(&"quicktest_error.txt")?;
-                fs::remove_file(&"expected_testcase.txt")?;
-                fs::remove_file(&"main.o")?;
-                fs::remove_file(&"gen.o")?;
-                fs::remove_file(&"correct.o")?;
+                fs::remove_file(&QTEST_INPUT_FILE)?;
+                fs::remove_file(&QTEST_OUTPUT_FILE)?;
+                fs::remove_file(&QTEST_ERROR_FILE)?;
+                fs::remove_file(&QTEST_EXPECTED_FILE)?;
+                fs::remove_file(&TARGET_BINARY_FILE)?;
+                fs::remove_file(&GEN_BINARY_FILE)?;
+                fs::remove_file(&CORRECT_BINARY_FILE)?;
                 return Ok(());
             }
         } else {
             // The time is in the allowed range
-
+            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
+            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
+            
             // Check WA Status
-            if compare_file(&format!("{}/quicktest_output.txt", root), &format!("{}/expected_testcase.txt", root), true) {
+            if compare_file(&file_out, &file_expected, true) {
                 // is OK
                 println!(
                     "  {} [{}] {} {}ms",
@@ -220,10 +256,29 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                     let filename: String = format!("test_cases/testcase_wa_{}.txt", wa_count);
                     let mut file = fs::File::create(filename)
                         .expect("Error creating file test_cases/testcase(i).txt");
-                    file.write_all(fs::read_to_string("quicktest_input.txt").unwrap().as_bytes()).unwrap();
+                    file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
                 }
 
                 if wa_break {
+                    // remove input, output and error files
+                    fs::remove_file(&QTEST_INPUT_FILE)?;
+                    fs::remove_file(&QTEST_OUTPUT_FILE)?;
+                    fs::remove_file(&QTEST_ERROR_FILE)?;
+                    fs::remove_file(&QTEST_EXPECTED_FILE)?;
+                    
+                    match file_exists(&TARGET_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+                        _ => (),
+                    }
+                    match file_exists(&GEN_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+                        _ => (),
+                    }
+                    match file_exists(&CORRECT_BINARY_FILE) {
+                        Ok(_) => fs::remove_file(&CORRECT_BINARY_FILE)?,
+                        _ => (),
+                    };
+
                     let error = Err(failure::err_msg(format!("Wrong answer on test {}", test_number)));
                     return Ok(error.context("WA Status".to_string())?);
                 }
@@ -231,16 +286,25 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         }
 
         // remove input, output and error files
-        fs::remove_file(&"quicktest_input.txt")?;
-        fs::remove_file(&"quicktest_output.txt")?;
-        fs::remove_file(&"quicktest_error.txt")?;
-        fs::remove_file(&"expected_testcase.txt")?;
+        fs::remove_file(&QTEST_INPUT_FILE)?;
+        fs::remove_file(&QTEST_OUTPUT_FILE)?;
+        fs::remove_file(&QTEST_ERROR_FILE)?;
+        fs::remove_file(&QTEST_EXPECTED_FILE)?;
         
     }
 
-    fs::remove_file(&"main.o")?;
-    fs::remove_file(&"gen.o")?;
-    fs::remove_file(&"correct.o")?;
+    match file_exists(&TARGET_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+        _ => (),
+    }
+    match file_exists(&GEN_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+        _ => (),
+    }
+    match file_exists(&CORRECT_BINARY_FILE) {
+        Ok(_) => fs::remove_file(&CORRECT_BINARY_FILE)?,
+        _ => (),
+    }
 
     Ok(())
 }
@@ -283,25 +347,64 @@ pub fn compare_file(target_file: &String, correct_file: &String, ignore_space: b
 
     if ignore_space {
         // Remove spaces at the beginning and end of the file
-        // for target_content_vec
 
-        // TODO: check when the whole vector has blanks, because a Run Time Error is generated
+        // for target_content_vec
         while !target_content_vec.is_empty()
-            && *target_content_vec.back().unwrap()==' '||*target_content_vec.back().unwrap()=='\n' {
+            && (*target_content_vec.back().unwrap()==' '||*target_content_vec.back().unwrap()=='\n') {
             target_content_vec.pop_back();
         }
         while !target_content_vec.is_empty()
-            && *target_content_vec.front().unwrap()==' '||*target_content_vec.front().unwrap()=='\n' {
+            && (*target_content_vec.front().unwrap()==' '||*target_content_vec.front().unwrap()=='\n') {
             target_content_vec.pop_front();
         }
+
         // for correct_content_vec
         while !correct_content_vec.is_empty()
-            && *correct_content_vec.back().unwrap()==' '||*correct_content_vec.back().unwrap()=='\n' {
+            && (*correct_content_vec.back().unwrap()==' '||*correct_content_vec.back().unwrap()=='\n') {
             correct_content_vec.pop_back();
         }
         while !correct_content_vec.is_empty()
-            && *correct_content_vec.front().unwrap()==' '||*correct_content_vec.front().unwrap()=='\n' {
+            && (*correct_content_vec.front().unwrap()==' '||*correct_content_vec.front().unwrap()=='\n') {
             correct_content_vec.pop_front();
+        }
+
+        // replace "  " to " ", " \n" to "\n", "\n " to "\n" and "\n\n" to "\n"
+        let mut target_tmp = target_content_vec.clone();
+        let mut correct_tmp = correct_content_vec.clone();
+        target_content_vec.clear();
+        correct_content_vec.clear();
+
+        if !target_tmp.is_empty() {
+            target_content_vec.push_back(target_tmp.pop_front().unwrap());
+        }
+        while !target_tmp.is_empty() {
+            match (target_content_vec.back(), target_tmp.pop_front()) {
+                (Some(' '), Some('\n')) => {
+                    target_content_vec.pop_back();
+                    target_content_vec.push_back('\n');
+                },
+                (Some(' '), Some(' ')) => continue,
+                (Some('\n'), Some(' ')) => continue,
+                (Some('\n'), Some('\n')) => continue,
+                (Some(_), Some(ch)) => target_content_vec.push_back(ch),
+                _ => continue,
+            }
+        }
+        if !correct_tmp.is_empty() {
+            correct_content_vec.push_back(correct_tmp.pop_front().unwrap());
+        }
+        while !correct_tmp.is_empty() {
+            match (correct_content_vec.back(), correct_tmp.pop_front()) {
+                (Some(' '), Some('\n')) => {
+                    correct_content_vec.pop_back();
+                    correct_content_vec.push_back('\n');
+                },
+                (Some(' '), Some(' ')) => continue,
+                (Some('\n'), Some(' ')) => continue,
+                (Some('\n'), Some('\n')) => continue,
+                (Some(_), Some(ch)) => correct_content_vec.push_back(ch),
+                _ => continue,
+            }
         }
     }
 
