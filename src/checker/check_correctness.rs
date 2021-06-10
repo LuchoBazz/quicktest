@@ -32,6 +32,7 @@ use crate::util::lang::{
 use failure::ResultExt;
 use exitfailure::ExitFailure;
 use colored::*;
+use glob::glob;
 
 pub fn run(target_file: PathBuf, correct_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
@@ -132,7 +133,18 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
 
     generator_file_lang.build();
 
-    // TODO: if wa is true, remove testcase_tle_*.txt
+    if save_cases {
+        // remove test cases prefixed with testcase_wa*.txt
+        let paths = glob("test_cases/testcase_wa*")?;
+        for entry in paths {
+            match entry {
+                Ok(path) => {
+                    fs::remove_file(path.to_str().unwrap())?;
+                },
+                Err(_) => (),
+            }
+        }
+    }
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
@@ -211,9 +223,19 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                 fs::remove_file(&QTEST_OUTPUT_FILE)?;
                 fs::remove_file(&QTEST_ERROR_FILE)?;
                 fs::remove_file(&QTEST_EXPECTED_FILE)?;
-                fs::remove_file(&TARGET_BINARY_FILE)?;
-                fs::remove_file(&GEN_BINARY_FILE)?;
-                fs::remove_file(&CORRECT_BINARY_FILE)?;
+
+                match file_exists(&TARGET_BINARY_FILE) {
+                    Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
+                    _ => (),
+                }
+                match file_exists(&GEN_BINARY_FILE) {
+                    Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
+                    _ => (),
+                }
+                match file_exists(&CORRECT_BINARY_FILE) {
+                    Ok(_) => fs::remove_file(&CORRECT_BINARY_FILE)?,
+                    _ => (),
+                };
                 return Ok(());
             }
         } else {
