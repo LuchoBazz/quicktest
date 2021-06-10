@@ -22,3 +22,7 @@ glob = "0.3.0"
 [[bin]]
 name = "quicktest"
 path = "src/main.rs"
+
+[[bin]]
+name = "qt"
+path = "src/main.rs"
