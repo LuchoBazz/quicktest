@@ -12,10 +12,6 @@ use std::env;
 use std::time::Duration;
 use std::io::Write;
 
-use crate::runner::lang::cpp::default::{
-    gnucpp17_default, gnucpp17_set_output
-};
-use crate::runner::lang::cpp::Cpp;
 use crate::runner::types::Language;
 use crate::util::file::file_exists;
 
@@ -28,6 +24,10 @@ use crate::constants::QTEST_INPUT_FILE;
 use crate::constants::QTEST_OUTPUT_FILE;
 use crate::constants::QTEST_ERROR_FILE;
 use crate::constants::QTEST_EXPECTED_FILE;
+use crate::util::lang::{
+    get_language_by_ext_default,
+    get_language_by_ext_set_output
+};
 
 use failure::ResultExt;
 use exitfailure::ExitFailure;
@@ -91,36 +91,46 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         _ => unreachable!(),
     };
 
-    let correct_file_cpp: Cpp = gnucpp17_default(
+    // Get the language depending on the extension of the correct_file
+    let any_correct: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
-        correct_file.to_str().unwrap(),
+        correct_file,
         &CORRECT_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_EXPECTED_FILE,
         &QTEST_ERROR_FILE
     );
+    let any_correct: Box<dyn Language> = any_correct.unwrap();
+    let correct_file_lang: &dyn Language = any_correct.as_ref();
 
-    let target_file_cpp: Cpp = gnucpp17_default(
+    // Get the language depending on the extension of the target_file
+    let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
-        target_file.to_str().unwrap(),
+        target_file,
         &TARGET_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_OUTPUT_FILE,
         &QTEST_ERROR_FILE
     );
+    let any_target: Box<dyn Language> = any_target.unwrap();
+    let target_file_lang: &dyn Language = any_target.as_ref();
 
-    let generator_file_cpp: Cpp = gnucpp17_set_output(
+    // Get the language depending on the extension of the gen_file
+    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
         root,
-        gen_file.to_str().unwrap(),
+        gen_file,
         &GEN_BINARY_FILE,
         &QTEST_INPUT_FILE,
     );
+    let any_gen: Box<dyn Language> = any_gen.unwrap();
+    let generator_file_lang: &dyn Language = any_gen.as_ref();
 
-    correct_file_cpp.build();
 
-    target_file_cpp.build();
+    correct_file_lang.build();
 
-    generator_file_cpp.build();
+    target_file_lang.build();
+
+    generator_file_lang.build();
 
     // TODO: if wa is true, remove testcase_tle_*.txt
 
@@ -128,9 +138,9 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
     let mut wa_count: u32 = 0;
 
     for test_number in 1..=test_cases {
-        let time_gen: Duration = generator_file_cpp.execute(timeout as u32);
-        let time_correct: Duration = correct_file_cpp.execute(timeout as u32);
-        let time_target: Duration = target_file_cpp.execute(timeout as u32);
+        let time_gen: Duration = generator_file_lang.execute(timeout as u32);
+        let time_correct: Duration = correct_file_lang.execute(timeout as u32);
+        let time_target: Duration = target_file_lang.execute(timeout as u32);
 
         let mills_target: u128 = time_target.as_millis();
 
