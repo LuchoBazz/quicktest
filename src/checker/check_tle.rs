@@ -13,6 +13,7 @@ use std::fs;
 use colored::*;
 use failure::ResultExt;
 use exitfailure::ExitFailure;
+use glob::glob;
 
 use crate::runner::types::Language;
 use crate::util::file::file_exists;
@@ -98,6 +99,19 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     target_file_lang.build();
 
     generator_file_lang.build();
+
+    if save_cases {
+        // remove test cases prefixed with testcase_tle*.txt
+        let paths = glob("test_cases/testcase_tle*")?;
+        for entry in paths {
+            match entry {
+                Ok(path) => {
+                    fs::remove_file(path.to_str().unwrap())?;
+                },
+                Err(_) => (),
+            }
+        }
+    }
 
     let mut tle_count: u32 = 0;
 
