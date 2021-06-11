@@ -6,3 +6,4 @@
 
 pub mod check_correctness;
 pub mod check_tle;
+pub mod cmd_checker;

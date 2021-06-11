@@ -17,6 +17,11 @@ pub const CORRECT_BINARY_FILE: &str= ".qtest/correct.o";
 pub const CORRECT_BINARY_FILE: &str= ".qtest/correct.exe";
 
 #[cfg(unix)]
+pub const CHECKER_BINARY_FILE: &str= ".qtest/checker.o";
+#[cfg(windows)]
+pub const CHECKER_BINARY_FILE: &str= ".qtest/checker.exe";
+
+#[cfg(unix)]
 pub const GEN_BINARY_FILE: &str= ".qtest/gen.o";
 #[cfg(windows)]
 pub const GEN_BINARY_FILE: &str= ".qtest/gen.exe";
@@ -26,3 +31,4 @@ pub const QTEST_OUTPUT_FILE: &str= ".qtest/quicktest_output.txt";
 pub const QTEST_ERROR_FILE: &str= ".qtest/quicktest_error.txt";
 
 pub const QTEST_EXPECTED_FILE: &str= ".qtest/expected_testcase.txt";
+pub const QTEST_CHECKER_FILE: &str= ".qtest/checker_testcase.txt";
