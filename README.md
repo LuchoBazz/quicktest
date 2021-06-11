@@ -6,7 +6,9 @@
 
 ## Documentation
 
-**⚠️ Note:** _Quick Test CLI_ is currently below version `v1.0.0`, so it may contain bugs, you can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
+**⚠️ Note:** _Quick Test CLI_ is currently below version `v1.0.0`, so it may contain bugs, you can report any bugs -[here](https://github.com/LuisMBaezCo/quicktest/issues).
+
+Read this in other languages: [_Español_](docs/README.es-ES.md)
 
 **Table of Contents**
 
@@ -41,6 +43,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         ```
 
 ## Getting Started
+
 ### Installation
 
 If you already have Rust on your system:
