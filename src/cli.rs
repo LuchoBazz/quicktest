@@ -68,4 +68,33 @@ pub enum Opt {
         #[structopt(short = "s", long = "save-cases")]
         save_cases: bool,
     },
+    Check {
+        /// Target File
+        #[structopt(short = "t", long = "target-file", parse(from_os_str))]
+        target_file: PathBuf,
+
+        /// Checker File
+        #[structopt(short = "c", long = "checker-file", parse(from_os_str))]
+        checker_file: PathBuf,
+
+        /// Generator File
+        #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
+        gen_file: PathBuf,
+
+        /// Timeout TLE
+        #[structopt(short = "o", long = "timeout", default_value = "2000")]
+        timeout: u32,
+
+        /// Number of test cases
+        #[structopt(short = "n", long = "test-cases", default_value = "1000")]
+        test_cases: u32,
+
+        /// Break if Wrong Answer (WA) occurs
+        #[structopt(short = "b", long = "wa-break")]
+        wa_break: bool,
+
+        /// Save test cases
+        #[structopt(short = "s", long = "save-cases")]
+        save_cases: bool,
+    },
 }

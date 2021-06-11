@@ -84,6 +84,7 @@ impl Language for Cpp {
 
         let mut child: std::process::Child = match &self.stdin {
             Some(file) => {
+                // println!("{:?}", file);
                 let input = File::open(file.to_str().unwrap()).unwrap();
 
                 let child = Command::new(self.binary_file.to_str().unwrap())
@@ -177,7 +178,7 @@ pub mod default {
             "-std=c++17",
             PathBuf::from(format!("{}/{}", root, binary_file)),
             vec!["-Wall"],
-            vec!["-DLOCAL=1"],
+            vec!["-DONLINE_JUDGE=1"],
             Some(stdin),
             Some(stdout),
             Some(stderr)
