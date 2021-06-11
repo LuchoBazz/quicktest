@@ -42,7 +42,19 @@ fn main() -> Result<(), ExitFailure> {
                 wa_break,
                 save_cases
             )
-        }
+        },
+        Opt::Check{target_file, checker_file, gen_file,
+            test_cases, timeout, wa_break, save_cases} => {
+            checker::cmd_checker::run(
+                target_file,
+                checker_file,
+                gen_file,
+                timeout,
+                test_cases,
+                wa_break,
+                save_cases
+            )
+        },
     };
 
     response
