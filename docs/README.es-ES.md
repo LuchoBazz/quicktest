@@ -1,4 +1,4 @@
-<h1 align="center">🦉 Quick Test CLI</h1>
+<h1 align="center">🧰 Quick Test CLI</h1>
 
 <p align="center">Interfaz de línea de comandos (CLI) para pruebas de estrés para programación competitiva</p>
 
@@ -8,7 +8,7 @@
 
 **⚠️ Nota:** _Quick Test CLI_ está actualmente por debajo de la versión `v1.0.0`, por lo que puede contener errores, puede informar cualquier error [aquí](https://github.com/LuisMBaezCo/quicktest/issues).
 
-Lea esto en otros idiomas: [_English_](./../README.md)
+Lea esto en otros idiomas: [_English_](./../README.md), [_Português_](README.pt-BR.md) 
 
 **Tabla de contenido**
 

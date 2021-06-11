@@ -1,4 +1,4 @@
-<h1 align="center">🦉 Quick Test CLI</h1>
+<h1 align="center">🧰 Quick Test CLI</h1>
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
@@ -8,7 +8,7 @@
 
 **⚠️ Note:** _Quick Test CLI_ is currently below version `v1.0.0`, so it may contain bugs, you can report any bugs -[here](https://github.com/LuisMBaezCo/quicktest/issues).
 
-Read this in other languages: [_Español_](docs/README.es-ES.md)
+Read this in other languages: [_Español_](docs/README.es-ES.md), [_Português_](docs/README.pt-BR.md) 
 
 **Table of Contents**
 
