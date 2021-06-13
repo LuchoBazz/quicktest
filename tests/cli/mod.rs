@@ -6,3 +6,5 @@
 
 mod tle_subcommand;
 mod cmp_subcommand;
+mod test_utilities;
+mod test_constants;

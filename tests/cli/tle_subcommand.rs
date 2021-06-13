@@ -7,157 +7,150 @@
 // reference I : https://mattgathu.github.io/2017/10/01/testing-rust-cli-apps.html
 // reference II: https://www.duskborn.com/posts/rust-lit/
 
-static GEN_CPP: &'static str = r#"
-#include <bits/stdc++.h>
-using namespace std;
-template <typename T>
-T random(const T from, const T to) {
-    static random_device rdev;
-    static default_random_engine re(rdev());
+use std::process::Command;  // Run programs
+use assert_cmd::prelude::*; // Add methods on commands
+use predicates::prelude::*; // Used for writing assertion
+use std::error::Error;
 
-    using dist_type = typename conditional<
-        is_floating_point<T>::value,
-        uniform_real_distribution<T>,
-        uniform_int_distribution<T>
-    >::type;
+use crate::cli::test_constants::{
+    TARGET_CPP, TARGET_PY,
+    GEN_CPP,  GEN_PY,
+    FOLDER
+};
+use crate::cli::test_utilities::create_files;
 
-    dist_type uni(from, to);
-    return static_cast<T>(uni(re));
-}
-int main() {
-    #define endl '\n'
-    int n = random<int>(1e5, 2e5);
-    cout << n << endl;
-    for(int i=0;i<n;++i) cout << random<int>(1, 1e9) << " ";
-    cout << endl;
-    return 0;
-}
-"#;
+#[test]
+fn tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.cpp";
+    let gen_file = "gen.cpp";
+    let folder = "tle";
+    create_files(
+        target_file, gen_file,
+        TARGET_CPP, GEN_CPP,
+        folder
+    )?;
 
-static TARGET_CPP: &'static str = r#"
-#include <bits/stdc++.h>
-using namespace std;
-int n;
-vector<int> A;
-int main() {
-    cin >> n;
-    A.resize(n);
-    for(auto &ref: A) cin >> ref;
-    sort(A.begin(), A.end());
-    cout << n << endl;
-    for(auto &a: A) cout << a << " ";
-    cout << endl;
-    return 0;
-}
-"#;
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
 
-#[cfg(test)]
-mod  tle_subcommand_cpp {
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
 
-    use std::{io::Write, path::PathBuf, process::Command};  // Run programs
-    use assert_cmd::prelude::*; // Add methods on commands
-    use predicates::prelude::*; // Used for writing assertion
-    use std::error::Error;
-    use crate::cli::tle_subcommand::GEN_CPP;
-    use crate::cli::tle_subcommand::TARGET_CPP;
+    let cases: usize = 10;
 
-    fn create_files() -> Result<(), std::io::Error>{
-        match std::fs::create_dir("target/code/") {_=>(),}
-        let mut gen_file = std::fs::File::create(PathBuf::from("target/code/gen.cpp"))?;
-        gen_file.write_all(GEN_CPP.as_bytes())?;
-        
-        let mut target_file = std::fs::File::create(PathBuf::from("target/code/main.cpp"))?;
-        target_file.write_all(TARGET_CPP.as_bytes())?;
-        Ok(())
-    }
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
     
-    #[test]
-    fn tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
-        create_files()?;
-
-        #[cfg(unix)]
-        let mut cmd = Command::new("./target/debug/quicktest");
-
-        #[cfg(windows)]
-        let mut cmd = Command::new("./target/debug/quicktest.exe");
-
-        let cases: usize = 10;
-
-        cmd.arg("tle")
-            .arg("--target-file")
-            .arg("target/code/main.cpp")
-            .arg("--gen-file")
-            .arg("target/code/gen.cpp")
-            .arg("--timeout=1000")
-            .arg(format!("--test-cases={}", cases));
-
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("[OK]").count(cases));
-        
-        Ok(())
-    }
+    Ok(())
 }
 
-static GEN_PY: &'static str = r#"
-from random import uniform
-n = int(uniform(int(1e5), int(2e5)))
-print(n)
-A = [int(uniform(1, int(1e9))) for _ in range(n)]
-print(*A)
-"#;
+#[test]
+fn tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.py";
+    let gen_file = "gen.py";
+    let folder = "tle";
+    create_files(
+        target_file, gen_file,
+        TARGET_PY, GEN_PY,
+        folder
+    )?;
 
-static TARGET_PY: &'static str = r#"
-n = int(input())
-A = list(map(int, input().split()))
-A.sort()
-print(n)
-print(*A)
-"#;
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
 
-mod  tle_subcommand_py {
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
 
-    use std::{io::Write, path::PathBuf, process::Command};  // Run programs
-    use assert_cmd::prelude::*; // Add methods on commands
-    use predicates::prelude::*; // Used for writing assertion
-    use std::error::Error;
-    use crate::cli::tle_subcommand::GEN_PY;
-    use crate::cli::tle_subcommand::TARGET_PY;
+    let cases: usize = 10;
 
-    fn create_files() -> Result<(), std::io::Error>{
-        match std::fs::create_dir("target/code/") {_=>(),}
-        let mut gen_file = std::fs::File::create(PathBuf::from("target/code/gen.py"))?;
-        gen_file.write_all(GEN_PY.as_bytes())?;
-        
-        let mut target_file = std::fs::File::create(PathBuf::from("target/code/main.py"))?;
-        target_file.write_all(TARGET_PY.as_bytes())?;
-        Ok(())
-    }
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
 
-    #[test]
-    fn tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
-        create_files()?;
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
+}
 
-        #[cfg(unix)]
-        let mut cmd = Command::new("./target/debug/quicktest");
+#[test]
+fn tle_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.cpp";
+    let gen_file = "gen.py";
+    let folder = "tle";
+    create_files(
+        target_file, gen_file,
+        TARGET_CPP, GEN_PY,
+        folder
+    )?;
 
-        #[cfg(windows)]
-        let mut cmd = Command::new("./target/debug/quicktest.exe");
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
 
-        let cases: usize = 10;
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
 
-        cmd.arg("tle")
-            .arg("--target-file")
-            .arg("target/code/main.py")
-            .arg("--gen-file")
-            .arg("target/code/gen.py")
-            .arg("--timeout=1000")
-            .arg(format!("--test-cases={}", cases));
+    let cases: usize = 10;
 
-        cmd.assert()
-            .success()
-            .stdout(predicate::str::contains("[OK]").count(cases));
-        
-        Ok(())
-    }
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
+}
+    
+#[test]
+fn tle_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.py";
+    let gen_file = "gen.cpp";
+    let folder = "tle";
+    create_files(
+        target_file, gen_file,
+        TARGET_PY, GEN_CPP,
+        folder
+    )?;
+
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
+
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
+
+    let cases: usize = 10;
+
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
 }
