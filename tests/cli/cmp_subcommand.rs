@@ -27,7 +27,7 @@ OPTIONS:
     -o, --timeout <timeout>              Timeout TLE [default: 2000]
 "#;
 
-mod tle_subcommand {
+mod cmp_subcommand {
     use std::process::Command;
     use crate::cli::cmp_subcommand::WITHOUT_ARGS_OUTPUT;
 

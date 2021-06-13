@@ -7,4 +7,5 @@ jobs:
 
     steps:
       - checkout
-      - run: cargo test
+      - run: cargo test cmp_subcommand
+      - run: cargo test tle_subcommand -- --test-threads 1
