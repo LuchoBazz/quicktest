@@ -13,20 +13,20 @@ use predicates::prelude::*; // Used for writing assertion
 use std::error::Error;
 
 use crate::cli::test_constants::{
-    TARGET_CPP, TARGET_PY,
-    GEN_CPP,  GEN_PY,
+    TARGET_CPP_TLE, TARGET_PY_TLE,
+    GEN_CPP_TLE,  GEN_PY_TLE,
     FOLDER
 };
-use crate::cli::test_utilities::create_files;
+use crate::cli::test_utilities::create_files_tle;
 
 #[test]
 fn tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
     let target_file = "main.cpp";
     let gen_file = "gen.cpp";
     let folder = "tle";
-    create_files(
+    create_files_tle(
         target_file, gen_file,
-        TARGET_CPP, GEN_CPP,
+        TARGET_CPP_TLE, GEN_CPP_TLE,
         folder
     )?;
 
@@ -58,9 +58,9 @@ fn tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
     let target_file = "main.py";
     let gen_file = "gen.py";
     let folder = "tle";
-    create_files(
+    create_files_tle(
         target_file, gen_file,
-        TARGET_PY, GEN_PY,
+        TARGET_PY_TLE, GEN_PY_TLE,
         folder
     )?;
 
@@ -92,9 +92,9 @@ fn tle_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
     let target_file = "main.cpp";
     let gen_file = "gen.py";
     let folder = "tle";
-    create_files(
+    create_files_tle(
         target_file, gen_file,
-        TARGET_CPP, GEN_PY,
+        TARGET_CPP_TLE, GEN_PY_TLE,
         folder
     )?;
 
@@ -126,9 +126,9 @@ fn tle_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
     let target_file = "main.py";
     let gen_file = "gen.cpp";
     let folder = "tle";
-    create_files(
+    create_files_tle(
         target_file, gen_file,
-        TARGET_PY, GEN_CPP,
+        TARGET_PY_TLE, GEN_CPP_TLE,
         folder
     )?;
 
