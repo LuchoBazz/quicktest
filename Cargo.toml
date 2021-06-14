@@ -1,12 +1,12 @@
 [package]
 name = "quicktest"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Luis Miguel Báez <es.luismiguelbaez@gmail.com>"]
 license = "MIT"
-description = "Command Line Interface (CLI) for stress testing in competitive programming contest"
+description = "Command Line Interface (CLI) for stress testing for competitive programming contest"
 readme = "README.md"
 repository = "https://github.com/LuisMBaezCo/quicktest"
-keywords = ["cli", "stress-testing", "testing", "cp-tool", "testing-tool"]
+keywords = ["stress-testing", "cli", "testing", "cp-tool", "testing-tool"]
 categories = ["cli"]
 edition = "2018"
 
