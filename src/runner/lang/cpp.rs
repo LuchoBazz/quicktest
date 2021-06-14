@@ -82,31 +82,29 @@ impl Language for Cpp {
 
         let now: Instant = Instant::now();
 
-        let mut child: std::process::Child = match &self.stdin {
+        let process_output: std::process::Output = match &self.stdin {
             Some(file) => {
-                // println!("{:?}", file);
                 let input = File::open(file.to_str().unwrap()).unwrap();
-
-                let child = Command::new(self.binary_file.to_str().unwrap())
+                let process_output = Command::new(self.binary_file.to_str().unwrap())
                     .stdin(Stdio::from(input))
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .spawn()
+                    .output()
                     .unwrap();
-                child
+                process_output
             },
             _ => {
-                let child = Command::new(self.binary_file.to_str().unwrap())
+                let process_output = Command::new(self.binary_file.to_str().unwrap())
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .spawn()
+                    .output()
                     .unwrap();
-                child
+                process_output
             }
         };
 
         let output_file: Option<Arc<Mutex<File>>> = match &self.stdout {
-            Some(file) => {
+            Some(file) =>{
                 let output = File::create(file.to_str().unwrap()).unwrap();
                 Some(Arc::new(Mutex::new(output)))
             },
@@ -123,31 +121,27 @@ impl Language for Cpp {
 
         let thread: std::thread::JoinHandle<()> = std::thread::spawn(move || {
             for _ in 0..timeout {
-                if let Ok(Some(_)) = child.try_wait() {
-                    if let Ok(response) = child.wait_with_output() {
-                        match output_file {
-                            Some(f) => {
-                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                                file.write_all(&response.stdout).unwrap();
-                            },
-                            None => (),
-                        }
-
-                        match err_file {
-                            Some(f) => {
-                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                                file.write_all(&response.stderr).unwrap();
-                            },
-                            None => (),
-                        }
+                if process_output.status.success() {
+                    match output_file {
+                        Some(f) => {
+                            let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
+                            file.write_all(&process_output.stdout).unwrap();
+                        },
+                        None => (),
+                    }
+                    match err_file {
+                        Some(f) => {
+                            let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
+                            file.write_all(&process_output.stderr).unwrap();
+                        },
+                        None => (),
                     }
                     return;
                 }
                 std::thread::sleep(std::time::Duration::from_millis(1));
             }
-            child.kill().unwrap();
         });
-
+        
         thread.join().unwrap();
 
         let new_now: Instant = Instant::now();

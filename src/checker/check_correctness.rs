@@ -151,11 +151,7 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
 
     for test_number in 1..=test_cases {
         let time_gen: Duration = generator_file_lang.execute(timeout as u32);
-        let time_correct: Duration = correct_file_lang.execute(timeout as u32);
-        let time_target: Duration = target_file_lang.execute(timeout as u32);
-
-        let mills_target: u128 = time_target.as_millis();
-
+        
         if time_gen >= Duration::from_millis(timeout as u64) {
             // TLE Generator
             println!(
@@ -170,6 +166,8 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             return Ok(error.context("Generator TLE".to_string())?);
         }
 
+        let time_correct: Duration = correct_file_lang.execute(timeout as u32);
+
         if time_correct >= Duration::from_millis(timeout as u64) {
             // TLE Correct file
             println!(
@@ -183,6 +181,10 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             let error: Result<(), failure::Error> = Err(failure::err_msg("Correct file very slow"));
             return Ok(error.context("Correct File TLE".to_string())?);
         }
+
+        let time_target: Duration = target_file_lang.execute(timeout as u32);
+
+        let mills_target: u128 = time_target.as_millis();
 
         if time_target >= Duration::from_millis(timeout as u64) {
             // TLE Target file
@@ -306,14 +308,13 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
                 }
             }
         }
-
-        // remove input, output and error files
-        fs::remove_file(&QTEST_INPUT_FILE)?;
-        fs::remove_file(&QTEST_OUTPUT_FILE)?;
-        fs::remove_file(&QTEST_ERROR_FILE)?;
-        fs::remove_file(&QTEST_EXPECTED_FILE)?;
-        
     }
+
+    // remove input, output and error files
+    fs::remove_file(&QTEST_INPUT_FILE)?;
+    fs::remove_file(&QTEST_OUTPUT_FILE)?;
+    fs::remove_file(&QTEST_ERROR_FILE)?;
+    fs::remove_file(&QTEST_EXPECTED_FILE)?;
 
     match file_exists(&TARGET_BINARY_FILE) {
         Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,

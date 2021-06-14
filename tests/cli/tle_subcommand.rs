@@ -4,41 +4,153 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-// reference: https://mattgathu.github.io/2017/10/01/testing-rust-cli-apps.html
+// reference I : https://mattgathu.github.io/2017/10/01/testing-rust-cli-apps.html
+// reference II: https://www.duskborn.com/posts/rust-lit/
 
-static WITHOUT_ARGS_OUTPUT: &'static str =
-r#"quicktest-tle 0.3.1
-Check TLE
+use std::process::Command;  // Run programs
+use assert_cmd::prelude::*; // Add methods on commands
+use predicates::prelude::*; // Used for writing assertion
+use std::error::Error;
 
-USAGE:
-    quicktest tle [FLAGS] [OPTIONS] --gen-file <gen-file> --target-file <target-file>
+use crate::cli::test_constants::{
+    TARGET_CPP_TLE, TARGET_PY_TLE,
+    GEN_CPP_TLE,  GEN_PY_TLE,
+    FOLDER
+};
+use crate::cli::test_utilities::create_files_tle;
 
-FLAGS:
-    -h, --help          Prints help information
-    -s, --save-cases    Save test cases
-    -b, --tle-break     Break if Time Limit Exceeded (TLE) occurs
-    -V, --version       Prints version information
-
-OPTIONS:
-    -g, --gen-file <gen-file>          Generator File
-    -t, --target-file <target-file>    Target File
-    -n, --test-cases <test-cases>      Number of test cases [default: 1000]
-    -o, --timeout <timeout>            Timeout TLE [default: 2000]
-"#;
-
-mod tle_subcommand {
-    use std::process::Command;
-    use crate::cli::tle_subcommand::WITHOUT_ARGS_OUTPUT;
+#[test]
+fn tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.cpp";
+    let gen_file = "gen.cpp";
+    let folder = "tle";
+    create_files_tle(
+        target_file, gen_file,
+        TARGET_CPP_TLE, GEN_CPP_TLE,
+        folder
+    )?;
 
     #[cfg(unix)]
-    #[test]
-    fn help() {
-        let output = Command::new("./target/debug/quicktest")
-            .arg("tle")
-            .arg("--help")
-            .output()
-            .expect("help in tle subcommand failed");
-        
-        assert_eq!(String::from_utf8_lossy(&output.stdout), WITHOUT_ARGS_OUTPUT);
-    }
+    let mut cmd = Command::new("./target/debug/quicktest");
+
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
+
+    let cases: usize = 10;
+
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
+}
+
+#[test]
+fn tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.py";
+    let gen_file = "gen.py";
+    let folder = "tle";
+    create_files_tle(
+        target_file, gen_file,
+        TARGET_PY_TLE, GEN_PY_TLE,
+        folder
+    )?;
+
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
+
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
+
+    let cases: usize = 10;
+
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
+}
+
+#[test]
+fn tle_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.cpp";
+    let gen_file = "gen.py";
+    let folder = "tle";
+    create_files_tle(
+        target_file, gen_file,
+        TARGET_CPP_TLE, GEN_PY_TLE,
+        folder
+    )?;
+
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
+
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
+
+    let cases: usize = 10;
+
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
+}
+    
+#[test]
+fn tle_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
+    let target_file = "main.py";
+    let gen_file = "gen.cpp";
+    let folder = "tle";
+    create_files_tle(
+        target_file, gen_file,
+        TARGET_PY_TLE, GEN_CPP_TLE,
+        folder
+    )?;
+
+    #[cfg(unix)]
+    let mut cmd = Command::new("./target/debug/quicktest");
+
+    #[cfg(windows)]
+    let mut cmd = Command::new("./target/debug/quicktest.exe");
+
+    let cases: usize = 10;
+
+    cmd.arg("tle")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file)) //target/.code/tle/main.cpp
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file)) // target/.code/tle/gen.cpp
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+
+    cmd.assert()
+        .success()
+        .stdout(predicate::str::contains("[OK]").count(cases));
+    
+    Ok(())
 }
