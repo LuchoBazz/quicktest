@@ -74,6 +74,16 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         _ => unreachable!(),
     };
 
+    // Get the language depending on the extension of the gen_file
+    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
+        root,
+        gen_file,
+        &GEN_BINARY_FILE,
+        &QTEST_INPUT_FILE,
+    );
+    let any_gen: Box<dyn Language> = any_gen.unwrap();
+    let generator_file_lang: &dyn Language = any_gen.as_ref();
+
     // Get the language depending on the extension of the target_file
     let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
@@ -86,19 +96,9 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
 
-    // Get the language depending on the extension of the gen_file
-    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
-        root,
-        gen_file,
-        &GEN_BINARY_FILE,
-        &QTEST_INPUT_FILE,
-    );
-    let any_gen: Box<dyn Language> = any_gen.unwrap();
-    let generator_file_lang: &dyn Language = any_gen.as_ref();
-
-    target_file_lang.build();
-
     generator_file_lang.build();
+    
+    target_file_lang.build();
 
     if save_cases {
         // remove test cases prefixed with testcase_tle*.txt
@@ -117,13 +117,9 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
     for test_number in 1..=test_cases {
         let time_gen: Duration = generator_file_lang.execute(timeout as u32);
-        let time_target: Duration = target_file_lang.execute(timeout as u32);
-        
-        let mills_target = time_target.as_millis();
-        
+
         if time_gen >= Duration::from_millis(timeout as u64) {
             // TLE Generator
-
             println!(
                 "  {} [{}] {} {}ms",
                 test_number,
@@ -131,10 +127,12 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                 "Generator Time Limit Exceeded :".bold().red(),
                 timeout
             );
-
             let error = Err(failure::err_msg("very slow generator"));
             return Ok(error.context("Generator TLE".to_string())?);
-        } 
+        }
+
+        let time_target: Duration = target_file_lang.execute(timeout as u32);
+        let mills_target = time_target.as_millis();
 
         if time_target >= Duration::from_millis(timeout as u64) {
             // TLE Target file
@@ -195,12 +193,11 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                 "Finished in".bold().green(), mills_target
             );
         }
-
-        // remove input, output and error files
-        fs::remove_file(&QTEST_INPUT_FILE)?;
-        fs::remove_file(&QTEST_OUTPUT_FILE)?;
-        fs::remove_file(&QTEST_ERROR_FILE)?;
     }
+    // remove input, output and error files
+    fs::remove_file(&QTEST_INPUT_FILE)?;
+    fs::remove_file(&QTEST_OUTPUT_FILE)?;
+    fs::remove_file(&QTEST_ERROR_FILE)?;
 
     match file_exists(&TARGET_BINARY_FILE) {
         Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
