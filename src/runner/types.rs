@@ -9,4 +9,5 @@ use std::time::Duration;
 pub trait Language {
     fn build(&self);
     fn execute(&self, timeout: u32) -> Duration;
+    fn set_stdio(&mut self, stdin: &str);
 }

@@ -150,6 +150,10 @@ impl Language for Cpp {
 
         time 
     }
+
+    fn set_stdio(&mut self, stdin: &str) {
+        self.stdin = Some(PathBuf::from(stdin));
+    }
 }
 
 

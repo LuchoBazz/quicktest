@@ -137,6 +137,10 @@ impl Language for Python {
 
         time 
     }
+
+    fn set_stdio(&mut self, stdin: &str) {
+        self.stdin = Some(PathBuf::from(stdin));
+    }
 }
 
 pub mod default {
