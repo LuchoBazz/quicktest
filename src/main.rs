@@ -55,6 +55,10 @@ fn main() -> Result<(), ExitFailure> {
                 save_cases
             )
         },
+        Opt::Run{target_file, timeout, all, wa, tle, rte} => {
+    
+            checker::run_cases::run(target_file, timeout, all, wa, tle, rte)
+        },
     };
 
     response

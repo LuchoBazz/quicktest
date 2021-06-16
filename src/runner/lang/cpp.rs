@@ -9,12 +9,13 @@ use std::process::Command;
 use std::process::Stdio;
 use std::path::PathBuf;
 use std::fs::File;
-use std::sync::Arc;
-use std::sync::Mutex;
 use std::time::Duration;
 
-use crate::runner::types::Language;
+use crate::runner::types::{Language, CPStatus, StatusResponse};
 use std::time::Instant;
+
+use process_control::ChildExt;
+use process_control::Timeout;
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
@@ -66,8 +67,8 @@ impl Cpp {
 
 impl Language for Cpp {
 
-    fn build(&self) -> () {
-        Command::new(self.program)
+    fn build(&self) -> bool {
+        let status = Command::new(self.program)
             .arg(self.standard)
             .args(&self.flags)
             .args(&self.variables)
@@ -76,79 +77,80 @@ impl Language for Cpp {
             .arg(self.file_name.to_str().unwrap())
             .status()
             .expect("Compiling C++ error");
+        status.code() == Some(0)
     }
 
-    fn execute(&self, timeout: u32) -> Duration {
-
+    fn execute(&self, timeout: u32) -> StatusResponse {
+        
         let now: Instant = Instant::now();
 
-        let process_output: std::process::Output = match &self.stdin {
+        let child: Result<std::process::Child, std::io::Error> = match &self.stdin {
             Some(file) => {
                 let input = File::open(file.to_str().unwrap()).unwrap();
-                let process_output = Command::new(self.binary_file.to_str().unwrap())
+                let child = Command::new(self.binary_file.to_str().unwrap())
                     .stdin(Stdio::from(input))
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .output()
-                    .unwrap();
-                process_output
+                    .spawn();
+                child
             },
             _ => {
-                let process_output = Command::new(self.binary_file.to_str().unwrap())
+                let child = Command::new(self.binary_file.to_str().unwrap())
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .output()
-                    .unwrap();
-                process_output
+                    .spawn();
+                child
             }
         };
 
-        let output_file: Option<Arc<Mutex<File>>> = match &self.stdout {
-            Some(file) =>{
-                let output = File::create(file.to_str().unwrap()).unwrap();
-                Some(Arc::new(Mutex::new(output)))
-            },
-            _ => None,
-        };
+        let mut res_status = CPStatus::AC;
 
-        let err_file: Option<Arc<Mutex<File>>> = match &self.stderr {
-            Some(file) =>{
-                let err = File::create(file.to_str().unwrap()).unwrap();
-                Some(Arc::new(Mutex::new(err)))
-            },
-            _ => None,
-        };
+        if let Ok(child_output) = child {
+            let response = child_output
+                .with_output_timeout(Duration::from_millis(timeout as u64))
+                .terminating()
+                .wait();
+            
+            if let Ok(output_option)= response {
+                if let Some(output) = output_option {
 
-        let thread: std::thread::JoinHandle<()> = std::thread::spawn(move || {
-            for _ in 0..timeout {
-                if process_output.status.success() {
-                    match output_file {
-                        Some(f) => {
-                            let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                            file.write_all(&process_output.stdout).unwrap();
-                        },
-                        None => (),
+                    if output.status.success() {
+                        // OK
+                        match &self.stdout {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stdout).unwrap();
+                            },
+                            _ => (),
+                        }
+
+                        match &self.stderr {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stderr).unwrap();
+                            },
+                            _ => (),
+                        }
+                        res_status = CPStatus::AC;
+                    } else {
+                        res_status = CPStatus::RTE;
                     }
-                    match err_file {
-                        Some(f) => {
-                            let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                            file.write_all(&process_output.stderr).unwrap();
-                        },
-                        None => (),
-                    }
-                    return;
+                } else {
+                    res_status = CPStatus::TLE;
                 }
-                std::thread::sleep(std::time::Duration::from_millis(1));
             }
-        });
-        
-        thread.join().unwrap();
+        } else {
+            res_status = CPStatus::CE;
+        }
 
         let new_now: Instant = Instant::now();
-
         let time: Duration = new_now.duration_since(now);
 
-        time 
+        StatusResponse::new(time, res_status)
+    }
+
+    fn set_stdio(&mut self, stdin: &str) {
+        self.stdin = Some(PathBuf::from(stdin));
     }
 }
 
