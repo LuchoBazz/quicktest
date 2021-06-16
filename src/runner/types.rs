@@ -6,6 +6,7 @@
 
 use std::time::Duration;
 
+#[derive(PartialEq)]
 pub enum CPStatus {
     AC,
     WA,

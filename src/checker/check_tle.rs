@@ -15,7 +15,7 @@ use failure::ResultExt;
 use exitfailure::ExitFailure;
 use glob::glob;
 
-use crate::runner::types::Language;
+use crate::runner::types::{CPStatus, Language};
 use crate::util::file::file_exists;
 use crate::util::lang::{
     get_language_by_ext_default,
@@ -107,7 +107,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
     if !can_compile_target {
         let error = Err(failure::err_msg("failed to compile the target file"));
-        return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+        return Ok(error.context("compilation of <target-file> failed".to_string())?);
     }
 
     if save_cases {
@@ -129,11 +129,19 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         let response_gen = generator_file_lang.execute(timeout as u32);
         let time_gen = response_gen.time;
 
-        if time_gen >= Duration::from_millis(timeout as u64) {
+        if response_gen.status == CPStatus::RTE {
+            let error = Err(failure::err_msg("Generator file exited by Runtime Error"));
+            return Ok(error.context("Runtime Error of <gen-file>".to_string())?);
+        } else if response_gen.status == CPStatus::CE {
+            let error = Err(failure::err_msg("failed to compile the generator"));
+            return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+        }
+
+        if time_gen >= Duration::from_millis(timeout as u64) || response_gen.status == CPStatus::TLE {
             // TLE Generator
             println!(
                 "  {} [{}] {} {}ms",
-                test_number,
+                test_number.to_string().bold().white(),
                 "TLE".bold().red(),
                 "Generator Time Limit Exceeded :".bold().red(),
                 timeout
@@ -146,14 +154,28 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 
-        if time_target >= Duration::from_millis(timeout as u64) {
+        if response_target.status == CPStatus::RTE {
+            println!(
+                "  {} [{}] {} {}ms",
+                test_number.to_string().bold().white(),
+                "RTE".bold().red(),
+                "Runtime Error :".bold().red(),
+                mills_target
+            );
+            continue;
+        } else if response_target.status == CPStatus::CE {
+            let error = Err(failure::err_msg("failed to compile the target file"));
+            return Ok(error.context("compilation of <target-file> failed".to_string())?);
+        }
+
+        if time_target >= Duration::from_millis(timeout as u64) || response_gen.status == CPStatus::TLE{
             // TLE Target file
             
             tle_count += 1;
 
             println!(
                 "  {} [{}] {} {}ms",
-                test_number,
+                test_number.to_string().bold().white(),
                 "TLE".bold().red(),
                 "Time Limit Exceeded :".bold().red(),
                 timeout
@@ -207,9 +229,9 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         }
     }
     // remove input, output and error files
-    fs::remove_file(&QTEST_INPUT_FILE)?;
-    fs::remove_file(&QTEST_OUTPUT_FILE)?;
-    fs::remove_file(&QTEST_ERROR_FILE)?;
+    match fs::remove_file(&QTEST_INPUT_FILE) {_=>()}
+    match fs::remove_file(&QTEST_OUTPUT_FILE) {_=>()}
+    match fs::remove_file(&QTEST_ERROR_FILE) {_=>()}
 
     match file_exists(&TARGET_BINARY_FILE) {
         Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
@@ -223,5 +245,3 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
     Ok(())
 }
-
-

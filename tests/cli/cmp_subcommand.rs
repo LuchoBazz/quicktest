@@ -9,8 +9,8 @@ use assert_cmd::prelude::*; // Add methods on commands
 use predicates::prelude::*; // Used for writing assertion
 use std::error::Error;
 
-use super::test_utilities::create_files_cmp;
-use super::test_constants::{
+use crate::util::test_utilities::create_files_cmp;
+use crate::util::test_constants::{
     FOLDER,
     TARGET_CPP_CMP, CORRECT_CPP_CMP, GEN_CPP_CMP,
     TARGET_PY_CMP, CORRECT_PY_CMP, GEN_PY_CMP
