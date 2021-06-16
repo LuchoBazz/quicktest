@@ -9,12 +9,13 @@ use std::process::Command;
 use std::process::Stdio;
 use std::path::PathBuf;
 use std::fs::File;
-use std::sync::Arc;
-use std::sync::Mutex;
 use std::time::Duration;
 
 use crate::runner::types::Language;
 use std::time::Instant;
+
+use process_control::ChildExt;
+use process_control::Timeout;
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
@@ -83,80 +84,63 @@ impl Language for Cpp {
         // ref1: https://stackoverflow.com/questions/5218741/set-pipe-buffer-size
         // ref2: https://unix.stackexchange.com/questions/328250/set-pipe-capacity-in-linux
         // ref3: https://unix.stackexchange.com/questions/353728/can-i-increase-the-system-pipe-buffer-max
-
+        
         let now: Instant = Instant::now();
 
-        let mut child: std::process::Child = match &self.stdin {
+        let child: Result<std::process::Child, std::io::Error> = match &self.stdin {
             Some(file) => {
                 let input = File::open(file.to_str().unwrap()).unwrap();
                 let child = Command::new(self.binary_file.to_str().unwrap())
                     .stdin(Stdio::from(input))
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .spawn()
-                    .unwrap();
+                    .spawn();
                 child
             },
             _ => {
                 let child = Command::new(self.binary_file.to_str().unwrap())
                     .stdout(Stdio::piped())
                     .stderr(Stdio::piped())
-                    .spawn()
-                    .unwrap();
+                    .spawn();
                 child
             }
         };
-
-        let output_file: Option<Arc<Mutex<File>>> = match &self.stdout {
-            Some(file) => {
-                let output = File::create(file.to_str().unwrap()).unwrap();
-                Some(Arc::new(Mutex::new(output)))
-            },
-            _ => None,
-        };
-
-        let err_file: Option<Arc<Mutex<File>>> = match &self.stderr {
-            Some(file) => {
-                let err = File::create(file.to_str().unwrap()).unwrap();
-                Some(Arc::new(Mutex::new(err)))
-            },
-            _ => None,
-        };
-
-        let thread: std::thread::JoinHandle<()> = std::thread::spawn(move || {
-            for _ in 0..timeout {
-                if let Ok(Some(_)) = child.try_wait() {
-                    if let Ok(response) = child.wait_with_output() {
-                        match output_file {
-                            Some(f) => {
-                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                                file.write_all(&response.stdout).unwrap();
-                            },
-                            None => (),
-                        }
-
-                        match err_file {
-                            Some(f) => {
-                                let mut file: std::sync::MutexGuard<File> = f.lock().unwrap();
-                                file.write_all(&response.stderr).unwrap();
-                            },
-                            None => (),
-                        }
-                    }
-                    return;
-                }
-                std::thread::sleep(std::time::Duration::from_millis(1));
-            }
-            child.kill().unwrap();
-        });
         
-        thread.join().unwrap();
+        if let Ok(child_output) = child {
+            let response = child_output
+                .with_output_timeout(Duration::from_millis(timeout as u64))
+                .terminating()
+                .wait();
+            
+            if let Ok(output_option)= response {
+                if let Some(output) = output_option {
+                    // OK
+                    match &self.stdout {
+                        Some(file) => {
+                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                            writer.write_all(&output.stdout).unwrap();
+                        },
+                        _ => (),
+                    }
+
+                    match &self.stderr {
+                        Some(file) => {
+                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                            writer.write_all(&output.stderr).unwrap();
+                        },
+                        _ => (),
+                    }
+                } else {
+                    // TLE
+                }
+            }
+        } else {
+            // Compiler Error
+        }
 
         let new_now: Instant = Instant::now();
-
         let time: Duration = new_now.duration_since(now);
-
-        time 
+        time
     }
 
     fn set_stdio(&mut self, stdin: &str) {

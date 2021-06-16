@@ -26,7 +26,7 @@ T random(const T from, const T to) {
 }
 int main() {
     #define endl '\n'
-    int n = random<int>(1e3, 2e3);
+    int n = random<int>(1e5, 2e5);
     cout << n << endl;
     for(int i=0;i<n;++i) cout << random<int>(1, 1e9) << " ";
     cout << endl;
@@ -53,7 +53,7 @@ int main() {
 
 pub const GEN_PY_TLE: &str = r#"
 from random import uniform
-n = int(uniform(int(1e3), int(2e3)))
+n = int(uniform(int(1e5), int(2e5)))
 print(n)
 A = [int(uniform(1, int(1e9))) for _ in range(n)]
 print(*A)
