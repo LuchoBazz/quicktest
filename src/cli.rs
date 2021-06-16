@@ -68,6 +68,7 @@ pub enum Opt {
         #[structopt(short = "s", long = "save-cases")]
         save_cases: bool,
     },
+    /// Check the correctness of the answer using a script <checker-file> (Special for cases that do not have a unique answer)
     Check {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
@@ -96,5 +97,32 @@ pub enum Opt {
         /// Save test cases
         #[structopt(short = "s", long = "save-cases")]
         save_cases: bool,
+    },
+    /// Run the test cases that are locally
+    Run {
+
+        /// Target File
+        #[structopt(short = "t", long = "target-file", parse(from_os_str))]
+        target_file: PathBuf,
+
+        /// Timeout TLE
+        #[structopt(short = "o", long = "timeout", default_value = "2000")]
+        timeout: u32,
+
+        /// run all test cases
+        #[structopt(short = "a", long = "all")]
+        all: bool,
+
+        /// run test cases Wrong Answer
+        #[structopt(short = "w", long = "wa")]
+        wa: bool,
+
+        /// run test cases Time Limited Exceeded
+        #[structopt(short = "l", long = "tle")]
+        tle: bool,
+
+        /// run test cases Run Time Error
+        #[structopt(short = "r", long = "rte")]
+        rte: bool
     },
 }
