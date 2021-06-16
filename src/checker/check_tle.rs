@@ -96,9 +96,19 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
 
-    generator_file_lang.build();
+    let can_compile_gen = generator_file_lang.build();
+
+    if !can_compile_gen {
+        let error = Err(failure::err_msg("failed to compile the generator"));
+        return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+    }
     
-    target_file_lang.build();
+    let can_compile_target = target_file_lang.build();
+
+    if !can_compile_target {
+        let error = Err(failure::err_msg("failed to compile the target file"));
+        return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+    }
 
     if save_cases {
         // remove test cases prefixed with testcase_tle*.txt
@@ -116,7 +126,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     let mut tle_count: u32 = 0;
 
     for test_number in 1..=test_cases {
-        let time_gen: Duration = generator_file_lang.execute(timeout as u32);
+        let response_gen = generator_file_lang.execute(timeout as u32);
+        let time_gen = response_gen.time;
 
         if time_gen >= Duration::from_millis(timeout as u64) {
             // TLE Generator
@@ -131,7 +142,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             return Ok(error.context("Generator TLE".to_string())?);
         }
 
-        let time_target: Duration = target_file_lang.execute(timeout as u32);
+        let response_target = target_file_lang.execute(timeout as u32);
+        let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 
         if time_target >= Duration::from_millis(timeout as u64) {

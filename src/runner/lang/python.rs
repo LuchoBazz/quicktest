@@ -12,7 +12,7 @@ use std::fs::File;
 use std::time::Duration;
 use std::time::Instant;
 
-use crate::runner::types::Language;
+use crate::runner::types::{Language, CPStatus, StatusResponse};
 
 use process_control::ChildExt;
 use process_control::Timeout;
@@ -59,11 +59,12 @@ impl Python {
 
 impl Language for Python {
 
-    fn build(&self) -> () {
+    fn build(&self) -> bool {
         // no need to build
+        true
     }
 
-    fn execute(&self, timeout: u32) -> Duration {
+    fn execute(&self, timeout: u32) -> StatusResponse {
         let now: Instant = Instant::now();
 
         let child: Result<std::process::Child, std::io::Error> = match &self.stdin {
@@ -88,6 +89,8 @@ impl Language for Python {
             }
         };
 
+        let mut res_status = CPStatus::AC;
+
         if let Ok(child_output) = child {
             let response = child_output
                 .with_output_timeout(Duration::from_millis(timeout as u64))
@@ -96,33 +99,40 @@ impl Language for Python {
             
             if let Ok(output_option)= response {
                 if let Some(output) = output_option {
-                    // OK
-                    match &self.stdout {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stdout).unwrap();
-                        },
-                        _ => (),
-                    }
 
-                    match &self.stderr {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stderr).unwrap();
-                        },
-                        _ => (),
+                    if output.status.success() {
+                        // OK
+                        match &self.stdout {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stdout).unwrap();
+                            },
+                            _ => (),
+                        }
+
+                        match &self.stderr {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stderr).unwrap();
+                            },
+                            _ => (),
+                        }
+                        res_status = CPStatus::AC;
+                    } else {
+                        res_status = CPStatus::RTE;
                     }
                 } else {
-                    // TLE
+                    res_status = CPStatus::TLE;
                 }
             }
         } else {
-            // Compiler Error
+            res_status = CPStatus::CE;
         }
 
         let new_now: Instant = Instant::now();
         let time: Duration = new_now.duration_since(now);
-        time
+
+        StatusResponse::new(time, res_status)
     }
 
     fn set_stdio(&mut self, stdin: &str) {

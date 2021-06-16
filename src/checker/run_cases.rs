@@ -116,7 +116,9 @@ pub fn run(target_file: PathBuf, timeout: u32, all: bool, wa: bool, tle: bool, r
     for case in test_cases {
         let path = case.to_str().unwrap();
         any_target.set_stdio(path);
-        let time_target: std::time::Duration = any_target.execute(timeout);
+
+        let response_case = any_target.execute(timeout);
+        let time_target: std::time::Duration = response_case.time;
 
         let mills_target = time_target.as_millis();
 

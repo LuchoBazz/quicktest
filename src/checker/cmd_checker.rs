@@ -149,11 +149,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
     let mut wa_count: u32 = 0;
 
     for test_number in 1..=test_cases {
-        let time_gen: Duration = generator_file_lang.execute(timeout as u32);
-        let time_target: Duration = target_file_lang.execute(timeout as u32);
-        let time_checker: Duration = checker_file_lang_lang.execute(timeout as u32);
-
-        let mills_target: u128 = time_target.as_millis();
+        let response_gen = generator_file_lang.execute(timeout as u32);
+        let time_gen: Duration = response_gen.time;
 
         if time_gen >= Duration::from_millis(timeout as u64) {
             // TLE Generator
@@ -169,6 +166,12 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             return Ok(error.context("Generator TLE".to_string())?);
         }
 
+        let response_target = target_file_lang.execute(timeout as u32);
+        let time_target: Duration = response_target.time;
+
+        let response_checker = checker_file_lang_lang.execute(timeout as u32);
+        let time_checker: Duration = response_checker.time;
+
         if time_checker >= Duration::from_millis(timeout as u64) {
             // TLE Correct file
             println!(
@@ -183,6 +186,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             return Ok(error.context("Correct File TLE".to_string())?);
         }
 
+        let mills_target: u128 = time_target.as_millis();
+        
         if time_target >= Duration::from_millis(timeout as u64) {
             // TLE Target file
             

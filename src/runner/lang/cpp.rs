@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::fs::File;
 use std::time::Duration;
 
-use crate::runner::types::Language;
+use crate::runner::types::{Language, CPStatus, StatusResponse};
 use std::time::Instant;
 
 use process_control::ChildExt;
@@ -67,8 +67,8 @@ impl Cpp {
 
 impl Language for Cpp {
 
-    fn build(&self) -> () {
-        Command::new(self.program)
+    fn build(&self) -> bool {
+        let status = Command::new(self.program)
             .arg(self.standard)
             .args(&self.flags)
             .args(&self.variables)
@@ -77,13 +77,10 @@ impl Language for Cpp {
             .arg(self.file_name.to_str().unwrap())
             .status()
             .expect("Compiling C++ error");
+        status.code() == Some(0)
     }
 
-    fn execute(&self, timeout: u32) -> Duration {
-        // TODO: Set pipe buffer size
-        // ref1: https://stackoverflow.com/questions/5218741/set-pipe-buffer-size
-        // ref2: https://unix.stackexchange.com/questions/328250/set-pipe-capacity-in-linux
-        // ref3: https://unix.stackexchange.com/questions/353728/can-i-increase-the-system-pipe-buffer-max
+    fn execute(&self, timeout: u32) -> StatusResponse {
         
         let now: Instant = Instant::now();
 
@@ -105,7 +102,9 @@ impl Language for Cpp {
                 child
             }
         };
-        
+
+        let mut res_status = CPStatus::AC;
+
         if let Ok(child_output) = child {
             let response = child_output
                 .with_output_timeout(Duration::from_millis(timeout as u64))
@@ -114,33 +113,40 @@ impl Language for Cpp {
             
             if let Ok(output_option)= response {
                 if let Some(output) = output_option {
-                    // OK
-                    match &self.stdout {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stdout).unwrap();
-                        },
-                        _ => (),
-                    }
 
-                    match &self.stderr {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stderr).unwrap();
-                        },
-                        _ => (),
+                    if output.status.success() {
+                        // OK
+                        match &self.stdout {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stdout).unwrap();
+                            },
+                            _ => (),
+                        }
+
+                        match &self.stderr {
+                            Some(file) => {
+                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                                writer.write_all(&output.stderr).unwrap();
+                            },
+                            _ => (),
+                        }
+                        res_status = CPStatus::AC;
+                    } else {
+                        res_status = CPStatus::RTE;
                     }
                 } else {
-                    // TLE
+                    res_status = CPStatus::TLE;
                 }
             }
         } else {
-            // Compiler Error
+            res_status = CPStatus::CE;
         }
 
         let new_now: Instant = Instant::now();
         let time: Duration = new_now.duration_since(now);
-        time
+
+        StatusResponse::new(time, res_status)
     }
 
     fn set_stdio(&mut self, stdin: &str) {
