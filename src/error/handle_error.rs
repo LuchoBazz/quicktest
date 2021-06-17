@@ -60,3 +60,12 @@ pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailur
         format!("{} file", file_name)
     )?);
 }
+
+pub fn throw_break_found_msg(status_name: &str, status: &str, test_number: u32) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(
+        format!("Wrong answer {} on test {}", status_name, test_number)
+    ));
+    return Ok(error.context(
+        format!("{} status - break flag on", status)
+    )?);
+}

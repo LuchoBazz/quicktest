@@ -4,93 +4,64 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+// std library
 use std::collections::VecDeque;
-use std::path::Path;
 use std::path::PathBuf;
 use std::fs;
-use std::env;
 use std::time::Duration;
-use std::io::Write;
 
-use crate::runner::types::Language;
-use crate::util::file::file_exists;
+// local library
+use crate::error::handle_error::{
+    throw_runtime_error_msg, throw_time_limit_exceeded_msg,
+    throw_break_found_msg, throw_compiler_error_msg
+};
+use crate::file_handler::file::{
+    create_folder_or_error, file_exists_or_error, remove_files,
+    remove_files_with_prefix, write_file
+};
+use crate::file_handler::path::get_root_path;
+use crate::painter::style::{
+    show_accepted, show_runtime_error, show_time_limit_exceeded,
+    show_time_limit_exceeded_generator, show_wrong_answer,
+    show_time_limit_exceeded_checker
+};
+use crate::runner::types::{
+    is_runtime_error, is_time_limit_exceeded,
+    Language, is_compiled_error
+};
+
+// dependencies
+use exitfailure::ExitFailure;
 
 // Constants
-use crate::constants::CACHE_FOLDER;
-use crate::constants::TARGET_BINARY_FILE;
-use crate::constants::CHECKER_BINARY_FILE;
-use crate::constants::GEN_BINARY_FILE;
-use crate::constants::QTEST_INPUT_FILE;
-use crate::constants::QTEST_OUTPUT_FILE;
-use crate::constants::QTEST_ERROR_FILE;
-use crate::constants::QTEST_CHECKER_FILE;
+use crate::constants::{
+    CACHE_FOLDER, PREFIX_WA_FILES, TEST_CASES_FOLDER,
+    TARGET_BINARY_FILE, CHECKER_BINARY_FILE, GEN_BINARY_FILE,
+    QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
+    QTEST_CHECKER_FILE
+};
 use crate::util::lang::{
     get_language_by_ext_default,
     get_language_by_ext_set_output
 };
 
-use failure::ResultExt;
-use exitfailure::ExitFailure;
-use colored::*;
-use glob::glob;
-
 pub fn run(target_file: PathBuf, checker_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
         save_cases: bool) -> Result<(), ExitFailure>  {
     
-     // Check if the CACHE_FOLDER folder is already created
-     match fs::read_dir(CACHE_FOLDER) {
-        Ok(_) => (),
-        Err(_) => match fs::create_dir(CACHE_FOLDER) {
-            Ok(_) => (),
-            Err(_) => {
-                // If not, create the folder
-                let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't create internal cache files")));
-                return Ok(error.context("Error creating internal cache files".to_string())?);
-            }
-        },
-    }
+    // create cache folder
+    create_folder_or_error(CACHE_FOLDER)?;
     
     // verify that the target file exists
-    let file_name = target_file.to_str().unwrap();
-    match file_exists(file_name) {
-        Ok(_) => (),
-        Err(_) => {
-            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
-            return Ok(error.context("<target-file> Not found".to_string())?);
-        }
-    }
+    file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
 
-    // verify that the correct file exists
-    let file_name = checker_file.to_str().unwrap();
-    match file_exists(file_name) {
-        Ok(_) => (),
-        Err(_) => {
-            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
-            return Ok(error.context("<checker-file> Not found".to_string())?);
-        }
-    }
+    // verify that the checker_file file exists
+    file_exists_or_error(checker_file.to_str().unwrap(), "<checker-file>")?;
 
     // verify that the generator file exists
-    let file_name = gen_file.to_str().unwrap();
-    match file_exists(file_name) {
-        Ok(_) => (),
-        Err(_) => {
-            let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't open the file '{}'", file_name)));
-            return Ok(error.context("<gen-file> Not found".to_string())?);
-        }
-    }
+    file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
 
-    // get root path
-    let root: PathBuf = match env::current_dir() {
-        Ok(path) => path,
-        _ => unreachable!(),
-    };
-
-    let root: &str = match root.to_str() {
-        Some(root_path) => root_path,
-        _ => unreachable!(),
-    };
+    let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
     let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
@@ -126,23 +97,25 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
     let any_checker: Box<dyn Language> = any_checker.unwrap();
     let checker_file_lang_lang: &dyn Language = any_checker.as_ref();
 
-    checker_file_lang_lang.build();
-
-    target_file_lang.build();
-
-    generator_file_lang.build();
+    let can_compile_gen = generator_file_lang.build();
+    if !can_compile_gen {
+        return throw_compiler_error_msg("generator", "<gen-file>");
+    }
+    
+    let can_compile_target = target_file_lang.build();
+    if !can_compile_target {
+        return throw_compiler_error_msg("target", "<target-file>");
+    }
+    
+    let can_compile_checker = checker_file_lang_lang.build();
+    if !can_compile_checker {
+        return throw_compiler_error_msg("checker", "<checker-file>");
+    }
 
     if save_cases {
         // remove test cases prefixed with testcase_wa*.txt
-        let paths = glob("test_cases/testcase_wa*")?;
-        for entry in paths {
-            match entry {
-                Ok(path) => {
-                    fs::remove_file(path.to_str().unwrap())?;
-                },
-                Err(_) => (),
-            }
-        }
+        let prefix = &format!("{}/{}*", TEST_CASES_FOLDER, PREFIX_WA_FILES)[..];
+        remove_files_with_prefix(prefix);
     }
 
     let mut tle_count: u32 = 0;
@@ -152,94 +125,70 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
         let response_gen = generator_file_lang.execute(timeout as u32);
         let time_gen: Duration = response_gen.time;
 
-        if time_gen >= Duration::from_millis(timeout as u64) {
-            // TLE Generator
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number,
-                "TLE".bold().red(),
-                "Generator Time Limit Exceeded :".bold().red(),
-                timeout
-            );
+        if is_runtime_error(&response_gen.status) {
+            return throw_runtime_error_msg("generator", "<gen-file>");
+        } else if is_compiled_error(&response_gen.status) {
+            return throw_compiler_error_msg("generator", "<gen-file>");
+        }
 
-            let error: Result<(), failure::Error> = Err(failure::err_msg("very slow generator"));
-            return Ok(error.context("Generator TLE".to_string())?);
+        if time_gen >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
+            // TLE Generator
+            show_time_limit_exceeded_generator(test_number, timeout);
+            return throw_time_limit_exceeded_msg("generator", "<gen-file>");
         }
 
         let response_target = target_file_lang.execute(timeout as u32);
         let time_target: Duration = response_target.time;
+        let mills_target: u128 = time_target.as_millis();
+
+        if is_runtime_error(&response_target.status) {
+            show_runtime_error(test_number, mills_target as u32);
+            continue;
+        } else if is_compiled_error(&response_target.status) {
+            return throw_compiler_error_msg("target", "<target-file>");
+        }
 
         let response_checker = checker_file_lang_lang.execute(timeout as u32);
         let time_checker: Duration = response_checker.time;
 
-        if time_checker >= Duration::from_millis(timeout as u64) {
-            // TLE Correct file
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number,
-                "TLE".bold().red(),
-                "Correct File give Time Limit Exceeded :".bold().red(),
-                timeout
-            );
-
-            let error: Result<(), failure::Error> = Err(failure::err_msg("Correct file very slow"));
-            return Ok(error.context("Correct File TLE".to_string())?);
+        if is_runtime_error(&response_checker.status) {
+            return throw_runtime_error_msg("checker", "<checker-file>");
+        } else if is_compiled_error(&response_checker.status) {
+            return throw_compiler_error_msg("checker", "<checker-file>");
         }
 
-        let mills_target: u128 = time_target.as_millis();
-        
-        if time_target >= Duration::from_millis(timeout as u64) {
-            // TLE Target file
-            
-            tle_count += 1;
+        if time_checker >= Duration::from_millis(timeout as u64) {
+            // TLE checker file
+            show_time_limit_exceeded_checker(test_number, timeout);
+            return throw_time_limit_exceeded_msg("checker", "<checker-file>");
+        }
 
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number,
-                "TLE".bold().red(),
-                "Time Limit Exceeded :".bold().red(),
-                timeout
-            );
-        
-            // Verify that the folder test_cases exists, in case it does not exist create it
-            if save_cases && !Path::new("test_cases").exists() {
-                match fs::create_dir("test_cases") {
-                    Err(_) => {
-                        let error = Err(failure::err_msg("Could not create folder test_cases"));
-                        return Ok(error.context("test_cases folder".to_string())?);
-                    }
-                    _ => (),
-                }
-            }
+        if time_target >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_target.status) {
+            // TLE Target file
+            tle_count += 1;
+            show_time_limit_exceeded(test_number, timeout);
 
             // Save the input of the test case that gave status tle
             if save_cases {
-                let filename: String = format!("test_cases/testcase_tle_{}.txt", tle_count);
-                let mut file = fs::File::create(filename)
-                    .expect("Error creating file test_cases/testcase(i).txt");
-                file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
+                // create test_cases folder
+                create_folder_or_error(TEST_CASES_FOLDER)?;
+                // Example: test_cases/testcase_tle_1.txt
+                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_WA_FILES, tle_count)[..];
+                write_file(file_name, fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes())?;
             }
             
             // check if the wa_break flag is high
             if wa_break {
                 // remove input, output and error files
-                fs::remove_file(&QTEST_INPUT_FILE)?;
-                fs::remove_file(&QTEST_OUTPUT_FILE)?;
-                fs::remove_file(&QTEST_ERROR_FILE)?;
-                fs::remove_file(&QTEST_CHECKER_FILE)?;
-
-                match file_exists(&TARGET_BINARY_FILE) {
-                    Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
-                    _ => (),
-                }
-                match file_exists(&GEN_BINARY_FILE) {
-                    Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
-                    _ => (),
-                }
-                match file_exists(&CHECKER_BINARY_FILE) {
-                    Ok(_) => fs::remove_file(&CHECKER_BINARY_FILE)?,
-                    _ => (),
-                };
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    QTEST_CHECKER_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                    CHECKER_BINARY_FILE
+                ]);
                 return Ok(());
             }
         } else {
@@ -249,87 +198,48 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             // Check WA Status
             if check_answer(&file_checker, true) {
                 // is OK
-                println!(
-                    "  {} [{}] {} {}ms",
-                    test_number.to_string().bold().white(),
-                    "OK".bold().green(),
-                    "Finished in".bold().green(), mills_target
-                );
+                show_accepted(test_number, mills_target as u32);
             } else {
                 // WA found
                 wa_count += 1;
-                println!(
-                    "  {} [{}] {} {}ms",
-                    test_number.to_string().bold().white(),
-                    "WA".bold().red(),
-                    "Finished in".bold().red(), mills_target
-                );
 
-                // Verify that the folder test_cases exists, in case it does not exist create it
-                if save_cases && !Path::new("test_cases").exists() {
-                    match fs::create_dir("test_cases") {
-                        Err(_) => {
-                            let error = Err(failure::err_msg("Could not create folder test_cases"));
-                            return Ok(error.context("test_cases folder".to_string())?);
-                        }
-                        _ => (),
-                    }
-                }
+                show_wrong_answer(test_number, mills_target as u32);
 
-                // Save the input of the test case that gave status tle
+                // Save the input of the test case that gave status wa
                 if save_cases {
-                    let filename: String = format!("test_cases/testcase_wa_{}.txt", wa_count);
-                    let mut file = fs::File::create(filename)
-                        .expect("Error creating file test_cases/testcase(i).txt");
-                    file.write_all(fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes()).unwrap();
+                    create_folder_or_error(TEST_CASES_FOLDER)?;
+                    // Example: test_cases/testcase_wa_1.txt
+                    let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_WA_FILES, wa_count)[..];
+                    write_file(file_name, fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes())?;
                 }
 
                 if wa_break {
                     // remove input, output and error files
-                    fs::remove_file(&QTEST_INPUT_FILE)?;
-                    fs::remove_file(&QTEST_OUTPUT_FILE)?;
-                    fs::remove_file(&QTEST_ERROR_FILE)?;
-                    fs::remove_file(&QTEST_CHECKER_FILE)?;
-                    
-                    match file_exists(&TARGET_BINARY_FILE) {
-                        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
-                        _ => (),
-                    }
-                    match file_exists(&GEN_BINARY_FILE) {
-                        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
-                        _ => (),
-                    }
-                    match file_exists(&CHECKER_BINARY_FILE) {
-                        Ok(_) => fs::remove_file(&CHECKER_BINARY_FILE)?,
-                        _ => (),
-                    };
-
-                    let error = Err(failure::err_msg(format!("Wrong answer on test {}", test_number)));
-                    return Ok(error.context("WA Status".to_string())?);
+                    remove_files(vec![
+                        QTEST_INPUT_FILE,
+                        QTEST_OUTPUT_FILE,
+                        QTEST_ERROR_FILE,
+                        QTEST_CHECKER_FILE,
+                        TARGET_BINARY_FILE,
+                        GEN_BINARY_FILE,
+                        CHECKER_BINARY_FILE
+                    ]);
+                    return throw_break_found_msg("Wrong Answer", "WA", test_cases);
                 }
             }
         }
-
-        // remove input, output and error files
-        fs::remove_file(&QTEST_INPUT_FILE)?;
-        fs::remove_file(&QTEST_OUTPUT_FILE)?;
-        fs::remove_file(&QTEST_ERROR_FILE)?;
-        fs::remove_file(&QTEST_CHECKER_FILE)?;
-        
     }
 
-    match file_exists(&TARGET_BINARY_FILE) {
-        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
-        _ => (),
-    }
-    match file_exists(&GEN_BINARY_FILE) {
-        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
-        _ => (),
-    }
-    match file_exists(&CHECKER_BINARY_FILE) {
-        Ok(_) => fs::remove_file(&CHECKER_BINARY_FILE)?,
-        _ => (),
-    }
+    // remove input, output, error and binary files
+    remove_files(vec![
+        QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE,
+        QTEST_CHECKER_FILE,
+        TARGET_BINARY_FILE,
+        GEN_BINARY_FILE,
+        CHECKER_BINARY_FILE
+    ]);
 
     Ok(())
 }

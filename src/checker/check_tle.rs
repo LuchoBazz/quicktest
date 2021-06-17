@@ -122,7 +122,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        if time_target >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
+        if time_target >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_target.status) {
             // TLE Target file
             tle_count += 1;
             show_time_limit_exceeded(test_number, timeout);
