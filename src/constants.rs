@@ -34,3 +34,5 @@ pub const QTEST_ERROR_FILE: &str= ".qtest/quicktest_error.txt";
 
 pub const QTEST_EXPECTED_FILE: &str= ".qtest/expected_testcase.txt";
 pub const QTEST_CHECKER_FILE: &str= ".qtest/checker_testcase.txt";
+
+pub const PREFIX_TLE_FILES: &str = "testcase_tle";

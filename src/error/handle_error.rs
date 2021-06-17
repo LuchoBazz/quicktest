@@ -51,3 +51,12 @@ pub fn throw_couldnt_open_file_msg(file_name: &str, label: &str) -> Result<(), E
         format!("{} Not found", label)
     )?);
 }
+
+pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(
+        format!("Could not write to folder {}", file_name)
+    ));
+    return Ok(error.context(
+        format!("{} file", file_name)
+    )?);
+}
