@@ -10,16 +10,23 @@ use std::time::Duration;
 use std::env;
 use std::fs;
 
-use colored::*;
 use failure::ResultExt;
 use exitfailure::ExitFailure;
 use glob::glob;
 
-use crate::runner::types::{CPStatus, Language};
+use crate::error::handle_error::{throw_compiler_error_msg, throw_runtime_error_msg, throw_time_limit_exceeded_msg};
+use crate::runner::types::{
+    Language, is_time_limit_exceeded,
+    is_compiled_error, is_runtime_error
+};
 use crate::util::file::file_exists;
 use crate::util::lang::{
     get_language_by_ext_default,
     get_language_by_ext_set_output
+};
+use crate::painter::style::{
+    show_accepted, show_time_limit_exceeded,
+    show_time_limit_exceeded_generator, show_runtime_error
 };
 
 // Constants
@@ -97,17 +104,13 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     let target_file_lang: &dyn Language = any_target.as_ref();
 
     let can_compile_gen = generator_file_lang.build();
-
     if !can_compile_gen {
-        let error = Err(failure::err_msg("failed to compile the generator"));
-        return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+        return throw_compiler_error_msg("generator", "<gen-file>");
     }
     
     let can_compile_target = target_file_lang.build();
-
     if !can_compile_target {
-        let error = Err(failure::err_msg("failed to compile the target file"));
-        return Ok(error.context("compilation of <target-file> failed".to_string())?);
+        return throw_compiler_error_msg("target", "<target-file>");
     }
 
     if save_cases {
@@ -129,57 +132,33 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         let response_gen = generator_file_lang.execute(timeout as u32);
         let time_gen = response_gen.time;
 
-        if response_gen.status == CPStatus::RTE {
-            let error = Err(failure::err_msg("Generator file exited by Runtime Error"));
-            return Ok(error.context("Runtime Error of <gen-file>".to_string())?);
-        } else if response_gen.status == CPStatus::CE {
-            let error = Err(failure::err_msg("failed to compile the generator"));
-            return Ok(error.context("compilation of <gen-file> failed".to_string())?);
+        if is_runtime_error(&response_gen.status) {
+            return throw_runtime_error_msg("generator", "<gen-file>");
+        } else if is_compiled_error(&response_gen.status) {
+            return throw_compiler_error_msg("generator", "<gen-file>");
         }
 
-        if time_gen >= Duration::from_millis(timeout as u64) || response_gen.status == CPStatus::TLE {
+        if time_gen >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
             // TLE Generator
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number.to_string().bold().white(),
-                "TLE".bold().red(),
-                "Generator Time Limit Exceeded :".bold().red(),
-                timeout
-            );
-            let error = Err(failure::err_msg("very slow generator"));
-            return Ok(error.context("Generator TLE".to_string())?);
+            show_time_limit_exceeded_generator(test_number, timeout);
+            return throw_time_limit_exceeded_msg("generator", "<gen-file>");
         }
 
         let response_target = target_file_lang.execute(timeout as u32);
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 
-        if response_target.status == CPStatus::RTE {
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number.to_string().bold().white(),
-                "RTE".bold().red(),
-                "Runtime Error :".bold().red(),
-                mills_target
-            );
+        if is_runtime_error(&response_target.status) {
+            show_runtime_error(test_number, mills_target as u32);
             continue;
-        } else if response_target.status == CPStatus::CE {
-            let error = Err(failure::err_msg("failed to compile the target file"));
-            return Ok(error.context("compilation of <target-file> failed".to_string())?);
+        } else if is_compiled_error(&response_target.status) {
+            return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        if time_target >= Duration::from_millis(timeout as u64) || response_gen.status == CPStatus::TLE{
+        if time_target >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
             // TLE Target file
-            
             tle_count += 1;
-
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number.to_string().bold().white(),
-                "TLE".bold().red(),
-                "Time Limit Exceeded :".bold().red(),
-                timeout
-            );
+            show_time_limit_exceeded(test_number, timeout);
         
             // Verify that the folder test_cases exists, in case it does not exist create it
             if save_cases && !Path::new("test_cases").exists() {
@@ -220,12 +199,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                return Ok(());
             }
         } else {
-            println!(
-                "  {} [{}] {} {}ms",
-                test_number.to_string().bold().white(),
-                "OK".bold().green(),
-                "Finished in".bold().green(), mills_target
-            );
+            show_accepted(test_number, mills_target as u32);
         }
     }
     // remove input, output and error files
