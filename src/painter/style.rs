@@ -34,6 +34,7 @@ pub fn show_time_limit_exceeded(test_number: u32, time: u32) {
     );
 }
 
+// TODO: modularize these functions
 pub fn show_time_limit_exceeded_generator(test_number: u32, time: u32) {
     println!(
         "  {} [{}] {} {}ms",
@@ -50,6 +51,16 @@ pub fn show_time_limit_exceeded_checker(test_number: u32, time: u32) {
         test_number.to_string().bold().white(),
         "TLE".bold().red(),
         "Checker Time Limit Exceeded :".bold().red(),
+        time
+    );
+}
+
+pub fn show_time_limit_exceeded_correct(test_number: u32, time: u32) {
+    println!(
+        "  {} [{}] {} {}ms",
+        test_number.to_string().bold().white(),
+        "TLE".bold().red(),
+        "Correct File Time Limit Exceeded :".bold().red(),
         time
     );
 }
