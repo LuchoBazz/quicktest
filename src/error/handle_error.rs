@@ -33,3 +33,21 @@ pub fn throw_time_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(),
         format!("{} TLE", label)
     )?);
 }
+
+pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(
+        format!("Could not create folder {}", file_name)
+    ));
+    return Ok(error.context(
+        format!("{} folder", file_name)
+    )?);
+}
+
+pub fn throw_couldnt_open_file_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(
+        format!("Can't open the file {}", file_name)
+    ));
+    return Ok(error.context(
+        format!("{} Not found", label)
+    )?);
+}

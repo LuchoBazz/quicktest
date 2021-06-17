@@ -10,11 +10,14 @@ use std::time::Duration;
 use std::env;
 use std::fs;
 
-use failure::ResultExt;
 use exitfailure::ExitFailure;
 use glob::glob;
 
-use crate::error::handle_error::{throw_compiler_error_msg, throw_runtime_error_msg, throw_time_limit_exceeded_msg};
+use crate::error::handle_error::{
+    throw_compiler_error_msg, throw_couldnt_create_folder_msg,
+    throw_couldnt_open_file_msg, throw_runtime_error_msg,
+    throw_time_limit_exceeded_msg
+};
 use crate::runner::types::{
     Language, is_time_limit_exceeded,
     is_compiled_error, is_runtime_error
@@ -30,45 +33,30 @@ use crate::painter::style::{
 };
 
 // Constants
-use crate::constants::CACHE_FOLDER;
-use crate::constants::TARGET_BINARY_FILE;
-use crate::constants::GEN_BINARY_FILE;
-use crate::constants::QTEST_INPUT_FILE;
-use crate::constants::QTEST_OUTPUT_FILE;
-use crate::constants::QTEST_ERROR_FILE;
+use crate::constants::{
+    CACHE_FOLDER, TARGET_BINARY_FILE, GEN_BINARY_FILE,
+    QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE
+};
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
         test_cases: u32, timeout: u32, tle_break: bool, save_cases: bool) -> Result<(), ExitFailure> {
     
     // Check if the CACHE_FOLDER folder is already created
-    match fs::read_dir(CACHE_FOLDER) {
-        Ok(_) => (),
-        Err(_) => match fs::create_dir(CACHE_FOLDER) {
-            Ok(_) => (),
-            Err(_) => {
-                // If not, create the folder
-                let error: Result<(), failure::Error> = Err(failure::err_msg(format!("Can't create internal cache files")));
-                return Ok(error.context("Error creating internal cache files".to_string())?);
-            }
-        },
+    if let Err(_) = fs::read_dir(CACHE_FOLDER) {
+        if let Err(_) = fs::create_dir(CACHE_FOLDER) {
+            // If not, create the folder
+            return throw_couldnt_create_folder_msg(CACHE_FOLDER);
+        }
     }
 
     // verify that the target file exists
-    match fs::File::open(target_file.to_str().unwrap()) {
-        Err(_) => {
-            let error = Err(failure::err_msg(format!("Can't open the file {}", target_file.to_str().unwrap())));
-            return Ok(error.context("<target-file> Not found".to_string())?);
-        },
-        _ => (),
+    if let Err(_) = fs::File::open(target_file.to_str().unwrap()) {
+        return throw_couldnt_open_file_msg(target_file.to_str().unwrap(), "<target-file>");
     }
-
+    
     // verify that the generator file exists
-    match fs::File::open(gen_file.to_str().unwrap()) {
-        Err(_) => {
-            let error = Err(failure::err_msg(format!("Can't open the file {}", gen_file.to_str().unwrap())));
-            return Ok(error.context("<gen-file> Not found".to_string())?);
-        },
-        _ => (),
+    if let Err(_) = fs::File::open(gen_file.to_str().unwrap()) {
+        return throw_couldnt_open_file_msg(gen_file.to_str().unwrap(), "<gen-file>");
     }
 
     let root = match env::current_dir() {
@@ -117,11 +105,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         // remove test cases prefixed with testcase_tle*.txt
         let paths = glob("test_cases/testcase_tle*")?;
         for entry in paths {
-            match entry {
-                Ok(path) => {
-                    fs::remove_file(path.to_str().unwrap())?;
-                },
-                Err(_) => (),
+            if let Ok(path) = entry {
+                fs::remove_file(path.to_str().unwrap())?;
             }
         }
     }
@@ -162,12 +147,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         
             // Verify that the folder test_cases exists, in case it does not exist create it
             if save_cases && !Path::new("test_cases").exists() {
-                match fs::create_dir("test_cases") {
-                    Err(_) => {
-                        let error = Err(failure::err_msg("Could not create folder test_cases"));
-                        return Ok(error.context("test_cases folder".to_string())?);
-                    }
-                    _ => (),
+                if let Err(_) = fs::create_dir("test_cases") {
+                    return throw_couldnt_create_folder_msg("test_cases");
                 }
             }
 
@@ -188,13 +169,11 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                 fs::remove_file(&QTEST_OUTPUT_FILE)?;
                 fs::remove_file(&QTEST_ERROR_FILE)?;
 
-                match file_exists(&TARGET_BINARY_FILE) {
-                    Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
-                    _ => (),
+                if let Ok(_) = file_exists(&TARGET_BINARY_FILE) {
+                    fs::remove_file(&TARGET_BINARY_FILE)?;
                 }
-                match file_exists(&GEN_BINARY_FILE) {
-                    Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
-                    _ => (),
+                if let Ok(_) = file_exists(&GEN_BINARY_FILE) {
+                    fs::remove_file(&GEN_BINARY_FILE)?;
                 }
                return Ok(());
             }
@@ -207,14 +186,11 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     match fs::remove_file(&QTEST_OUTPUT_FILE) {_=>()}
     match fs::remove_file(&QTEST_ERROR_FILE) {_=>()}
 
-    match file_exists(&TARGET_BINARY_FILE) {
-        Ok(_) => fs::remove_file(&TARGET_BINARY_FILE)?,
-        _ => (),
+    if let Ok(_) = file_exists(&TARGET_BINARY_FILE) {
+        fs::remove_file(&TARGET_BINARY_FILE)?;
     }
-    
-    match file_exists(&GEN_BINARY_FILE) {
-        Ok(_) => fs::remove_file(&GEN_BINARY_FILE)?,
-        _ => (),
+    if let Ok(_) = file_exists(&GEN_BINARY_FILE) {
+        fs::remove_file(&GEN_BINARY_FILE)?;
     }
 
     Ok(())
