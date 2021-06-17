@@ -1,6 +1,6 @@
 use std::{io::Write, path::{Path, PathBuf}};
 
-use crate::cli::test_constants::FOLDER;
+use crate::util::test_constants::FOLDER;
 
 pub fn create_files_tle(target: &str, gen: &str,
         target_code: &str, gen_code: &str, new_folder: &str) -> Result<(), std::io::Error> {

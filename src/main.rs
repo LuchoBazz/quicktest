@@ -11,6 +11,9 @@ pub mod checker;
 pub mod runner;
 pub mod util;
 pub mod constants;
+pub mod painter;
+pub mod error;
+pub mod file_handler;
 
 use crate::cli::Opt;
 

@@ -4,5 +4,4 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub mod cli;
-pub mod util;
+pub mod handle_error;
