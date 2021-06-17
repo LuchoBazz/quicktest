@@ -9,8 +9,8 @@ use assert_cmd::prelude::*; // Add methods on commands
 use predicates::prelude::*; // Used for writing assertion
 use std::error::Error;
 
-use super::test_utilities::create_files_check;
-use super::test_constants::{
+use crate::util::test_utilities::create_files_check;
+use crate::util::test_constants::{
     FOLDER,
     TARGET_CPP_CHECK, CHECKER_CPP_CHECK, GEN_CPP_CHECK
 };
