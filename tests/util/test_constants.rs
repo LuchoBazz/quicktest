@@ -5,6 +5,19 @@
  */
 
 pub const FOLDER: &str = "target/.code";
+pub const FOLDER_TLE: &str = "tle";
+
+#[cfg(unix)]
+pub const BINARY: &str = "./target/debug/quicktest";
+
+#[cfg(windows)]
+pub const BINARY: &str = "./target/debug/quicktest.exe";
+
+pub const TARGET_FILE_CPP: &str = "main.cpp";
+pub const GEN_FILE_CPP: &str = "gen.cpp";
+
+pub const TARGET_FILE_PY: &str = "main.py";
+pub const GEN_FILE_PY: &str = "gen.py";
 
 // CMP CODES
 pub const TARGET_CPP_CMP: &str = r#"
