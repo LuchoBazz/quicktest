@@ -4,8 +4,9 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub const FOLDER: &str = "target/.code";
+pub const FOLDER:     &str = "target/.code";
 pub const FOLDER_TLE: &str = "tle";
+pub const FOLDER_CMP: &str = "cmp";
 
 #[cfg(unix)]
 pub const BINARY: &str = "./target/debug/quicktest";
@@ -13,109 +14,38 @@ pub const BINARY: &str = "./target/debug/quicktest";
 #[cfg(windows)]
 pub const BINARY: &str = "./target/debug/quicktest.exe";
 
-pub const TARGET_FILE_CPP: &str = "main.cpp";
-pub const GEN_FILE_CPP: &str = "gen.cpp";
+pub const TARGET_FILE_CPP:  &str = "main.cpp";
+pub const CORRECT_FILE_CPP: &str = "correct.cpp";
+pub const GEN_FILE_CPP:     &str = "gen.cpp";
 
-pub const TARGET_FILE_PY: &str = "main.py";
-pub const GEN_FILE_PY: &str = "gen.py";
+pub const TARGET_FILE_PY:   &str = "main.py";
+pub const CORRECT_FILE_PY:  &str = "correct.py";
+pub const GEN_FILE_PY:      &str = "gen.py";
 
-// CMP CODES
-pub const TARGET_CPP_CMP: &str = r#"
+// RTE CODES
+pub const RTE_CPP: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    int n; cin >> n;
-    vector<int> arr(n);
-    for(auto &a: arr) cin >> a;
-    sort(arr.begin(), arr.end());
-
-    cout << n << endl;
-    for(auto &a: arr) cout << a << " ";
-    cout << endl;
-    
-    return 0;
-}
-"#;
-
-pub const CORRECT_CPP_CMP: &str = r#"
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-
-    int n; cin >> n;
-    vector<int> arr(n);
-    for(auto &a: arr) cin >> a;
-    
-    for (int i = 0; i < n-1; i++) {
-        for (int j = 0; j < n-i-1; j++) {
-            if (arr[j] > arr[j+1]) {
-                swap(arr[j], arr[j+1]);
-            }
-        }
+    // Generate divide by zero error
+    for(int i = 0; i < 10; ++i) {
+        int y = 10 / i;
     }
-
-    cout << n << endl;
-    for(auto &a: arr) cout << a << " ";
-    cout << endl;
-    
-    return 0;
 }
 "#;
 
-pub const GEN_CPP_CMP: &str = r#"
+pub const RTE_PY: &str = r#"
+for i in range(10):
+    print(10 / i)
+"#;
+
+// CE CODES
+pub const CE_CPP: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
-template <typename T>
-T random(const T from, const T to) {
-    static random_device rdev;
-    static default_random_engine re(rdev());
-
-    using dist_type = typename conditional<
-        is_floating_point<T>::value,
-        uniform_real_distribution<T>,
-        uniform_int_distribution<T>
-    >::type;
-
-    dist_type uni(from, to);
-    return static_cast<T>(uni(re));
-}
 int main() {
-    int n = random<int>(1e2, 2e2);
-    cout << n << endl;
-    for(int i=0;i<n;++i) cout << random<int>(1, 1e9) << " ";
-    cout << endl;
-    
-    return 0;
+    Generate Compiler Error
 }
-"#;
-
-pub const TARGET_PY_CMP: &str = r#"
-n = int(input())
-A = list(map(int, input().split()))
-A.sort()
-print(n)
-print(*A)
-"#;
-
-pub const CORRECT_PY_CMP: &str = r#"
-n = int(input())
-A = list(map(int, input().split()))
-
-for i in range(n-1):
-    for j in range(n-i-1):
-        if A[j] > A[j+1]:
-            A[j], A[j+1] = A[j+1], A[j]
-
-print(n)
-print(*A)
-"#;
-
-pub const GEN_PY_CMP: &str = r#"
-from random import uniform
-n = int(uniform(int(1e2), int(2e2)))
-print(n)
-A = [int(uniform(1, int(1e9))) for _ in range(n)]
-print(*A)
 "#;
 
 // CHECKER CODES

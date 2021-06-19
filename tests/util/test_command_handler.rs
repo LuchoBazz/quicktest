@@ -7,7 +7,7 @@
 use std::process::Command;
 
 use crate::util::test_constants::{
-    FOLDER, FOLDER_TLE
+    FOLDER, FOLDER_TLE, FOLDER_CMP
 }; 
 
 pub fn execute_command_tle(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
@@ -16,6 +16,18 @@ pub fn execute_command_tle(cmd: &mut Command, target_file: &str, gen_file: &str,
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_TLE, target_file))
         .arg("--gen-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_TLE, gen_file))
+        .arg("--timeout=1000")
+        .arg(format!("--test-cases={}", cases));
+}
+
+pub fn execute_command_cmp(cmd: &mut Command, target_file: &str, correct_file: &str, gen_file: &str, cases: usize) {
+    cmd.arg("cmp")
+        .arg("--target-file")
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, target_file))
+        .arg("--correct-file")
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, correct_file))
+        .arg("--gen-file")
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, gen_file))
         .arg("--timeout=1000")
         .arg(format!("--test-cases={}", cases));
 }

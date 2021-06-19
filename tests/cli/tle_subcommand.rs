@@ -13,10 +13,7 @@ use predicates::prelude::*; // Used for writing assertion
 use std::error::Error;
 use crate::util::test_command_handler::execute_command_tle;
 use crate::util::test_utilities::create_files_tle;
-use crate::util::test_constants::{
-    BINARY, FOLDER_TLE, GEN_FILE_CPP, GEN_FILE_PY,
-    TARGET_FILE_CPP, TARGET_FILE_PY
-};
+use crate::util::test_constants::{BINARY, CE_CPP, FOLDER_TLE, GEN_FILE_CPP, GEN_FILE_PY, RTE_CPP, RTE_PY, TARGET_FILE_CPP, TARGET_FILE_PY};
 
 // // TLE CODES
 pub const GEN_CPP_TLE: &str = r#"
@@ -140,20 +137,8 @@ fn cmd_tle_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 // CHECK RTE in Subcommand tle
-
-const RTE_CPP: &str = r#"
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    // Generate divide by zero error
-    for(int i = 0; i < 10; ++i) {
-        int y = 10 / i;
-    }
-}
-"#;
-
 #[test]
-fn cmd_tle_check_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_tle_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(TARGET_FILE_CPP, GEN_FILE_CPP, RTE_CPP, GEN_CPP_TLE, FOLDER_TLE)?;
     let cases: usize = 10;
 
@@ -167,18 +152,28 @@ fn cmd_tle_check_rte_cpp() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-const RTE_PY: &str = r#"
-for i in range(10):
-    print(10 / i)
-"#;
-
 #[test]
-fn cmd_tle_check_rte_py() -> Result<(), Box<dyn Error>> {
-    create_files_tle(TARGET_FILE_PY, GEN_FILE_CPP, RTE_PY, GEN_CPP_TLE, FOLDER_TLE)?;
+fn cmd_tle_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
+    create_files_tle(TARGET_FILE_CPP, GEN_FILE_CPP, TARGET_CPP_TLE, RTE_CPP, FOLDER_TLE)?;
     let cases: usize = 10;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_tle(&mut cmd, TARGET_FILE_PY, GEN_FILE_CPP, cases);
+    execute_command_tle(&mut cmd, TARGET_FILE_CPP, GEN_FILE_CPP, cases);
+
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Error: Runtime Error of <gen-file>"));
+    
+    Ok(())
+}
+
+#[test]
+fn cmd_tle_target_rte_py() -> Result<(), Box<dyn Error>> {
+    create_files_tle(TARGET_FILE_PY, GEN_FILE_PY, RTE_PY, GEN_PY_TLE, FOLDER_TLE)?;
+    let cases: usize = 10;
+
+    let mut cmd = Command::new(BINARY);
+    execute_command_tle(&mut cmd, TARGET_FILE_PY, GEN_FILE_PY, cases);
 
     cmd.assert()
         .success()
@@ -187,17 +182,25 @@ fn cmd_tle_check_rte_py() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-// CHECK Compiler Error in Subcommand tle
-const CE_CPP: &str = r#"
-#include <bits/stdc++.h>
-using namespace std;
-int main() {
-    Generate Compiler Error
+#[test]
+fn cmd_tle_gen_rte_py() -> Result<(), Box<dyn Error>> {
+    create_files_tle(TARGET_FILE_PY, GEN_FILE_PY, TARGET_PY_TLE, RTE_PY, FOLDER_TLE)?;
+    let cases: usize = 10;
+
+    let mut cmd = Command::new(BINARY);
+    execute_command_tle(&mut cmd, TARGET_FILE_PY, GEN_FILE_PY, cases);
+
+    cmd.assert()
+        .failure()
+        .stderr(predicate::str::contains("Error: Runtime Error of <gen-file>"));
+    
+    Ok(())
 }
-"#;
+
+// CHECK Compiler Error in Subcommand tle
 
 #[test]
-fn cmd_tle_check_ce_target_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_tle_target_ce_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(TARGET_FILE_CPP, GEN_FILE_CPP, CE_CPP, GEN_CPP_TLE, FOLDER_TLE)?;
     let cases: usize = 10;
     
@@ -211,9 +214,8 @@ fn cmd_tle_check_ce_target_cpp() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-
 #[test]
-fn cmd_tle_check_ce_gen_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_tle_gen_ce_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(TARGET_FILE_CPP, GEN_FILE_CPP, TARGET_CPP_TLE, CE_CPP, FOLDER_TLE)?;
     let cases: usize = 10;
 

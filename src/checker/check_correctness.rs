@@ -24,9 +24,8 @@ use crate::file_handler::file::{
 };
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
-    show_accepted, show_time_limit_exceeded,
-    show_time_limit_exceeded_correct,
-    show_time_limit_exceeded_generator,
+    show_accepted, show_runtime_error, show_time_limit_exceeded,
+    show_time_limit_exceeded_correct, show_time_limit_exceeded_generator,
     show_wrong_answer
 };
 use crate::runner::types::{
@@ -156,14 +155,14 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
 
         let response_target = target_file_lang.execute(timeout as u32);
         let time_target: Duration = response_target.time;
+        let mills_target: u128 = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
-            return throw_runtime_error_msg("target", "<target-file>");
+            show_runtime_error(test_number, mills_target as u32);
+            continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
         }
-
-        let mills_target: u128 = time_target.as_millis();
 
         if time_target >= Duration::from_millis(timeout as u64) {
             // TLE Target file
