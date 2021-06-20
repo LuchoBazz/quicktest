@@ -4,18 +4,15 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::{fs, io::Write};
+use std::{fs::{self, remove_dir_all}, io::Write};
 
 use glob::glob;
 use exitfailure::ExitFailure;
 
-use crate::{
-    error::handle_error::{
+use crate::{constants::TEST_CASES_FOLDER, error::handle_error::{
         throw_couldnt_create_folder_msg, throw_couldnt_open_file_msg,
         throw_couldnt_write_to_file_msg
-    },
-    util::file::file_exists
-};
+    }, util::file::file_exists};
 
 pub fn remove_files(files: Vec<&str>) {
     for file in files {
@@ -33,6 +30,10 @@ pub fn remove_files_with_prefix(prefix: &str) {
             }
         }
     }
+}
+
+pub fn remove_folder(path: &str) {
+    if let Ok(_) = remove_dir_all(path) {}
 }
 
 pub fn write_file(file_name: &str, bytes: &[u8]) ->  Result<(), ExitFailure> {
@@ -59,4 +60,12 @@ pub fn create_folder_or_error(name: &str) -> Result<(), ExitFailure> {
         }
     }
     Ok(())
+}
+
+pub fn save_test_case(file_name: &str, from_path: &str) {
+    // create test_cases folder
+    if let Ok(_) = create_folder_or_error(TEST_CASES_FOLDER) {}
+    // Example: test_cases/testcase_tle_1.txt
+    //let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+    if let Ok(_) = write_file(file_name, fs::read_to_string(from_path).unwrap().as_bytes()) {}
 }

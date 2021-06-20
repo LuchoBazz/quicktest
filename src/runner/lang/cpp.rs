@@ -4,18 +4,13 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::io::Write;
-use std::process::Command;
-use std::process::Stdio;
+
 use std::path::PathBuf;
-use std::fs::File;
-use std::time::Duration;
+use std::process::Command;
 
-use crate::runner::types::{Language, CPStatus, StatusResponse};
-use std::time::Instant;
+use crate::runner::cmd::execute_program;
+use crate::runner::types::{Language, StatusResponse};
 
-use process_control::ChildExt;
-use process_control::Timeout;
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
@@ -81,72 +76,14 @@ impl Language for Cpp {
     }
 
     fn execute(&self, timeout: u32) -> StatusResponse {
-        
-        let now: Instant = Instant::now();
-
-        let child: Result<std::process::Child, std::io::Error> = match &self.stdin {
-            Some(file) => {
-                let input = File::open(file.to_str().unwrap()).unwrap();
-                let child = Command::new(self.binary_file.to_str().unwrap())
-                    .stdin(Stdio::from(input))
-                    .stdout(Stdio::piped())
-                    .stderr(Stdio::piped())
-                    .spawn();
-                child
-            },
-            _ => {
-                let child = Command::new(self.binary_file.to_str().unwrap())
-                    .stdout(Stdio::piped())
-                    .stderr(Stdio::piped())
-                    .spawn();
-                child
-            }
-        };
-
-        let mut res_status = CPStatus::AC;
-
-        if let Ok(child_output) = child {
-            let response = child_output
-                .with_output_timeout(Duration::from_millis(timeout as u64))
-                .terminating()
-                .wait();
-            
-            if let Ok(output_option)= response {
-                if let Some(output) = output_option {
-
-                    if output.status.success() {
-                        // OK
-                        match &self.stdout {
-                            Some(file) => {
-                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                                writer.write_all(&output.stdout).unwrap();
-                            },
-                            _ => (),
-                        }
-
-                        match &self.stderr {
-                            Some(file) => {
-                                let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                                writer.write_all(&output.stderr).unwrap();
-                            },
-                            _ => (),
-                        }
-                        res_status = CPStatus::AC;
-                    } else {
-                        res_status = CPStatus::RTE;
-                    }
-                } else {
-                    res_status = CPStatus::TLE;
-                }
-            }
-        } else {
-            res_status = CPStatus::CE;
-        }
-
-        let new_now: Instant = Instant::now();
-        let time: Duration = new_now.duration_since(now);
-
-        StatusResponse::new(time, res_status)
+        let commands = vec![self.binary_file.to_str().unwrap()];
+        execute_program(
+            timeout,
+            commands,
+            self.stdin.clone(),
+            self.stdout.clone(),
+            self.stderr.clone()
+        )
     }
 
     fn set_stdio(&mut self, stdin: &str) {

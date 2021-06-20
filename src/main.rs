@@ -24,38 +24,41 @@ fn main() -> Result<(), ExitFailure> {
 
     let response = match opt {
         Opt::TLE { target_file, gen_file, test_cases,
-            timeout, tle_break, save_cases} => {
+            timeout, tle_break, save_bad, save_all} => {
             checker::check_tle::run(
                 target_file,
                 gen_file,
                 test_cases,
                 timeout,
                 tle_break,
-                save_cases
+                save_bad,
+                save_all
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
-            timeout, test_cases, wa_break, save_cases} => {
+            timeout, test_cases, break_bad, save_bad, save_all} => {
             checker::check_correctness::run(
                 target_file,
                 correct_file,
                 gen_file,
                 timeout,
                 test_cases,
-                wa_break,
-                save_cases
+                break_bad,
+                save_bad,
+                save_all
             )
         },
         Opt::Check{target_file, checker_file, gen_file,
-            test_cases, timeout, wa_break, save_cases} => {
+            test_cases, timeout, break_bad, save_bad, save_all} => {
             checker::cmd_checker::run(
                 target_file,
                 checker_file,
                 gen_file,
                 timeout,
                 test_cases,
-                wa_break,
-                save_cases
+                break_bad,
+                save_bad,
+                save_all
             )
         },
         Opt::Run{target_file, timeout, all, wa, tle, rte} => {
