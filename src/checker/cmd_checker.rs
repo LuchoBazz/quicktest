@@ -14,15 +14,12 @@ use crate::error::handle_error::{
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
     throw_break_found_msg, throw_compiler_error_msg
 };
-use crate::file_handler::file::{
-    create_folder_or_error, file_exists_or_error, remove_files,
-    remove_folder, save_test_case
-};
+use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, load_testcases, remove_files, remove_folder, save_test_case};
 use crate::file_handler::path::get_root_path;
+use crate::generator::generator::execute_generator;
 use crate::painter::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
-    show_time_limit_exceeded_checker, show_time_limit_exceeded_generator,
-    show_wrong_answer
+    show_time_limit_exceeded_checker, show_wrong_answer
 };
 use crate::runner::types::{
     is_runtime_error, is_time_limit_exceeded,
@@ -41,7 +38,8 @@ use crate::util::lang::{
 
 pub fn run(target_file: PathBuf, checker_file: PathBuf,
         gen_file: PathBuf, timeout: u32, test_cases: u32, break_bad: bool,
-        save_bad: bool, save_all: bool) -> Result<(), ExitFailure>  {
+        save_bad: bool, save_all: bool, run_all: bool, run_ac: bool,
+        run_wa: bool, run_tle: bool, run_rte: bool) -> Result<(), ExitFailure>  {
     
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
@@ -111,25 +109,30 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
         remove_folder(TEST_CASES_FOLDER);
     }
 
+    let mut cases: VecDeque<PathBuf> = VecDeque::new();
+    load_testcases(&mut cases, run_all, run_ac, run_wa, run_tle, run_rte)?;
+    
     let mut tle_count: u32 = 0;
     let mut wa_count:  u32 = 0;
     let mut rte_count: u32 = 0;
     let mut ac_count:  u32 = 0;
 
-    for test_number in 1..=test_cases {
-        let response_gen = generator_file_lang.execute(timeout as u32);
-        let time_gen: Duration = response_gen.time;
+    let load_case: bool = run_all || run_ac || run_wa || run_tle || run_rte;
+    
+    let mut test_number: u32 = 0;
 
-        if is_runtime_error(&response_gen.status) {
-            return throw_runtime_error_msg("generator", "<gen-file>");
-        } else if is_compiled_error(&response_gen.status) {
-            return throw_compiler_error_msg("generator", "<gen-file>");
-        }
+    while test_number < test_cases || load_case {
+        test_number += 1;
 
-        if time_gen >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
-            // TLE Generator
-            show_time_limit_exceeded_generator(test_number, timeout);
-            return throw_time_limit_exceeded_msg("generator", "<gen-file>");
+        if load_case {
+            if !cases.is_empty() {
+                // Load test case in stdin
+                let case = cases.pop_front().unwrap();
+                copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
+            } else { break; }
+        } else {
+            // run generator
+            execute_generator(generator_file_lang, timeout, test_cases)?;
         }
 
         let response_target = target_file_lang.execute(timeout as u32);

@@ -43,7 +43,8 @@ fn main() -> Result<(), ExitFailure> {
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
-            timeout, test_cases, break_bad, save_bad, save_all} => {
+            timeout, test_cases, break_bad, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
             
             checker::check_correctness::run(
                 target_file,
@@ -53,11 +54,17 @@ fn main() -> Result<(), ExitFailure> {
                 test_cases,
                 break_bad,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
         },
         Opt::Check{target_file, checker_file, gen_file,
-            test_cases, timeout, break_bad, save_bad, save_all} => {
+            test_cases, timeout, break_bad, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
             checker::cmd_checker::run(
                 target_file,
                 checker_file,
@@ -66,13 +73,14 @@ fn main() -> Result<(), ExitFailure> {
                 test_cases,
                 break_bad,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
-        },
-        Opt::Run{target_file, timeout, all, wa, tle, rte} => {
-    
-            checker::run_cases::run(target_file, timeout, all, wa, tle, rte)
-        },
+        }
     };
 
     response
