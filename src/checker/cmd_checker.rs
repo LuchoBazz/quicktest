@@ -20,9 +20,9 @@ use crate::file_handler::file::{
 };
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
-    show_accepted, show_runtime_error, show_time_limit_exceeded,
-    show_time_limit_exceeded_generator, show_wrong_answer,
-    show_time_limit_exceeded_checker
+    show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
+    show_time_limit_exceeded_checker, show_time_limit_exceeded_generator,
+    show_wrong_answer
 };
 use crate::runner::types::{
     is_runtime_error, is_time_limit_exceeded,
@@ -230,6 +230,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
         }
     }
 
+    show_stats(ac_count, wa_count, tle_count, rte_count);
+    
     // remove input, output, error and binary files
     remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_CHECKER_FILE,
         TARGET_BINARY_FILE, GEN_BINARY_FILE, CHECKER_BINARY_FILE]);

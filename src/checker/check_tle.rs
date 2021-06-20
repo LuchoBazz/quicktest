@@ -30,8 +30,8 @@ use crate::util::lang::{
     get_language_by_ext_set_output
 };
 use crate::painter::style::{
-    show_accepted, show_time_limit_exceeded,
-    show_time_limit_exceeded_generator, show_runtime_error
+    show_accepted, show_runtime_error, show_stats,
+    show_time_limit_exceeded, show_time_limit_exceeded_generator
 };
 
 // Constants
@@ -170,6 +170,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             show_accepted(test_number, mills_target as u32);
         }
     }
+    show_stats(ac_count, 0, tle_count, rte_count);
 
     // remove input, output and error files
     remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,

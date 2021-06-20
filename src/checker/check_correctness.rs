@@ -22,9 +22,9 @@ use crate::file_handler::file::{
 };
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
-    show_accepted, show_runtime_error, show_time_limit_exceeded,
-    show_time_limit_exceeded_correct, show_time_limit_exceeded_generator,
-    show_wrong_answer
+    show_accepted, show_runtime_error, show_stats,
+    show_time_limit_exceeded, show_time_limit_exceeded_correct,
+    show_time_limit_exceeded_generator, show_wrong_answer
 };
 use crate::runner::types::{
     Language,
@@ -233,6 +233,8 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             }
         }
     }
+    
+    show_stats(ac_count, wa_count, tle_count, rte_count);
 
     // remove input, output, error and binary files
     remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
