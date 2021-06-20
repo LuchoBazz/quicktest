@@ -27,19 +27,19 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 * **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
     * **Sample:**
         ```shell
-        quicktest tle --target-file=”main.cpp” --gen-file=”gen.cpp” --timeout=2000 --test-cases=1000
+        quicktest tle --target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
         ```
 
 * **Check the correctness of the code compared to a slower version:** Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
     * **Sample:**
         ```shell
-        quicktest cmp --target-file=”main.cpp” --correct-file=”correct.cpp” --gen-file=”gen.cpp” --timeout=2000 --test-cases=1000
+        quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
         ```
 
 * **Verify the correctness of the code using a verifier script:** Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
     * **Sample:**
         ```shell
-        quicktest check --target-file=”main.cpp” --checker-file=”correct.cpp” --gen-file=”gen.cpp” --timeout=2000 --test-cases=1000
+        quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
         ```
 
 ## Getting Started

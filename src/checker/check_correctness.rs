@@ -6,7 +6,6 @@
 
 use std::collections::VecDeque;
 use std::path::PathBuf;
-use std::fs;
 use std::time::Duration;
 
 // dependencies
@@ -18,15 +17,13 @@ use crate::error::handle_error::{
     throw_runtime_error_msg, throw_time_limit_exceeded_msg
 };
 use crate::file_handler::file::{
-    create_folder_or_error, file_exists_or_error,
-    remove_files, remove_files_with_prefix,
-    write_file
+    create_folder_or_error, file_exists_or_error, remove_files,
+    remove_folder, save_test_case
 };
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
-    show_accepted, show_time_limit_exceeded,
-    show_time_limit_exceeded_correct,
-    show_time_limit_exceeded_generator,
+    show_accepted, show_runtime_error, show_time_limit_exceeded,
+    show_time_limit_exceeded_correct, show_time_limit_exceeded_generator,
     show_wrong_answer
 };
 use crate::runner::types::{
@@ -36,20 +33,15 @@ use crate::runner::types::{
 };
 
 // Constants
-use crate::constants::{
-    CACHE_FOLDER, PREFIX_WA_FILES, TEST_CASES_FOLDER,
-    TARGET_BINARY_FILE, CORRECT_BINARY_FILE, GEN_BINARY_FILE,
-    QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
-    QTEST_ERROR_FILE, QTEST_EXPECTED_FILE
-};
+use crate::constants::{CACHE_FOLDER, CORRECT_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER};
 use crate::util::lang::{
     get_language_by_ext_default,
     get_language_by_ext_set_output
 };
 
 pub fn run(target_file: PathBuf, correct_file: PathBuf,
-        gen_file: PathBuf, timeout: u32, test_cases: u32, wa_break: bool,
-        save_cases: bool) -> Result<(), ExitFailure>  {
+        gen_file: PathBuf, timeout: u32, test_cases: u32, break_bad: bool,
+        save_bad: bool, save_all: bool) -> Result<(), ExitFailure>  {
 
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
@@ -114,14 +106,15 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
         return throw_compiler_error_msg("correct", "<correct-file>");
     }
 
-    if save_cases {
-        // remove test cases prefixed with test_cases/testcase_tle*.txt
-        let prefix = &format!("{}/{}*", TEST_CASES_FOLDER, PREFIX_WA_FILES)[..];
-        remove_files_with_prefix(prefix);
+    if save_bad || save_all {
+        // Remove all previous test cases
+        remove_folder(TEST_CASES_FOLDER);
     }
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
+    let mut rte_count: u32 = 0;
+    let mut ac_count: u32 = 0;
 
     for test_number in 1..=test_cases {
         let response_gen = generator_file_lang.execute(timeout as u32);
@@ -156,14 +149,28 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
 
         let response_target = target_file_lang.execute(timeout as u32);
         let time_target: Duration = response_target.time;
+        let mills_target: u128 = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
-            return throw_runtime_error_msg("target", "<target-file>");
+            rte_count += 1;
+            show_runtime_error(test_number, mills_target as u32);
+            if save_bad || save_all {
+                // Example: test_cases/testcase_rte_1.txt
+                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                // save testcase
+                save_test_case(file_name, QTEST_INPUT_FILE);
+            }
+            if break_bad {
+                // remove input, output and error files
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE, CORRECT_BINARY_FILE]);
+                
+                return throw_break_found_msg("Wrong Answer", "WA", test_cases);
+            }
+            continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
         }
-
-        let mills_target: u128 = time_target.as_millis();
 
         if time_target >= Duration::from_millis(timeout as u64) {
             // TLE Target file
@@ -172,26 +179,18 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
 
             show_time_limit_exceeded(test_number, timeout);
 
-            if save_cases {
-                // create test_cases folder
-                create_folder_or_error(TEST_CASES_FOLDER)?;
+            if save_bad || save_all {
                 // Example: test_cases/testcase_tle_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_WA_FILES, tle_count)[..];
-                write_file(file_name, fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes())?;
+                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+                // save testcase
+                save_test_case(file_name, QTEST_INPUT_FILE);
             }
             
-            // check if the wa_break flag is high
-            if wa_break {
+            // check if the break_bad flag is high
+            if break_bad {
                 // remove input, output and error files
-                remove_files(vec![
-                    QTEST_INPUT_FILE,
-                    QTEST_OUTPUT_FILE,
-                    QTEST_ERROR_FILE,
-                    QTEST_EXPECTED_FILE,
-                    TARGET_BINARY_FILE,
-                    GEN_BINARY_FILE,
-                    CORRECT_BINARY_FILE
-                ]);
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE, CORRECT_BINARY_FILE]);
                 return Ok(());
             }
         } else {
@@ -201,33 +200,34 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             
             // Check WA Status
             if compare_file(&file_out, &file_expected, true) {
+                ac_count += 1;
                 // is OK
                 show_accepted(test_number, mills_target as u32);
+
+                if save_all {
+                    // Example: test_cases/testcase_ac_1.txt
+                    let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
+                    // save testcase
+                    save_test_case(file_name, QTEST_INPUT_FILE);
+                }
             } else {
                 // WA found
                 wa_count += 1;
 
                 show_wrong_answer(test_number, mills_target as u32);
 
-                // Save the input of the test case that gave status wa
-                if save_cases {
-                    create_folder_or_error(TEST_CASES_FOLDER)?;
+                if save_bad || save_all {
                     // Example: test_cases/testcase_wa_1.txt
                     let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_WA_FILES, wa_count)[..];
-                    write_file(file_name, fs::read_to_string(QTEST_INPUT_FILE).unwrap().as_bytes())?;
+                    // save testcase
+                    save_test_case(file_name, QTEST_INPUT_FILE);
                 }
 
-                if wa_break {
+                if break_bad {
                     // remove input, output and error files
-                    remove_files(vec![
-                        QTEST_INPUT_FILE,
-                        QTEST_OUTPUT_FILE,
-                        QTEST_ERROR_FILE,
-                        QTEST_EXPECTED_FILE,
-                        TARGET_BINARY_FILE,
-                        GEN_BINARY_FILE,
-                        CORRECT_BINARY_FILE
-                    ]);
+                    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+                        TARGET_BINARY_FILE, GEN_BINARY_FILE, CORRECT_BINARY_FILE]);
+                    
                     return throw_break_found_msg("Wrong Answer", "WA", test_cases);
                 }
             }
@@ -235,15 +235,8 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
     }
 
     // remove input, output, error and binary files
-    remove_files(vec![
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-        QTEST_EXPECTED_FILE,
-        TARGET_BINARY_FILE,
-        GEN_BINARY_FILE,
-        CORRECT_BINARY_FILE
-    ]);
+    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+        TARGET_BINARY_FILE, GEN_BINARY_FILE, CORRECT_BINARY_FILE]);
 
     Ok(())
 }

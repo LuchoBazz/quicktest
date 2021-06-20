@@ -6,3 +6,4 @@
 
 pub mod test_constants;
 pub mod test_utilities;
+pub mod test_command_handler;
