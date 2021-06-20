@@ -92,3 +92,16 @@ pub fn show_runtime_error(test_number: u32, time: u32) {
         time
     );
 }
+
+pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
+
+    println!("\n  📌{}\n", "-Stats-".bold().white());
+
+    println!(
+        "  {}={}, {}={}, {}={}, {}={}",
+        "AC".bold().green(), ac.to_string().bold().white(),
+        "WA".bold().red(), wa.to_string().bold().white(),
+        "TLE".bold().red(), tle.to_string().bold().white(),
+        "RTE".bold().red(), rte.to_string().bold().white()
+    );
+}
