@@ -17,7 +17,7 @@ use crate::file_handler::path::get_root_path;
 use crate::error::handle_error::{
     throw_compiler_error_msg
 };
-use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case};
+use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case};
 use crate::generator::generator::execute_generator;
 use crate::runner::types::{
     Language, is_time_limit_exceeded,
@@ -124,8 +124,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             show_runtime_error(test_number, mills_target as u32);
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
-                // Example: test_cases/testcase_rte_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                // Example: test_cases/testcase_rte_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -149,8 +149,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
-                // Example: test_cases/testcase_tle_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+                // Example: test_cases/testcase_tle_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -166,8 +166,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         } else {
             ac_count += 1;
             if save_all {
-                // Example: test_cases/testcase_ac_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
+                // Example: test_cases/testcase_ac_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             show_accepted(test_number, mills_target as u32);

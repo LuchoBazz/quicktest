@@ -14,7 +14,7 @@ use crate::error::handle_error::{
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
     throw_break_found_msg, throw_compiler_error_msg
 };
-use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, load_testcases, remove_files, remove_folder, save_test_case};
+use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, load_testcases, remove_files, remove_folder, save_test_case};
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::painter::style::{
@@ -143,8 +143,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
             if save_bad || save_all {
-                // Example: test_cases/testcase_rte_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                // Example: test_cases/testcase_rte_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -181,8 +181,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             show_time_limit_exceeded(test_number, timeout);
 
             if save_bad || save_all {
-                // Example: test_cases/testcase_tle_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+                // Example: test_cases/testcase_tle_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -204,8 +204,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
                 ac_count += 1;
                 show_accepted(test_number, mills_target as u32);
                 if save_all {
-                    // Example: test_cases/testcase_ac_1.txt
-                    let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
+                    // Example: test_cases/testcase_ac_01.txt
+                    let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
                     // save testcase
                     save_test_case(file_name, QTEST_INPUT_FILE);
                 }
@@ -216,8 +216,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
                 show_wrong_answer(test_number, mills_target as u32);
 
                 if save_bad || save_all {
-                    // Example: test_cases/testcase_wa_1.txt
-                    let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_WA_FILES, wa_count)[..];
+                    // Example: test_cases/testcase_wa_01.txt
+                    let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_WA_FILES, wa_count)[..];
                     // save testcase
                     save_test_case(file_name, QTEST_INPUT_FILE);
                 }

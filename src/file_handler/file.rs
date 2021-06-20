@@ -69,6 +69,15 @@ pub fn create_folder_or_error(name: &str) -> Result<(), ExitFailure> {
     Ok(())
 }
 
+pub fn format_filename_test_case(folder: &str, prefix: &str, number: u32) -> String {
+    if number > 0 {
+        let file_name = format!( "{}/{}_{}.txt", folder, prefix, number);
+        return file_name;
+    }
+    let file_name = format!( "{}/{}_0{}.txt", folder, prefix, number);
+    return file_name;
+}
+
 pub fn save_test_case(file_name: &str, from_path: &str) {
     // create test_cases folder
     if let Ok(_) = create_folder_or_error(TEST_CASES_FOLDER) {}
