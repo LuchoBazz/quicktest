@@ -24,14 +24,15 @@ fn main() -> Result<(), ExitFailure> {
 
     let response = match opt {
         Opt::TLE { target_file, gen_file, test_cases,
-            timeout, tle_break, save_cases} => {
+            timeout, tle_break, save_bad, save_all} => {
             checker::check_tle::run(
                 target_file,
                 gen_file,
                 test_cases,
                 timeout,
                 tle_break,
-                save_cases
+                save_bad,
+                save_all
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
