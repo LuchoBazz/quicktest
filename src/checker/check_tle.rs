@@ -35,11 +35,7 @@ use crate::painter::style::{
 };
 
 // Constants
-use crate::constants::{
-    CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES,
-    PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
-    QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER
-};
+use crate::constants::{CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER};
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
         test_cases: u32, timeout: u32, tle_break: bool, save_bad: bool, save_all: bool) -> Result<(), ExitFailure> {
@@ -97,6 +93,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     }
 
     let mut tle_count: u32 = 0;
+    let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
 
     for test_number in 1..=test_cases {
@@ -120,7 +117,23 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         let mills_target = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
+            rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
+            // Save the input of the test case that gave status tle
+            if save_bad || save_all {
+                // Example: test_cases/testcase_rte_1.txt
+                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                // save testcase
+                save_test_case(file_name, QTEST_INPUT_FILE);
+            }
+            // check if the tle_breck flag is high
+            if tle_break {
+                // remove input, output and error files
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE]);
+                
+               return Ok(());
+            }
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
@@ -142,13 +155,9 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             // check if the tle_breck flag is high
             if tle_break {
                 // remove input, output and error files
-                remove_files(vec![
-                    QTEST_INPUT_FILE,
-                    QTEST_OUTPUT_FILE,
-                    QTEST_ERROR_FILE,
-                    TARGET_BINARY_FILE,
-                    GEN_BINARY_FILE
-                ]);
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE]);
+                
                return Ok(());
             }
         } else {
@@ -163,13 +172,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     }
 
     // remove input, output and error files
-    remove_files(vec![
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-        TARGET_BINARY_FILE,
-        GEN_BINARY_FILE
-    ]);
+    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
+        TARGET_BINARY_FILE, GEN_BINARY_FILE]);
 
     Ok(())
 }

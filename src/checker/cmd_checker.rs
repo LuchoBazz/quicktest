@@ -7,7 +7,6 @@
 // std library
 use std::collections::VecDeque;
 use std::path::PathBuf;
-use std::fs;
 use std::time::Duration;
 
 // local library
@@ -15,7 +14,10 @@ use crate::error::handle_error::{
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
     throw_break_found_msg, throw_compiler_error_msg
 };
-use crate::file_handler::file::{create_folder_or_error, file_exists_or_error, remove_files, remove_folder, save_test_case, write_file};
+use crate::file_handler::file::{
+    create_folder_or_error, file_exists_or_error, remove_files,
+    remove_folder, save_test_case
+};
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
     show_accepted, show_runtime_error, show_time_limit_exceeded,
@@ -143,6 +145,13 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
+            // check if the break_bad flag is high
+            if break_bad {
+                // remove input, output and error files
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_CHECKER_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE, CHECKER_BINARY_FILE]);
+                return Ok(());
+            }
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
@@ -178,15 +187,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             // check if the break_bad flag is high
             if break_bad {
                 // remove input, output and error files
-                remove_files(vec![
-                    QTEST_INPUT_FILE,
-                    QTEST_OUTPUT_FILE,
-                    QTEST_ERROR_FILE,
-                    QTEST_CHECKER_FILE,
-                    TARGET_BINARY_FILE,
-                    GEN_BINARY_FILE,
-                    CHECKER_BINARY_FILE
-                ]);
+                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_CHECKER_FILE,
+                    TARGET_BINARY_FILE, GEN_BINARY_FILE, CHECKER_BINARY_FILE]);
                 return Ok(());
             }
         } else {
@@ -219,15 +221,9 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
 
                 if break_bad {
                     // remove input, output and error files
-                    remove_files(vec![
-                        QTEST_INPUT_FILE,
-                        QTEST_OUTPUT_FILE,
-                        QTEST_ERROR_FILE,
-                        QTEST_CHECKER_FILE,
-                        TARGET_BINARY_FILE,
-                        GEN_BINARY_FILE,
-                        CHECKER_BINARY_FILE
-                    ]);
+                    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_CHECKER_FILE,
+                        TARGET_BINARY_FILE, GEN_BINARY_FILE, CHECKER_BINARY_FILE]);
+                    
                     return throw_break_found_msg("Wrong Answer", "WA", test_cases);
                 }
             }
@@ -235,15 +231,8 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
     }
 
     // remove input, output, error and binary files
-    remove_files(vec![
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-        QTEST_CHECKER_FILE,
-        TARGET_BINARY_FILE,
-        GEN_BINARY_FILE,
-        CHECKER_BINARY_FILE
-    ]);
+    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE, QTEST_CHECKER_FILE,
+        TARGET_BINARY_FILE, GEN_BINARY_FILE, CHECKER_BINARY_FILE]);
 
     Ok(())
 }
