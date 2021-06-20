@@ -6,7 +6,6 @@
 
 use std::collections::VecDeque;
 use std::path::PathBuf;
-use std::fs;
 use std::time::Duration;
 
 // dependencies
@@ -17,7 +16,10 @@ use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg,
     throw_runtime_error_msg, throw_time_limit_exceeded_msg
 };
-use crate::file_handler::file::{create_folder_or_error, file_exists_or_error, remove_files, remove_files_with_prefix, remove_folder, save_test_case, write_file};
+use crate::file_handler::file::{
+    create_folder_or_error, file_exists_or_error, remove_files,
+    remove_folder, save_test_case
+};
 use crate::file_handler::path::get_root_path;
 use crate::painter::style::{
     show_accepted, show_runtime_error, show_time_limit_exceeded,
@@ -171,7 +173,7 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             show_time_limit_exceeded(test_number, timeout);
 
             if save_bad || save_all {
-                // Example: test_cases/testcase_rte_1.txt
+                // Example: test_cases/testcase_tle_1.txt
                 let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
