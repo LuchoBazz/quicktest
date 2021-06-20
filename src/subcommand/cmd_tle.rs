@@ -14,11 +14,12 @@ use exitfailure::ExitFailure;
 
 // local library
 use crate::file_handler::path::get_root_path;
-use crate::error::handle_error::{
-    throw_compiler_error_msg
-};
-use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case};
+use crate::error::handle_error::throw_compiler_error_msg;
 use crate::generator::generator::execute_generator;
+use crate::file_handler::file::{
+    copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case,
+    load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case
+};
 use crate::runner::types::{
     Language, is_time_limit_exceeded,
     is_compiled_error, is_runtime_error
@@ -33,7 +34,11 @@ use crate::painter::style::{
 };
 
 // Constants
-use crate::constants::{CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER};
+use crate::constants::{
+    CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES,
+    QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
+    TEST_CASES_FOLDER
+};
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
         test_cases: u32, timeout: u32, tle_break: bool, save_bad: bool, save_all: bool,

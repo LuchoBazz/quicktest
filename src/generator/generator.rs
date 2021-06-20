@@ -7,11 +7,10 @@
 use std::time::Duration;
 
 use exitfailure::ExitFailure;
-
+use crate::painter::style::show_time_limit_exceeded_generator;
 use crate::error::handle_error::{
     throw_compiler_error_msg, throw_runtime_error_msg, throw_time_limit_exceeded_msg
 };
-use crate::painter::style::show_time_limit_exceeded_generator;
 use crate::runner::types::{
     Language, is_compiled_error, is_runtime_error, is_time_limit_exceeded
 };

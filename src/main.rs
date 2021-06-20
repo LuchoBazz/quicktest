@@ -7,7 +7,7 @@
 use structopt::StructOpt;
 
 pub mod cli;
-pub mod checker;
+pub mod subcommand;
 pub mod runner;
 pub mod util;
 pub mod constants;
@@ -27,7 +27,7 @@ fn main() -> Result<(), ExitFailure> {
         Opt::TLE { target_file, gen_file, test_cases,
             timeout, tle_break, save_bad, save_all,
             run_all, run_ac, run_wa, run_tle, run_rte} => {
-            checker::check_tle::run(
+            subcommand::cmd_tle::run(
                 target_file,
                 gen_file,
                 test_cases,
@@ -46,7 +46,7 @@ fn main() -> Result<(), ExitFailure> {
             timeout, test_cases, break_bad, save_bad, save_all,
             run_all, run_ac, run_wa, run_tle, run_rte} => {
             
-            checker::check_correctness::run(
+            subcommand::cmd_cmp::run(
                 target_file,
                 correct_file,
                 gen_file,
@@ -65,7 +65,7 @@ fn main() -> Result<(), ExitFailure> {
         Opt::Check{target_file, checker_file, gen_file,
             test_cases, timeout, break_bad, save_bad, save_all,
             run_all, run_ac, run_wa, run_tle, run_rte} => {
-            checker::cmd_checker::run(
+            subcommand::cmd_check::run(
                 target_file,
                 checker_file,
                 gen_file,
@@ -82,7 +82,7 @@ fn main() -> Result<(), ExitFailure> {
             )
         },
         Opt::Example {cmp, tle, check} => {
-            checker::cmd_example::run(cmp, tle, check)
+            subcommand::cmd_example::run(cmp, tle, check)
         }
     };
 
