@@ -36,15 +36,16 @@ fn main() -> Result<(), ExitFailure> {
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
-            timeout, test_cases, wa_break, save_cases} => {
+            timeout, test_cases, break_bad, save_bad, save_all} => {
             checker::check_correctness::run(
                 target_file,
                 correct_file,
                 gen_file,
                 timeout,
                 test_cases,
-                wa_break,
-                save_cases
+                break_bad,
+                save_bad,
+                save_all
             )
         },
         Opt::Check{target_file, checker_file, gen_file,

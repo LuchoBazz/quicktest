@@ -64,13 +64,17 @@ pub enum Opt {
         #[structopt(short = "n", long = "test-cases", default_value = "1000")]
         test_cases: u32,
 
-        /// Break if Wrong Answer (WA) occurs
-        #[structopt(short = "b", long = "wa-break")]
-        wa_break: bool,
+        /// Break if WA, TLE or RTE states occurs
+        #[structopt(short = "b", long = "break_bad")]
+        break_bad: bool,
 
-        /// Save test cases
-        #[structopt(short = "s", long = "save-cases")]
-        save_cases: bool,
+        /// Save only bad cases with WA, TLE or RTE states
+        #[structopt(short = "s", long = "save-bad", conflicts_with="save-all")]
+        save_bad: bool,
+
+        /// Save all test cases
+        #[structopt(short = "a", long = "save-all", conflicts_with="save-bad")]
+        save_all: bool,
     },
     /// Check the correctness of the answer using a script <checker-file> (Special for cases that do not have a unique answer)
     Check {
