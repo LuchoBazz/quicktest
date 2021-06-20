@@ -80,6 +80,9 @@ fn main() -> Result<(), ExitFailure> {
                 run_tle,
                 run_rte
             )
+        },
+        Opt::Example {cmp, tle, check} => {
+            checker::cmd_example::run(cmp, tle, check)
         }
     };
 

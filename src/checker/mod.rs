@@ -7,4 +7,4 @@
 pub mod check_correctness;
 pub mod check_tle;
 pub mod cmd_checker;
-pub mod run_cases;
+pub mod cmd_example;

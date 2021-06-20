@@ -18,6 +18,7 @@ include = ["**/*.rs","Cargo.toml",]
 [dependencies]
 process_control = "3.0.1"
 colored = "2.0.0"
+clap = "2.33.3"
 structopt = "0.3.21"
 exitfailure = "0.5.1"
 glob = "0.3.0"

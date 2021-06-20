@@ -5,3 +5,4 @@
  */
 
 pub mod style;
+pub mod example;

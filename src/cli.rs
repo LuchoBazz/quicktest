@@ -6,6 +6,7 @@
 
 use std::path::PathBuf;
 use structopt::StructOpt;
+use structopt::clap::ArgGroup;
 
 /// CLI for stress testing in competitive programming contest
 #[derive(StructOpt, Debug)]
@@ -42,23 +43,23 @@ pub enum Opt {
         #[structopt(short = "a", long = "save-all", conflicts_with="save-bad")]
         save_all: bool,
 
-        /// run all test cases
+        /// Run all test cases
         #[structopt(long = "run-all")]
         run_all: bool,
 
-        /// run test cases Accepted
+        /// Run test cases Accepted
         #[structopt(long = "run-ac")]
         run_ac: bool,
 
-        /// run test cases Wrong Answer
+        /// Run test cases Wrong Answer
         #[structopt(long = "run-wa")]
         run_wa: bool,
 
-        /// run test cases Time Limited Exceeded
+        /// Run test cases Time Limited Exceeded
         #[structopt(long = "run-tle")]
         run_tle: bool,
 
-        /// run test cases Run Time Error
+        /// Run test cases Run Time Error
         #[structopt(long = "run-rte")]
         run_rte: bool,
     },
@@ -169,5 +170,20 @@ pub enum Opt {
         /// run test cases Run Time Error
         #[structopt(long = "run-rte")]
         run_rte: bool,
+    },
+    /// Shows examples of the selected subcommand
+    #[structopt(group = ArgGroup::with_name("cmd").required(true))]
+    Example {
+        /// Show examples of the tle subcommand
+        #[structopt(long = "tle", group = "cmd")]
+        tle: bool,
+
+        /// Show examples of the cmp subcommand
+        #[structopt(long = "cmp", group = "cmd")]
+        cmp: bool,
+
+        /// Show examples of the check subcommand
+        #[structopt(long = "check", group = "cmd")]
+        check: bool,
     }
 }
