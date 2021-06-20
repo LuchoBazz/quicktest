@@ -7,13 +7,14 @@
 use structopt::StructOpt;
 
 pub mod cli;
-pub mod checker;
+pub mod subcommand;
 pub mod runner;
 pub mod util;
 pub mod constants;
 pub mod painter;
 pub mod error;
 pub mod file_handler;
+pub mod generator;
 
 use crate::cli::Opt;
 
@@ -24,20 +25,28 @@ fn main() -> Result<(), ExitFailure> {
 
     let response = match opt {
         Opt::TLE { target_file, gen_file, test_cases,
-            timeout, tle_break, save_bad, save_all} => {
-            checker::check_tle::run(
+            timeout, tle_break, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
+            subcommand::cmd_tle::run(
                 target_file,
                 gen_file,
                 test_cases,
                 timeout,
                 tle_break,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
-            timeout, test_cases, break_bad, save_bad, save_all} => {
-            checker::check_correctness::run(
+            timeout, test_cases, break_bad, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
+            
+            subcommand::cmd_cmp::run(
                 target_file,
                 correct_file,
                 gen_file,
@@ -45,12 +54,18 @@ fn main() -> Result<(), ExitFailure> {
                 test_cases,
                 break_bad,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
         },
         Opt::Check{target_file, checker_file, gen_file,
-            test_cases, timeout, break_bad, save_bad, save_all} => {
-            checker::cmd_checker::run(
+            test_cases, timeout, break_bad, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
+            subcommand::cmd_check::run(
                 target_file,
                 checker_file,
                 gen_file,
@@ -58,13 +73,17 @@ fn main() -> Result<(), ExitFailure> {
                 test_cases,
                 break_bad,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
         },
-        Opt::Run{target_file, timeout, all, wa, tle, rte} => {
-    
-            checker::run_cases::run(target_file, timeout, all, wa, tle, rte)
-        },
+        Opt::Example {cmp, tle, check} => {
+            subcommand::cmd_example::run(cmp, tle, check)
+        }
     };
 
     response

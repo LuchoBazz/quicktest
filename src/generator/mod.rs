@@ -4,5 +4,4 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub mod style;
-pub mod example;
+pub mod generator;

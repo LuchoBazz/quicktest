@@ -4,6 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+use std::collections::VecDeque;
 // std library
 use std::path::PathBuf;
 use std::time::Duration;
@@ -13,13 +14,11 @@ use exitfailure::ExitFailure;
 
 // local library
 use crate::file_handler::path::get_root_path;
-use crate::error::handle_error::{
-    throw_compiler_error_msg, throw_runtime_error_msg,
-    throw_time_limit_exceeded_msg
-};
+use crate::error::handle_error::throw_compiler_error_msg;
+use crate::generator::generator::execute_generator;
 use crate::file_handler::file::{
-    create_folder_or_error, file_exists_or_error, remove_files,
-    remove_files_with_prefix, remove_folder, save_test_case
+    copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case,
+    load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case
 };
 use crate::runner::types::{
     Language, is_time_limit_exceeded,
@@ -30,15 +29,20 @@ use crate::util::lang::{
     get_language_by_ext_set_output
 };
 use crate::painter::style::{
-    show_accepted, show_time_limit_exceeded,
-    show_time_limit_exceeded_generator, show_runtime_error
+    show_accepted, show_runtime_error, show_stats,
+    show_time_limit_exceeded
 };
 
 // Constants
-use crate::constants::{CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER};
+use crate::constants::{
+    CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES,
+    QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
+    TEST_CASES_FOLDER
+};
 
 pub fn run(target_file: PathBuf, gen_file: PathBuf,
-        test_cases: u32, timeout: u32, tle_break: bool, save_bad: bool, save_all: bool) -> Result<(), ExitFailure> {
+        test_cases: u32, timeout: u32, tle_break: bool, save_bad: bool, save_all: bool,
+        run_all: bool, run_ac: bool, run_wa: bool, run_tle: bool, run_rte: bool) -> Result<(), ExitFailure> {
     
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
@@ -92,24 +96,28 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         remove_files_with_prefix(prefix);
     }
 
+    let mut cases: VecDeque<PathBuf> = VecDeque::new();
+    load_testcases(&mut cases, run_all, run_ac, run_wa, run_tle, run_rte)?;
+
     let mut tle_count: u32 = 0;
     let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
 
-    for test_number in 1..=test_cases {
-        let response_gen = generator_file_lang.execute(timeout as u32);
-        let time_gen = response_gen.time;
+    let load_case: bool = run_all || run_ac || run_wa || run_tle || run_rte;
 
-        if is_runtime_error(&response_gen.status) {
-            return throw_runtime_error_msg("generator", "<gen-file>");
-        } else if is_compiled_error(&response_gen.status) {
-            return throw_compiler_error_msg("generator", "<gen-file>");
-        }
+    let mut test_number: u32 = 0;
+    while test_number < test_cases || load_case {
+        test_number += 1;
 
-        if time_gen >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_gen.status) {
-            // TLE Generator
-            show_time_limit_exceeded_generator(test_number, timeout);
-            return throw_time_limit_exceeded_msg("generator", "<gen-file>");
+        if load_case {
+            if !cases.is_empty() {
+                // Load test case in stdin
+                let case = cases.pop_front().unwrap();
+                copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
+            } else { break; }
+        } else {
+            // run generator
+            execute_generator(generator_file_lang, timeout, test_cases)?;
         }
 
         let response_target = target_file_lang.execute(timeout as u32);
@@ -121,8 +129,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             show_runtime_error(test_number, mills_target as u32);
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
-                // Example: test_cases/testcase_rte_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                // Example: test_cases/testcase_rte_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -146,8 +154,8 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
 
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
-                // Example: test_cases/testcase_tle_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+                // Example: test_cases/testcase_tle_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
@@ -163,13 +171,14 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         } else {
             ac_count += 1;
             if save_all {
-                // Example: test_cases/testcase_ac_1.txt
-                let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
+                // Example: test_cases/testcase_ac_01.txt
+                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             show_accepted(test_number, mills_target as u32);
         }
     }
+    show_stats(ac_count, 0, tle_count, rte_count);
 
     // remove input, output and error files
     remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
