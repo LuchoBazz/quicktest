@@ -98,7 +98,7 @@ pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
     println!("\n  📌{}\n", "-Stats-".bold().white());
 
     println!(
-        "  [{}]={}, [{}]={}, [{}]={}, [{}]={}",
+        "  {}={}, {}={}, {}={}, {}={}",
         "AC".bold().green(), ac.to_string().bold().white(),
         "WA".bold().red(), wa.to_string().bold().white(),
         "TLE".bold().red(), tle.to_string().bold().white(),

@@ -14,6 +14,7 @@ pub mod constants;
 pub mod painter;
 pub mod error;
 pub mod file_handler;
+pub mod generator;
 
 use crate::cli::Opt;
 
@@ -24,7 +25,8 @@ fn main() -> Result<(), ExitFailure> {
 
     let response = match opt {
         Opt::TLE { target_file, gen_file, test_cases,
-            timeout, tle_break, save_bad, save_all} => {
+            timeout, tle_break, save_bad, save_all,
+            run_all, run_ac, run_wa, run_tle, run_rte} => {
             checker::check_tle::run(
                 target_file,
                 gen_file,
@@ -32,11 +34,17 @@ fn main() -> Result<(), ExitFailure> {
                 timeout,
                 tle_break,
                 save_bad,
-                save_all
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte
             )
         },
         Opt::Cmp { target_file, correct_file, gen_file,
             timeout, test_cases, break_bad, save_bad, save_all} => {
+            
             checker::check_correctness::run(
                 target_file,
                 correct_file,
