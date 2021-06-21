@@ -140,10 +140,10 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             } else { break; }
         } else {
             // run generator
-            execute_generator(generator_file_lang, timeout, test_cases)?;
+            execute_generator(generator_file_lang, timeout, test_number)?;
         }
 
-        let response_target = target_file_lang.execute(timeout as u32);
+        let response_target = target_file_lang.execute(timeout as u32, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
@@ -168,7 +168,7 @@ pub fn run(target_file: PathBuf, checker_file: PathBuf,
             return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        let response_checker = checker_file_lang_lang.execute(timeout as u32);
+        let response_checker = checker_file_lang_lang.execute(timeout as u32, test_number);
         let time_checker: Duration = response_checker.time;
 
         if is_runtime_error(&response_checker.status) {

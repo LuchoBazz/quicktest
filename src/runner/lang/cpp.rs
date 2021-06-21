@@ -4,13 +4,11 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-
 use std::path::PathBuf;
 use std::process::Command;
 
 use crate::runner::cmd::execute_program;
 use crate::runner::types::{Language, StatusResponse};
-
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
@@ -75,10 +73,11 @@ impl Language for Cpp {
         status.code() == Some(0)
     }
 
-    fn execute(&self, timeout: u32) -> StatusResponse {
+    fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
         let commands = vec![self.binary_file.to_str().unwrap()];
         execute_program(
             timeout,
+            testcase,
             commands,
             self.stdin.clone(),
             self.stdout.clone(),
@@ -90,7 +89,6 @@ impl Language for Cpp {
         self.stdin = Some(PathBuf::from(stdin));
     }
 }
-
 
 pub mod default {
     use std::path::PathBuf;

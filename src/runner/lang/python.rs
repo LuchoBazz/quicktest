@@ -56,11 +56,12 @@ impl Language for Python {
         true
     }
 
-    fn execute(&self, timeout: u32) -> StatusResponse {
+    fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
         // Example: python3 main.py
         let commands = vec![self.program, self.file_name.to_str().unwrap()];
         execute_program(
             timeout,
+            testcase,
             commands,
             self.stdin.clone(),
             self.stdout.clone(),

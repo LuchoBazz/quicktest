@@ -117,10 +117,10 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             } else { break; }
         } else {
             // run generator
-            execute_generator(generator_file_lang, timeout, test_cases)?;
+            execute_generator(generator_file_lang, timeout, test_number)?;
         }
 
-        let response_target = target_file_lang.execute(timeout as u32);
+        let response_target = target_file_lang.execute(timeout as u32, test_number);
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 

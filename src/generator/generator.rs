@@ -16,7 +16,7 @@ use crate::runner::types::{
 };
 
 pub fn execute_generator(generator_file_lang: &dyn Language, timeout: u32, test_number: u32) -> Result<(), ExitFailure>{
-    let response_gen = generator_file_lang.execute(timeout as u32);
+    let response_gen = generator_file_lang.execute(timeout as u32, test_number);
     let time_gen = response_gen.time;
 
     if is_runtime_error(&response_gen.status) {

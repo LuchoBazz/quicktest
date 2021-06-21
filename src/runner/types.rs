@@ -8,7 +8,7 @@ use std::time::Duration;
 
 pub trait Language {
     fn build(&self) -> bool;
-    fn execute(&self, timeout: u32) -> StatusResponse;
+    fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse;
     fn set_stdio(&mut self, stdin: &str);
 }
 

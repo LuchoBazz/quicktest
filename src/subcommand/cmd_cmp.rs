@@ -140,10 +140,10 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             } else { break; }
         } else {
             // run generator
-            execute_generator(generator_file_lang, timeout, test_cases)?;
+            execute_generator(generator_file_lang, timeout, test_number)?;
         }
 
-        let response_correct = correct_file_lang.execute(timeout as u32);
+        let response_correct = correct_file_lang.execute(timeout as u32, test_number);
         let time_correct: Duration = response_correct.time;
 
         if is_runtime_error(&response_correct.status) {
@@ -158,7 +158,7 @@ pub fn run(target_file: PathBuf, correct_file: PathBuf,
             return throw_time_limit_exceeded_msg("correct", "<correct-file>");
         }
 
-        let response_target = target_file_lang.execute(timeout as u32);
+        let response_target = target_file_lang.execute(timeout as u32, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
