@@ -43,25 +43,27 @@ Quick Test CLI is a project to perform stress testing in competitive programming
 
 Currently, Quick Test CLI supports three types of tests which are listed below:
 
-* **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
-    * **Sample:**
-        ```shell
-        quicktest tle --target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
-        ```
-
 * **Check the correctness of the code compared to a slower version:** Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
     * **Sample:**
         ```shell
-        quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
+        quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp
+        ```
+
+* **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+    * **Sample:**
+        ```shell
+        quicktest tle --target-file=main.cpp --gen-file=gen.cpp
         ```
 
 * **Verify the correctness of the code using a verifier script:** Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
     * **Sample:**
         ```shell
-        quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
+        quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp
         ```
 
 ## Commands
+
+**Note:** you can use the long command `quicktest` or the alias `qt`
 
 * `quicktest cmp`
     
@@ -74,8 +76,9 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     **Other Options**
 
     * `--test-cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]`
+    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 
+---
 
 * `quicktest tle`
     
@@ -87,7 +90,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     **Other Options**
 
     * `--test-cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]`
+    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+---
 
 * `quicktest check`
     
@@ -100,9 +104,10 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     **Other Options**
 
     * `--test-cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]`
+    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+---
 
-* **Flags**
+* **Flags of the `cmp`, `tle` and `check` subcommands**
 
     * `--break_bad`  Break if WA, TLE or RTE states occurs
     * `--run-ac`     Run test cases Accepted
@@ -112,6 +117,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--run-wa`     Run test cases Wrong Answer
     * `--save-all`   Save all test cases
     * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+
+---
 
 * `quicktest example`
     
@@ -131,7 +138,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 ## Compilation and Execution Commands
 
 | Language     | Compile / Interpreter                                      | Execution Command          |
-|:------------:|:----------------------------------------------------------:|:--------------------------:|
+|:------------:|------------------------------------------------------------|----------------------------|
 | C++17        | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`   | `./main seed testcase`     |
 | Python3      |                                                            | `python3 main.py seed testcase`|
 
