@@ -12,11 +12,30 @@ Read this in other languages: [_Español_](docs/README.es-ES.md), [_Português_]
 
 **Table of Contents**
 
-- [Introduction](#introduction)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+- [Introduction](#introduction)
+- [Commands](#commands)
 - [Supported Languages](#supported-languages)
+- [Compilation and Execution Commands](#compilation-and-execution-commands)
 - [License](#license)
+
+## Getting Started
+
+### Installation
+
+If you already have Rust on your system:
+
+```sh
+cargo install quicktest
+```
+
+If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
+
+Shell (Linux, Mac):
+```sh
+curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
+```
 
 ## Introduction
 
@@ -42,22 +61,65 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000
         ```
 
-## Getting Started
+## Commands
 
-### Installation
+* `quicktest cmp`
+    
+    **Required Options**
 
-If you already have Rust on your system:
+    * `-t=<value> | --target-file=<value>`
+    * `-c=<value> | --correct-file=<value>`
+    * `-g=<value> | --gen-file=<value>`
 
-```sh
-cargo install quicktest
-```
+    **Other Options**
 
-If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
+    * `--test-cases=<value> [default: 1000]`
+    * `--timeout=<value>  [default: 2000]`
 
-Shell (Linux, Mac):
-```sh
-curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
-```
+
+* `quicktest tle`
+    
+    **Required Options**
+
+    * `-t=<value> | --target-file=<value>`
+    * `-g=<value> | --gen-file=<value>`
+
+    **Other Options**
+
+    * `--test-cases=<value> [default: 1000]`
+    * `--timeout=<value>  [default: 2000]`
+
+* `quicktest check`
+    
+    **Required Options**
+
+    * `-t=<value> | --target-file=<value>`
+    * `-c=<value> | --checker-file=<value>`
+    * `-g=<value> | --gen-file=<value>`
+
+    **Other Options**
+
+    * `--test-cases=<value> [default: 1000]`
+    * `--timeout=<value>  [default: 2000]`
+
+* **Flags**
+
+    * `--break_bad`  Break if WA, TLE or RTE states occurs
+    * `--run-ac`     Run test cases Accepted
+    * `--run-all`    Run all test cases
+    * `--run-rte`    Run test cases Run Time Error
+    * `--run-tle`    Run test cases Time Limited Exceeded
+    * `--run-wa`     Run test cases Wrong Answer
+    * `--save-all`   Save all test cases
+    * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+
+* `quicktest example`
+    
+    **Flags**
+
+    * `--check`   Show examples of the check subcommand
+    * `--cmp`     Show examples of the cmp subcommand
+    * `--tle`     Show examples of the tle subcommand
 
 ## Supported Languages
 
@@ -66,6 +128,12 @@ curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
 | C++                | -std=c++17             |
 | Python             | Version 3              |
 
+## Compilation and Execution Commands
+
+| Language     | Compile / Interpreter                                      | Execution Command          |
+|:------------:|:----------------------------------------------------------:|:--------------------------:|
+| C++17        | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`   | `./main seed testcase`     |
+| Python3      |                                                            | `python3 main.py seed testcase`|
 
 ## License
 Licensed under either of these:
