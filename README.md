@@ -2,7 +2,7 @@
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/crates/d/quicktest)](https://crates.io/crates/quicktest) [![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest) [![](https://img.shields.io/badge/rustc-1.51+-yellow.svg)](https://www.rust-lang.org/tools/install) 
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/crates/d/quicktest)](https://crates.io/crates/quicktest) [![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest) [![](https://img.shields.io/badge/rustc-1.50>=-yellow.svg)](https://www.rust-lang.org/tools/install) 
 
 ## Documentation
 
@@ -65,7 +65,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
 **Note:** you can use the long command `quicktest` or the alias `qt`
 
-* `quicktest cmp`
+* `quicktest cmp | qt cmp`
     
     **Required Options**
 
@@ -80,7 +80,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
 ---
 
-* `quicktest tle`
+* `quicktest tle | qt tle`
     
     **Required Options**
 
@@ -93,7 +93,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 ---
 
-* `quicktest check`
+* `quicktest check | qt check`
     
     **Required Options**
 
@@ -120,13 +120,15 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
 ---
 
-* `quicktest example`
+* `quicktest example | qt example`
     
     **Flags**
-
+    
     * `--check`   Show examples of the check subcommand
     * `--cmp`     Show examples of the cmp subcommand
     * `--tle`     Show examples of the tle subcommand
+    
+    **Nota:** can only use one flag at a time
 
 ## Supported Languages
 
