@@ -11,7 +11,7 @@
 
     cd quicktest/examples/cmp/cpp
 
-    quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=10 --timeout=1000
+    quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000
     ```
 
 * ### python examples
@@ -20,6 +20,32 @@
 
     cd quicktest/examples/cmp/python
 
-    quicktest cmp --target-file=main.py --correct-file=correct.py --gen-file=gen.py --test-cases=10 --timeout=1000
+    quicktest cmp --target-file=main.py --correct-file=correct.py --gen-file=gen.py --test-cases=200 --timeout=1000
     ```
+## Save Test Cases
 
+you can use the following flags
+* `--save-all`   Save all test cases
+* `--save-bad`   Save only bad cases with WA, TLE or RTE states
+
+for example
+
+```shell
+quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --save-bad
+```
+
+## Run Saved Test Cases
+
+you can use the following flags
+
+* `--run-ac`     Run test cases Accepted
+* `--run-all`    Run all test cases
+* `--run-rte`    Run test cases Run Time Error
+* `--run-tle`    Run test cases Time Limited Exceeded
+* `--run-wa`     Run test cases Wrong Answer
+
+for example
+
+```shell
+quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --run-wa
+```
