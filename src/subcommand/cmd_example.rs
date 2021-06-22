@@ -7,8 +7,7 @@
 use exitfailure::ExitFailure;
 
 use crate::painter::example::{
-    show_examples_check_cmd, show_examples_cmp_cmd,
-    show_examples_tle_cmd
+    show_examples_check_cmd, show_examples_cmp_cmd, show_examples_tle_cmd,
 };
 
 pub fn run(cmp: bool, tle: bool, check: bool) -> Result<(), ExitFailure> {

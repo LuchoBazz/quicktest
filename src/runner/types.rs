@@ -8,21 +8,18 @@ use std::time::Duration;
 
 pub trait Language {
     fn build(&self) -> bool;
-    fn execute(&self, timeout: u32) -> StatusResponse;
+    fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse;
     fn set_stdio(&mut self, stdin: &str);
 }
 
 pub struct StatusResponse {
     pub time: Duration,
-    pub status: CPStatus
+    pub status: CPStatus,
 }
 
 impl StatusResponse {
     pub fn new(time: Duration, status: CPStatus) -> StatusResponse {
-        StatusResponse {
-            time,
-            status
-        }
+        StatusResponse { time, status }
     }
 }
 
@@ -32,7 +29,7 @@ pub enum CPStatus {
     WA,
     TLE,
     CE,
-    RTE
+    RTE,
 }
 
 pub fn is_accepted(status: &CPStatus) -> bool {

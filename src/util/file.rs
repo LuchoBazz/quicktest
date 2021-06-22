@@ -4,8 +4,8 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::io;
 use std::fs;
+use std::io;
 use std::path::PathBuf;
 
 pub fn file_exists(file_name: &str) -> Result<bool, io::Error> {

@@ -4,9 +4,9 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub const FOLDER:       &str = "target/.code";
-pub const FOLDER_TLE:   &str = "tle";
-pub const FOLDER_CMP:   &str = "cmp";
+pub const FOLDER: &str = "target/.code";
+pub const FOLDER_TLE: &str = "tle";
+pub const FOLDER_CMP: &str = "cmp";
 pub const FOLDER_CHECK: &str = "checker";
 
 #[cfg(unix)]
@@ -15,15 +15,15 @@ pub const BINARY: &str = "./target/debug/quicktest";
 #[cfg(windows)]
 pub const BINARY: &str = "./target/debug/quicktest.exe";
 
-pub const TARGET_FILE_CPP:  &str = "main.cpp";
+pub const TARGET_FILE_CPP: &str = "main.cpp";
 pub const CORRECT_FILE_CPP: &str = "correct.cpp";
 pub const CHECKER_FILE_CPP: &str = "checker.cpp";
-pub const GEN_FILE_CPP:     &str = "gen.cpp";
+pub const GEN_FILE_CPP: &str = "gen.cpp";
 
-pub const TARGET_FILE_PY:   &str = "main.py";
-pub const CORRECT_FILE_PY:  &str = "correct.py";
-pub const CHECKER_FILE_PY:  &str = "checker.py";
-pub const GEN_FILE_PY:      &str = "gen.py";
+pub const TARGET_FILE_PY: &str = "main.py";
+pub const CORRECT_FILE_PY: &str = "correct.py";
+pub const CHECKER_FILE_PY: &str = "checker.py";
+pub const GEN_FILE_PY: &str = "gen.py";
 
 // RTE CODES
 pub const RTE_CPP: &str = r#"
