@@ -22,10 +22,11 @@ pub fn show_examples_tle_cmd() {
         "   $ {} {} {}",
         "quicktest".bold().green(),
         "tle".bold().blue(),
-        "--target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000".bold().white()
+        "--target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000"
+            .bold()
+            .white()
     );
 }
-
 
 pub fn show_examples_check_cmd() {
     println!("   📕 {}\n", "Command Examples".bold().blue());

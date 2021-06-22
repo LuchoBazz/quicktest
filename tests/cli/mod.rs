@@ -4,6 +4,6 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-mod tle_subcommand;
-mod cmp_subcommand;
 mod check_subcommand;
+mod cmp_subcommand;
+mod tle_subcommand;

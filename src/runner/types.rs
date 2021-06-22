@@ -14,15 +14,12 @@ pub trait Language {
 
 pub struct StatusResponse {
     pub time: Duration,
-    pub status: CPStatus
+    pub status: CPStatus,
 }
 
 impl StatusResponse {
     pub fn new(time: Duration, status: CPStatus) -> StatusResponse {
-        StatusResponse {
-            time,
-            status
-        }
+        StatusResponse { time, status }
     }
 }
 
@@ -32,7 +29,7 @@ pub enum CPStatus {
     WA,
     TLE,
     CE,
-    RTE
+    RTE,
 }
 
 pub fn is_accepted(status: &CPStatus) -> bool {

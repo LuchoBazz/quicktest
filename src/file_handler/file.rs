@@ -4,15 +4,26 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::{collections::VecDeque, fs::{self, remove_dir_all}, io::Write, path::PathBuf};
+use std::{
+    collections::VecDeque,
+    fs::{self, remove_dir_all},
+    io::Write,
+    path::PathBuf,
+};
 
-use glob::glob;
 use exitfailure::ExitFailure;
+use glob::glob;
 
-use crate::{constants::{PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, TEST_CASES_FOLDER}, error::handle_error::{
+use crate::{
+    constants::{
+        PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, TEST_CASES_FOLDER,
+    },
+    error::handle_error::{
         throw_couldnt_create_folder_msg, throw_couldnt_open_file_msg,
-        throw_couldnt_write_to_file_msg
-    }, util::file::file_exists};
+        throw_couldnt_write_to_file_msg,
+    },
+    util::file::file_exists,
+};
 
 pub fn remove_files(files: Vec<&str>) {
     for file in files {
@@ -26,7 +37,7 @@ pub fn remove_files_with_prefix(prefix: &str) {
     if let Ok(paths) = glob(prefix) {
         for entry in paths {
             if let Ok(path) = entry {
-                if let Ok(_ ) = fs::remove_file(path.to_str().unwrap()) {}
+                if let Ok(_) = fs::remove_file(path.to_str().unwrap()) {}
             }
         }
     }
@@ -36,7 +47,7 @@ pub fn remove_folder(path: &str) {
     if let Ok(_) = remove_dir_all(path) {}
 }
 
-pub fn write_file(file_name: &str, bytes: &[u8]) ->  Result<(), ExitFailure> {
+pub fn write_file(file_name: &str, bytes: &[u8]) -> Result<(), ExitFailure> {
     if let Ok(mut file) = std::fs::File::create(file_name) {
         if let Err(_) = file.write_all(bytes) {
             return throw_couldnt_write_to_file_msg(file_name);
@@ -45,7 +56,7 @@ pub fn write_file(file_name: &str, bytes: &[u8]) ->  Result<(), ExitFailure> {
     Ok(())
 }
 
-pub fn read_file(file_name: &str) ->  Option<String> {
+pub fn read_file(file_name: &str) -> Option<String> {
     if let Ok(data) = fs::read_to_string(file_name) {
         return Some(data);
     }
@@ -71,10 +82,10 @@ pub fn create_folder_or_error(name: &str) -> Result<(), ExitFailure> {
 
 pub fn format_filename_test_case(folder: &str, prefix: &str, number: u32) -> String {
     if number > 0 {
-        let file_name = format!( "{}/{}_{}.txt", folder, prefix, number);
+        let file_name = format!("{}/{}_{}.txt", folder, prefix, number);
         return file_name;
     }
-    let file_name = format!( "{}/{}_0{}.txt", folder, prefix, number);
+    let file_name = format!("{}/{}_0{}.txt", folder, prefix, number);
     return file_name;
 }
 
@@ -93,13 +104,25 @@ pub fn copy_file(from: &str, to: &str) -> Result<(), ExitFailure> {
     Ok(())
 }
 
-pub fn load_testcases(queue: &mut VecDeque<PathBuf>, run_all: bool, run_ac: bool, run_wa: bool, run_tle: bool, run_rte: bool) -> Result<(), ExitFailure> {
+pub fn load_testcases(
+    queue: &mut VecDeque<PathBuf>,
+    run_all: bool,
+    run_ac: bool,
+    run_wa: bool,
+    run_tle: bool,
+    run_rte: bool,
+) -> Result<(), ExitFailure> {
     let mut run_ac = run_ac;
     let mut run_wa = run_wa;
     let mut run_tle = run_tle;
     let mut run_rte = run_rte;
 
-    if run_all { run_ac = true; run_wa = true; run_tle = true; run_rte = true; }
+    if run_all {
+        run_ac = true;
+        run_wa = true;
+        run_tle = true;
+        run_rte = true;
+    }
 
     if run_ac {
         let paths = glob(&format!("{}/{}*", TEST_CASES_FOLDER, PREFIX_AC_FILES))?;

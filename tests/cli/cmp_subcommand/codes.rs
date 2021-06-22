@@ -61,7 +61,6 @@ int main() {
     return 0;
 }"#;
 
-
 pub const TARGET_PY_CMP: &str = r#"
 n = int(input())
 A = list(map(int, input().split()))

@@ -4,7 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
- pub const TARGET_CPP_CHECK: &str = r#"
+pub const TARGET_CPP_CHECK: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
 int main() {

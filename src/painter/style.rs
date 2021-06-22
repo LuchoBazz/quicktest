@@ -11,7 +11,8 @@ pub fn show_accepted(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "OK".bold().green(),
-        "Finished in".bold().green(), time
+        "Finished in".bold().green(),
+        time
     );
 }
 
@@ -20,7 +21,8 @@ pub fn show_accepted_case(case: &str, time: u32) {
         "  {} [{}] {} {}ms",
         case.to_string().bold().white(),
         "OK".bold().green(),
-        "Finished in".bold().green(), time
+        "Finished in".bold().green(),
+        time
     );
 }
 
@@ -29,7 +31,8 @@ pub fn show_wrong_answer(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "WA".bold().red(),
-        "Finished in".bold().red(), time
+        "Finished in".bold().red(),
+        time
     );
 }
 
@@ -94,14 +97,17 @@ pub fn show_runtime_error(test_number: u32, time: u32) {
 }
 
 pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
-
     println!("\n  📌{}\n", "-Stats-".bold().white());
 
     println!(
         "  {}={}, {}={}, {}={}, {}={}",
-        "AC".bold().green(), ac.to_string().bold().white(),
-        "WA".bold().red(), wa.to_string().bold().white(),
-        "TLE".bold().red(), tle.to_string().bold().white(),
-        "RTE".bold().red(), rte.to_string().bold().white()
+        "AC".bold().green(),
+        ac.to_string().bold().white(),
+        "WA".bold().red(),
+        wa.to_string().bold().white(),
+        "TLE".bold().red(),
+        tle.to_string().bold().white(),
+        "RTE".bold().red(),
+        rte.to_string().bold().white()
     );
 }

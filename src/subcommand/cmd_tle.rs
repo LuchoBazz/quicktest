@@ -13,55 +13,53 @@ use std::time::Duration;
 use exitfailure::ExitFailure;
 
 // local library
-use crate::file_handler::path::get_root_path;
 use crate::error::handle_error::throw_compiler_error_msg;
-use crate::generator::generator::execute_generator;
 use crate::file_handler::file::{
     copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case,
-    load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case
+    load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case,
 };
-use crate::runner::types::{
-    Language, is_time_limit_exceeded,
-    is_compiled_error, is_runtime_error
-};
-use crate::util::lang::{
-    get_language_by_ext_default,
-    get_language_by_ext_set_output
-};
+use crate::file_handler::path::get_root_path;
+use crate::generator::generator::execute_generator;
 use crate::painter::style::{
-    show_accepted, show_runtime_error, show_stats,
-    show_time_limit_exceeded
+    show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
 };
+use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::util::lang::{get_language_by_ext_default, get_language_by_ext_set_output};
 
 // Constants
 use crate::constants::{
     CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES,
-    QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
-    TEST_CASES_FOLDER
+    QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
-pub fn run(target_file: PathBuf, gen_file: PathBuf,
-        test_cases: u32, timeout: u32, tle_break: bool, save_bad: bool, save_all: bool,
-        run_all: bool, run_ac: bool, run_wa: bool, run_tle: bool, run_rte: bool) -> Result<(), ExitFailure> {
-    
+pub fn run(
+    target_file: PathBuf,
+    gen_file: PathBuf,
+    test_cases: u32,
+    timeout: u32,
+    tle_break: bool,
+    save_bad: bool,
+    save_all: bool,
+    run_all: bool,
+    run_ac: bool,
+    run_wa: bool,
+    run_tle: bool,
+    run_rte: bool,
+) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 
     // verify that the target file exists
     file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
-    
+
     // verify that the generator file exists
     file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
-    
+
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
-    let any_gen: Option<Box<dyn Language>> = get_language_by_ext_set_output(
-        root,
-        gen_file,
-        &GEN_BINARY_FILE,
-        &QTEST_INPUT_FILE,
-    );
+    let any_gen: Option<Box<dyn Language>> =
+        get_language_by_ext_set_output(root, gen_file, &GEN_BINARY_FILE, &QTEST_INPUT_FILE);
     let any_gen: Box<dyn Language> = any_gen.unwrap();
     let generator_file_lang: &dyn Language = any_gen.as_ref();
 
@@ -72,7 +70,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
         &TARGET_BINARY_FILE,
         &QTEST_INPUT_FILE,
         &QTEST_OUTPUT_FILE,
-        &QTEST_ERROR_FILE
+        &QTEST_ERROR_FILE,
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
@@ -81,7 +79,7 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     if !can_compile_gen {
         return throw_compiler_error_msg("generator", "<gen-file>");
     }
-    
+
     let can_compile_target = target_file_lang.build();
     if !can_compile_target {
         return throw_compiler_error_msg("target", "<target-file>");
@@ -114,7 +112,9 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
                 // Load test case in stdin
                 let case = cases.pop_front().unwrap();
                 copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
-            } else { break; }
+            } else {
+                break;
+            }
         } else {
             // run generator
             execute_generator(generator_file_lang, timeout, test_number)?;
@@ -130,24 +130,32 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
                 // Example: test_cases/testcase_rte_01.txt
-                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
+                let file_name: &str =
+                    &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             // check if the tle_breck flag is high
             if tle_break {
                 // remove input, output and error files
-                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
-                    TARGET_BINARY_FILE, GEN_BINARY_FILE]);
-                
-               return Ok(());
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                ]);
+
+                return Ok(());
             }
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        if time_target >= Duration::from_millis(timeout as u64) || is_time_limit_exceeded(&response_target.status) {
+        if time_target >= Duration::from_millis(timeout as u64)
+            || is_time_limit_exceeded(&response_target.status)
+        {
             // TLE Target file
             tle_count += 1;
             show_time_limit_exceeded(test_number, timeout);
@@ -155,24 +163,31 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
             // Save the input of the test case that gave status tle
             if save_bad || save_all {
                 // Example: test_cases/testcase_tle_01.txt
-                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
+                let file_name: &str =
+                    &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
-            
+
             // check if the tle_breck flag is high
             if tle_break {
                 // remove input, output and error files
-                remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
-                    TARGET_BINARY_FILE, GEN_BINARY_FILE]);
-                
-               return Ok(());
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                ]);
+
+                return Ok(());
             }
         } else {
             ac_count += 1;
             if save_all {
                 // Example: test_cases/testcase_ac_01.txt
-                let file_name: &str = &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
+                let file_name: &str =
+                    &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             show_accepted(test_number, mills_target as u32);
@@ -181,8 +196,13 @@ pub fn run(target_file: PathBuf, gen_file: PathBuf,
     show_stats(ac_count, 0, tle_count, rte_count);
 
     // remove input, output and error files
-    remove_files(vec![QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_ERROR_FILE,
-        TARGET_BINARY_FILE, GEN_BINARY_FILE]);
+    remove_files(vec![
+        QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE,
+        TARGET_BINARY_FILE,
+        GEN_BINARY_FILE,
+    ]);
 
     Ok(())
 }

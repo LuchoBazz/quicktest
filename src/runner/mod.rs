@@ -4,6 +4,6 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+pub mod cmd;
 pub mod lang;
 pub mod types;
-pub mod cmd;

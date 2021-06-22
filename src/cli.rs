@@ -5,14 +5,13 @@
  */
 
 use std::path::PathBuf;
-use structopt::StructOpt;
 use structopt::clap::ArgGroup;
+use structopt::StructOpt;
 
 /// CLI for stress testing in competitive programming contest
 #[derive(StructOpt, Debug)]
 #[structopt(name = "quicktest")]
 pub enum Opt {
-
     /// Check TLE
     TLE {
         /// Target File
@@ -36,11 +35,11 @@ pub enum Opt {
         tle_break: bool,
 
         /// Save only bad cases with WA, TLE or RTE states
-        #[structopt(short = "s", long = "save-bad", conflicts_with="save-all")]
+        #[structopt(short = "s", long = "save-bad", conflicts_with = "save-all")]
         save_bad: bool,
 
         /// Save all test cases
-        #[structopt(short = "a", long = "save-all", conflicts_with="save-bad")]
+        #[structopt(short = "a", long = "save-all", conflicts_with = "save-bad")]
         save_all: bool,
 
         /// Run all test cases
@@ -90,11 +89,11 @@ pub enum Opt {
         break_bad: bool,
 
         /// Save only bad cases with WA, TLE or RTE states
-        #[structopt(short = "s", long = "save-bad", conflicts_with="save-all")]
+        #[structopt(short = "s", long = "save-bad", conflicts_with = "save-all")]
         save_bad: bool,
 
         /// Save all test cases
-        #[structopt(short = "a", long = "save-all", conflicts_with="save-bad")]
+        #[structopt(short = "a", long = "save-all", conflicts_with = "save-bad")]
         save_all: bool,
 
         /// run all test cases
@@ -144,11 +143,11 @@ pub enum Opt {
         break_bad: bool,
 
         /// Save only bad cases with WA, TLE or RTE states
-        #[structopt(short = "s", long = "save-bad", conflicts_with="save-all")]
+        #[structopt(short = "s", long = "save-bad", conflicts_with = "save-all")]
         save_bad: bool,
 
         /// Save all test cases
-        #[structopt(short = "a", long = "save-all", conflicts_with="save-bad")]
+        #[structopt(short = "a", long = "save-all", conflicts_with = "save-bad")]
         save_all: bool,
 
         /// run all test cases
@@ -185,5 +184,5 @@ pub enum Opt {
         /// Show examples of the check subcommand
         #[structopt(long = "check", group = "cmd")]
         check: bool,
-    }
+    },
 }

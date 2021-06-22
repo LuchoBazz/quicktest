@@ -12,7 +12,6 @@ use crate::runner::types::{Language, StatusResponse};
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
-
     /// Example: g++
     pub program: &'static str,
 
@@ -30,7 +29,7 @@ pub struct Cpp {
 
     /// Example -DLOCAL, -DONLINE_JUDGE, etc
     variables: Vec<&'static str>,
-    
+
     stdin: Option<PathBuf>,
 
     stdout: Option<PathBuf>,
@@ -39,11 +38,17 @@ pub struct Cpp {
 }
 
 impl Cpp {
-    pub fn new(program: &'static str, file_name: PathBuf,
-            standard: &'static str, binary_file: PathBuf,
-            flags: Vec<&'static str>, variables: Vec<&'static str>,
-            stdin: Option<PathBuf>, stdout: Option<PathBuf>, stderr: Option<PathBuf>) -> Cpp {
-        
+    pub fn new(
+        program: &'static str,
+        file_name: PathBuf,
+        standard: &'static str,
+        binary_file: PathBuf,
+        flags: Vec<&'static str>,
+        variables: Vec<&'static str>,
+        stdin: Option<PathBuf>,
+        stdout: Option<PathBuf>,
+        stderr: Option<PathBuf>,
+    ) -> Cpp {
         Cpp {
             program: program,
             file_name: file_name,
@@ -53,13 +58,12 @@ impl Cpp {
             variables: variables,
             stdin: stdin,
             stdout: stdout,
-            stderr: stderr
+            stderr: stderr,
         }
     }
 }
 
 impl Language for Cpp {
-
     fn build(&self) -> bool {
         let status = Command::new(self.program)
             .arg(self.standard)
@@ -81,7 +85,7 @@ impl Language for Cpp {
             commands,
             self.stdin.clone(),
             self.stdout.clone(),
-            self.stderr.clone()
+            self.stderr.clone(),
         )
     }
 
@@ -94,13 +98,17 @@ pub mod default {
     use std::path::PathBuf;
 
     use super::Cpp;
-    
-    pub fn gnucpp17_default(root: &str, file_name: &str, 
-            binary_file: &str, input_file: &str, output_file: &str,
-            error_file: &str) -> Cpp {
-    
+
+    pub fn gnucpp17_default(
+        root: &str,
+        file_name: &str,
+        binary_file: &str,
+        input_file: &str,
+        output_file: &str,
+        error_file: &str,
+    ) -> Cpp {
         let stdin = PathBuf::from(format!("{}/{}", root, input_file));
-        let stdout =  PathBuf::from(format!("{}/{}", root, output_file));
+        let stdout = PathBuf::from(format!("{}/{}", root, output_file));
         let stderr = PathBuf::from(format!("{}/{}", root, error_file));
 
         Cpp::new(
@@ -112,14 +120,17 @@ pub mod default {
             vec!["-DONLINE_JUDGE=1"],
             Some(stdin),
             Some(stdout),
-            Some(stderr)
+            Some(stderr),
         )
     }
 
-    pub fn gnucpp17_set_output(root: &str, file_name: &str, 
-        binary_file: &str, output_file: &str) -> Cpp {
-
-        let stdout =  PathBuf::from(format!("{}/{}", root, output_file));
+    pub fn gnucpp17_set_output(
+        root: &str,
+        file_name: &str,
+        binary_file: &str,
+        output_file: &str,
+    ) -> Cpp {
+        let stdout = PathBuf::from(format!("{}/{}", root, output_file));
 
         Cpp::new(
             "g++",
@@ -130,7 +141,7 @@ pub mod default {
             vec!["-DLOCAL=1"],
             None,
             Some(stdout),
-            None
+            None,
         )
     }
 }
