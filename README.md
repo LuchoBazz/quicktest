@@ -75,7 +75,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> [default: 1000]`
+    * `--test-cases=<value> | --cases=<value> [default: 1000]`
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 
 ---
@@ -89,7 +89,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> [default: 1000]`
+    * `--test-cases=<value> | --cases=<value> [default: 1000]`
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 ---
 
@@ -103,13 +103,13 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> [default: 1000]`
+    * `--test-cases=<value> | --cases=<value> [default: 1000]`
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 ---
 
 * **Flags of the `cmp`, `tle` and `check` subcommands**
 
-    * `--break_bad`  Break if WA, TLE or RTE states occurs
+    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--run-ac`     Run test cases Accepted
     * `--run-all`    Run all test cases
     * `--run-rte`    Run test cases Run Time Error

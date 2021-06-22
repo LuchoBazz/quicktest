@@ -10,7 +10,9 @@
     git clone https://github.com/LuisMBaezCo/quicktest.git
 
     cd quicktest/examples/cmp/cpp
+    ```
 
+    ```shell
     quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000
     ```
 
@@ -19,7 +21,9 @@
     git clone https://github.com/LuisMBaezCo/quicktest.git
 
     cd quicktest/examples/cmp/python
-
+    ```
+    
+    ```shell
     quicktest cmp --target-file=main.py --correct-file=correct.py --gen-file=gen.py --test-cases=200 --timeout=1000
     ```
 ## Save Test Cases
