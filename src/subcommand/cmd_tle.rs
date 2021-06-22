@@ -37,7 +37,7 @@ pub fn run(
     gen_file: PathBuf,
     test_cases: u32,
     timeout: u32,
-    tle_break: bool,
+    break_bad: bool,
     save_bad: bool,
     save_all: bool,
     run_all: bool,
@@ -136,7 +136,7 @@ pub fn run(
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             // check if the tle_breck flag is high
-            if tle_break {
+            if break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -170,7 +170,7 @@ pub fn run(
             }
 
             // check if the tle_breck flag is high
-            if tle_break {
+            if break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
