@@ -4,42 +4,52 @@
 *  License: MIT (See the LICENSE file in the repository root directory)
 */
 
-use std::{fs::File, io::Write, path::PathBuf, process::{Command, Stdio}, time::{Duration, Instant}};
+use std::fs::File;
+use std::io::Write;
+use std::path::PathBuf;
+use std::process::{Command, Stdio};
+use std::time::{Duration, Instant};
 
 use process_control::{ChildExt, Timeout};
+use rand::distributions::{Distribution, Uniform};
 
 use super::types::{CPStatus, StatusResponse};
 
-pub fn execute_program(timeout: u32, commands: Vec<&str>,
-        stdin: Option<PathBuf>, stdout: Option<PathBuf>, 
-        stderr: Option<PathBuf>) -> StatusResponse {
-    
+pub fn execute_program(
+    timeout: u32,
+    testcase: u32,
+    commands: Vec<&str>,
+    stdin: Option<PathBuf>,
+    stdout: Option<PathBuf>,
+    stderr: Option<PathBuf>,
+) -> StatusResponse {
+    assert!(0 < commands.len());
+
     let now: Instant = Instant::now();
 
-    let child: Result<std::process::Child, std::io::Error> = match &stdin {
-        Some(file) => {
-            let input = File::open(file.to_str().unwrap()).unwrap();
-            let mut cmd = Command::new(commands[0]);
-            if commands.len() > 1 {
-                cmd.args(&commands[1..]);
-            }
-            let child = cmd.stdin(Stdio::from(input))
-                .stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn();
-            child
-        },
-        _ => {
-            let mut cmd = Command::new(commands[0]);
-            if commands.len() > 1 {
-                cmd.args(&commands[1..]);
-            }
-            let child = cmd.stdout(Stdio::piped())
-                .stderr(Stdio::piped())
-                .spawn();
-            child
-        }
-    };
+    let mut cmd = Command::new(commands[0]);
+
+    if commands.len() > 1 {
+        cmd.args(&commands[1..]);
+    }
+
+    if let Some(file) = &stdin {
+        // set output file, only exists
+        let input = File::open(file.to_str().unwrap()).unwrap();
+        cmd.stdin(Stdio::from(input));
+    } else {
+        // Only for generator file
+
+        // Initialize random generator
+        let mut rng = rand::thread_rng();
+        let die = Uniform::from(0..(std::i32::MAX / 2));
+
+        // add seed and test case
+        cmd.args(&[die.sample(&mut rng).to_string(), testcase.to_string()]);
+    }
+
+    let child: Result<std::process::Child, std::io::Error> =
+        cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
 
     let mut res_status = CPStatus::AC;
 
@@ -48,17 +58,16 @@ pub fn execute_program(timeout: u32, commands: Vec<&str>,
             .with_output_timeout(Duration::from_millis(timeout as u64))
             .terminating()
             .wait();
-        
-        if let Ok(output_option)= response {
-            if let Some(output) = output_option {
 
+        if let Ok(output_option) = response {
+            if let Some(output) = output_option {
                 if output.status.success() {
                     // OK
                     match stdout {
                         Some(file) => {
                             let mut writer = File::create(file.to_str().unwrap()).unwrap();
                             writer.write_all(&output.stdout).unwrap();
-                        },
+                        }
                         _ => (),
                     }
 
@@ -66,7 +75,7 @@ pub fn execute_program(timeout: u32, commands: Vec<&str>,
                         Some(file) => {
                             let mut writer = File::create(file.to_str().unwrap()).unwrap();
                             writer.write_all(&output.stderr).unwrap();
-                        },
+                        }
                         _ => (),
                     }
                     res_status = CPStatus::AC;

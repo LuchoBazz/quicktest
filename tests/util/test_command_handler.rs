@@ -6,7 +6,7 @@
 
 use std::process::Command;
 
-use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_TLE}; 
+use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_TLE};
 
 pub fn execute_command_tle(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
     cmd.arg("tle")
@@ -18,7 +18,13 @@ pub fn execute_command_tle(cmd: &mut Command, target_file: &str, gen_file: &str,
         .arg(format!("--test-cases={}", cases));
 }
 
-pub fn execute_command_cmp(cmd: &mut Command, target_file: &str, correct_file: &str, gen_file: &str, cases: usize) {
+pub fn execute_command_cmp(
+    cmd: &mut Command,
+    target_file: &str,
+    correct_file: &str,
+    gen_file: &str,
+    cases: usize,
+) {
     cmd.arg("cmp")
         .arg("--target-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, target_file))
@@ -30,7 +36,13 @@ pub fn execute_command_cmp(cmd: &mut Command, target_file: &str, correct_file: &
         .arg(format!("--test-cases={}", cases));
 }
 
-pub fn execute_command_check(cmd: &mut Command, target_file: &str, checker_file: &str, gen_file: &str, cases: usize) {
+pub fn execute_command_check(
+    cmd: &mut Command,
+    target_file: &str,
+    checker_file: &str,
+    gen_file: &str,
+    cases: usize,
+) {
     cmd.arg("check")
         .arg("--target-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CHECK, target_file))
