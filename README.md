@@ -6,7 +6,7 @@
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/crates/d/quicktest)](https://crates.io/crates/quicktest) [![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest) [![](https://img.shields.io/badge/rustc-1.50>=-yellow.svg)](https://www.rust-lang.org/tools/install) 
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
 
 ## Documentation
 
