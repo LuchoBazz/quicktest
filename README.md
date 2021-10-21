@@ -1,4 +1,8 @@
-<h1 align="center">🧰 Quick Test CLI</h1>
+<p align="center">
+  <img width="128" height="128" src="assets/logo/quicktest-512x512.png">
+</p>
+
+<h1 align="center">Quick Test CLI</h1>
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
