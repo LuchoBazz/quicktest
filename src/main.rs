@@ -23,6 +23,9 @@ use exitfailure::ExitFailure;
 fn main() -> Result<(), ExitFailure> {
     let opt = Opt::from_args();
 
+    #[cfg(windows)]
+    let _ = colored::control::set_virtual_terminal(true);
+
     let response = match opt {
         Opt::TLE {
             target_file,
