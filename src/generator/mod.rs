@@ -4,4 +4,5 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+#[allow(clippy::module_inception)]
 pub mod generator;

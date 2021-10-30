@@ -32,6 +32,7 @@ use crate::constants::{
     QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
+#[allow(clippy::too_many_arguments)]
 pub fn run(
     target_file: PathBuf,
     gen_file: PathBuf,

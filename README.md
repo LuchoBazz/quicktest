@@ -1,8 +1,12 @@
-<h1 align="center">🧰 Quick Test CLI</h1>
+<p align="center">
+  <img width="128" height="128" src="assets/logo/quicktest-512x512.png">
+</p>
+
+<h1 align="center">Quick Test CLI</h1>
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/crates/d/quicktest)](https://crates.io/crates/quicktest) [![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest) [![](https://img.shields.io/badge/rustc-1.50>=-yellow.svg)](https://www.rust-lang.org/tools/install) 
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
 
 ## Documentation
 
@@ -147,3 +151,5 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 ## License
 Licensed under either of these:
 * MIT license ([LICENSE-MIT](https://github.com/LuisMBaezCo/quicktest/blob/main/LICENSE) or https://opensource.org/licenses/MIT)
+
+<sub>Logo image based on the one made by <a href="https://www.flaticon.com/authors/freepik" id-flaticon="owl_2369306;hexagonal_73861" title="Freepik">Freepik</a> for <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>

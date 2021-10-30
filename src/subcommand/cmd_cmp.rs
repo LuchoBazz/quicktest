@@ -36,6 +36,7 @@ use crate::constants::{
     QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
+#[allow(clippy::too_many_arguments)]
 pub fn run(
     target_file: PathBuf,
     correct_file: PathBuf,
@@ -292,7 +293,7 @@ pub fn run(
     Ok(())
 }
 
-pub fn compare_file(target_file: &String, correct_file: &String, ignore_space: bool) -> bool {
+pub fn compare_file(target_file: &str, correct_file: &str, ignore_space: bool) -> bool {
     let mut is_good = true;
     let target_content = match std::fs::read_to_string(target_file) {
         Ok(content) => Some(content),
