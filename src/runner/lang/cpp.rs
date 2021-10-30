@@ -38,6 +38,7 @@ pub struct Cpp {
 }
 
 impl Cpp {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         program: &'static str,
         file_name: PathBuf,
@@ -50,15 +51,15 @@ impl Cpp {
         stderr: Option<PathBuf>,
     ) -> Cpp {
         Cpp {
-            program: program,
-            file_name: file_name,
-            standard: standard,
-            binary_file: binary_file,
-            flags: flags,
-            variables: variables,
-            stdin: stdin,
-            stdout: stdout,
-            stderr: stderr,
+            program,
+            file_name,
+            standard,
+            binary_file,
+            flags,
+            variables,
+            stdin,
+            stdout,
+            stderr,
         }
     }
 }

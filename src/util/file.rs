@@ -6,14 +6,14 @@
 
 use std::fs;
 use std::io;
-use std::path::PathBuf;
+use std::path::Path;
 
 pub fn file_exists(file_name: &str) -> Result<bool, io::Error> {
     fs::File::open(file_name)?;
     Ok(true)
 }
 
-pub fn get_extension(path: &PathBuf) -> Option<&str> {
+pub fn get_extension(path: &Path) -> Option<&str> {
     let ext = path.extension()?.to_str()?;
     Some(ext)
 }

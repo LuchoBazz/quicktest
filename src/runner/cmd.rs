@@ -23,7 +23,7 @@ pub fn execute_program(
     stdout: Option<PathBuf>,
     stderr: Option<PathBuf>,
 ) -> StatusResponse {
-    assert!(0 < commands.len());
+    assert!(!commands.is_empty());
 
     let now: Instant = Instant::now();
 
@@ -63,21 +63,16 @@ pub fn execute_program(
             if let Some(output) = output_option {
                 if output.status.success() {
                     // OK
-                    match stdout {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stdout).unwrap();
-                        }
-                        _ => (),
+                    if let Some(file) = stdout {
+                        let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                        writer.write_all(&output.stdout).unwrap();
                     }
 
-                    match stderr {
-                        Some(file) => {
-                            let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                            writer.write_all(&output.stderr).unwrap();
-                        }
-                        _ => (),
+                    if let Some(file) = stderr {
+                        let mut writer = File::create(file.to_str().unwrap()).unwrap();
+                        writer.write_all(&output.stderr).unwrap();
                     }
+
                     res_status = CPStatus::AC;
                 } else {
                     res_status = CPStatus::RTE;

@@ -42,13 +42,13 @@ impl Python {
         stderr: Option<PathBuf>,
     ) -> Python {
         Python {
-            program: program,
-            file_name: file_name,
-            flags: flags,
-            variables: variables,
-            stdin: stdin,
-            stdout: stdout,
-            stderr: stderr,
+            program,
+            file_name,
+            flags,
+            variables,
+            stdin,
+            stdout,
+            stderr,
         }
     }
 }

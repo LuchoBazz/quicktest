@@ -13,6 +13,7 @@ use structopt::StructOpt;
 #[structopt(name = "quicktest")]
 pub enum Opt {
     /// Check TLE
+    #[allow(clippy::upper_case_acronyms)]
     TLE {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]

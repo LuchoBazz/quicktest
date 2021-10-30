@@ -26,7 +26,7 @@ fn main() -> Result<(), ExitFailure> {
     #[cfg(windows)]
     let _ = colored::control::set_virtual_terminal(true);
 
-    let response = match opt {
+    match opt {
         Opt::TLE {
             target_file,
             gen_file,
@@ -113,7 +113,5 @@ fn main() -> Result<(), ExitFailure> {
             run_rte,
         ),
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
-    };
-
-    response
+    }
 }
