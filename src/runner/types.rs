@@ -23,6 +23,7 @@ impl StatusResponse {
     }
 }
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(PartialEq)]
 pub enum CPStatus {
     AC,

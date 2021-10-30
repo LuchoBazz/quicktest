@@ -37,6 +37,7 @@ use crate::constants::{
 };
 use crate::util::lang::{get_language_by_ext_default, get_language_by_ext_set_output};
 
+#[allow(clippy::too_many_arguments)]
 pub fn run(
     target_file: PathBuf,
     checker_file: PathBuf,
@@ -293,7 +294,7 @@ pub fn run(
 
 // checker compare  compare_file
 
-pub fn check_answer(answer_file: &String, ignore_space: bool) -> bool {
+pub fn check_answer(answer_file: &str, ignore_space: bool) -> bool {
     let mut is_good = true;
     let target_content = match std::fs::read_to_string(answer_file) {
         Ok(content) => Some(content),

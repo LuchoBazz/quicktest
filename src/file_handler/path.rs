@@ -14,5 +14,5 @@ pub fn get_root_path() -> String {
         Some(s) => s.to_string(),
         _ => unreachable!(),
     };
-    return root;
+    root
 }
