@@ -6,7 +6,7 @@
 
 use std::path::PathBuf;
 
-use crate::runner::cmd::execute_program;
+use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
 #[derive(Debug, Clone)]
@@ -74,6 +74,17 @@ impl Language for Python {
 
     fn set_stdio(&mut self, stdin: &str) {
         self.stdin = Some(PathBuf::from(stdin));
+    }
+
+    fn is_installed(&self) -> bool {
+        has_installed_controller(
+            &self.program,
+            vec!["--version"]
+        )
+    }
+
+    fn get_name(&self) -> String {
+        "Python Language".to_string()
     }
 }
 

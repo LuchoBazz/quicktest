@@ -10,6 +10,8 @@ pub trait Language {
     fn build(&self) -> bool;
     fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse;
     fn set_stdio(&mut self, stdin: &str);
+    fn is_installed(&self) -> bool;
+    fn get_name(&self) -> String;
 }
 
 pub struct StatusResponse {
