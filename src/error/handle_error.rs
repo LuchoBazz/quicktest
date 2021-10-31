@@ -12,7 +12,7 @@ pub fn throw_compiler_error_msg(file_name: &str, label: &str) -> Result<(), Exit
         "failed to compile the {} file",
         file_name
     )));
-    return Ok(error.context(format!("compilation of {} failed", label))?);
+    Ok(error.context(format!("compilation of {} failed", label))?)
 }
 
 pub fn throw_runtime_error_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
@@ -20,12 +20,12 @@ pub fn throw_runtime_error_msg(file_name: &str, label: &str) -> Result<(), ExitF
         "{} file exited by Runtime Error",
         file_name
     )));
-    return Ok(error.context(format!("Runtime Error of {}", label))?);
+    Ok(error.context(format!("Runtime Error of {}", label))?)
 }
 
 pub fn throw_time_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!("{} very slow", file_name)));
-    return Ok(error.context(format!("{} TLE", label))?);
+    Ok(error.context(format!("{} TLE", label))?)
 }
 
 pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailure> {
@@ -33,7 +33,7 @@ pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailur
         "Could not create folder {}",
         file_name
     )));
-    return Ok(error.context(format!("{} folder", file_name))?);
+    Ok(error.context(format!("{} folder", file_name))?)
 }
 
 pub fn throw_couldnt_open_file_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
@@ -41,7 +41,7 @@ pub fn throw_couldnt_open_file_msg(file_name: &str, label: &str) -> Result<(), E
         "Can't open the file {}",
         file_name
     )));
-    return Ok(error.context(format!("{} Not found", label))?);
+    Ok(error.context(format!("{} Not found", label))?)
 }
 
 pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailure> {
@@ -49,7 +49,15 @@ pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailur
         "Could not write to folder {}",
         file_name
     )));
-    return Ok(error.context(format!("{} file", file_name))?);
+    Ok(error.context(format!("{} file", file_name))?)
+}
+
+pub fn throw_extension_not_supported_msg(file: &str, ext: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(format!(
+        "extension '{}' of file '{}' is not supported",
+        ext, file
+    )));
+    Ok(error.context("EXTENSION_NOT_SOPPORTED_ERROR".to_string())?)
 }
 
 pub fn throw_break_found_msg(
@@ -61,5 +69,5 @@ pub fn throw_break_found_msg(
         "Wrong answer {} on test {}",
         status_name, test_number
     )));
-    return Ok(error.context(format!("{} status - break flag on", status))?);
+    Ok(error.context(format!("{} status - break flag on", status))?)
 }

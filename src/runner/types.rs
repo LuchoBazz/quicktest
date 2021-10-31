@@ -52,3 +52,23 @@ pub fn is_compiled_error(status: &CPStatus) -> bool {
 pub fn is_runtime_error(status: &CPStatus) -> bool {
     *status == CPStatus::RTE
 }
+
+// Extension
+#[derive(PartialEq)]
+pub enum Extension {
+    Cpp,
+    Python,
+    NotExtensionSupported
+}
+
+pub fn map_extension(ext: &str) -> Extension {
+    match ext {
+        "h"|"hh"|"hpp"|"hxx"|"h++"|"cc"|"cpp"|"cxx"|"c++" => Extension::Cpp,
+        "py" => Extension::Python,
+        _ => Extension::NotExtensionSupported
+    }
+}
+
+pub fn is_extension_supported(ext: &str) -> bool {
+    map_extension(&ext) != Extension::NotExtensionSupported
+}

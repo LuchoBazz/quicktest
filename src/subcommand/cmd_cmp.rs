@@ -16,10 +16,7 @@ use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
     throw_time_limit_exceeded_msg,
 };
-use crate::file_handler::file::{
-    copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case,
-    load_testcases, remove_files, remove_folder, save_test_case,
-};
+use crate::file_handler::file::{copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, is_extension_supported_or_error, load_testcases, remove_files, remove_folder, save_test_case};
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::painter::style::{
@@ -63,6 +60,16 @@ pub fn run(
 
     // verify that the generator file exists
     file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
+
+    // verify that the target file extension is supported
+    is_extension_supported_or_error(target_file.to_str().unwrap())?;
+
+    // verify that the correct file extension is supported
+    is_extension_supported_or_error(correct_file.to_str().unwrap())?;
+
+    // verify that the generator file extension is supported
+    is_extension_supported_or_error(gen_file.to_str().unwrap())?;
+
 
     let root = &get_root_path()[..];
 
