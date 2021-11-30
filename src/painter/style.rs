@@ -97,7 +97,11 @@ pub fn show_runtime_error(test_number: u32, time: u32) {
 }
 
 pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
+    #[cfg(unix)]
     println!("\n  📌{}\n", "-Stats-".bold().white());
+
+    #[cfg(windows)]
+    println!("\n  {}\n", "-Stats-".bold().white());
 
     println!(
         "  {}={}, {}={}, {}={}, {}={}",
