@@ -95,10 +95,7 @@ impl Language for Cpp {
     }
 
     fn is_installed(&self) -> bool {
-        has_installed_controller(
-            &self.program,
-            vec!["--version"]
-        )
+        has_installed_controller(&self.program, vec!["--version"])
     }
 
     fn get_name(&self) -> String {
