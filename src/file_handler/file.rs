@@ -4,26 +4,14 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::{
-    collections::VecDeque,
-    fs::{self, remove_dir_all},
-    io::Write,
-    path::PathBuf,
-};
+use std::{collections::VecDeque, fs::{self, remove_dir_all}, io::Write, path::{Path, PathBuf}};
 
 use exitfailure::ExitFailure;
 use glob::glob;
 
-use crate::{
-    constants::{
+use crate::{constants::{
         PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, TEST_CASES_FOLDER,
-    },
-    error::handle_error::{
-        throw_couldnt_create_folder_msg, throw_couldnt_open_file_msg,
-        throw_couldnt_write_to_file_msg,
-    },
-    util::file::file_exists,
-};
+    }, error::handle_error::{throw_couldnt_create_folder_msg, throw_couldnt_open_file_msg, throw_couldnt_write_to_file_msg, throw_extension_not_supported_msg, throw_program_not_installed_msg}, runner::types::{Language, is_extension_supported}, util::file::file_exists};
 
 pub fn remove_files(files: Vec<&str>) {
     for file in files {
@@ -94,6 +82,26 @@ pub fn save_test_case(file_name: &str, from_path: &str) {
 pub fn copy_file(from: &str, to: &str) -> Result<(), ExitFailure> {
     if let Some(data) = read_file(from) {
         write_file(to, data.as_bytes())?;
+    }
+    Ok(())
+}
+
+pub fn is_extension_supported_or_error(file_name: &str) -> Result<(), ExitFailure> {
+    let path = Path::new(&file_name);
+    let ext = match path.extension() {
+        Some(p) =>  p.to_str().unwrap_or(&""),
+        _ => &""
+    };
+    if !is_extension_supported(&ext) {
+        return throw_extension_not_supported_msg(&file_name, &ext);
+    }
+    Ok(())
+}
+
+pub fn can_run_language_or_error(lang: &dyn Language) -> Result<(), ExitFailure> {
+    if !(*lang).is_installed() {
+        let name = (*lang).get_name();
+        return throw_program_not_installed_msg(&name[..]);
     }
     Ok(())
 }

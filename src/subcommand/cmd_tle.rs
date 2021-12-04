@@ -5,6 +5,7 @@
  */
 
 use std::collections::VecDeque;
+
 // std library
 use std::path::PathBuf;
 use std::time::Duration;
@@ -14,10 +15,7 @@ use exitfailure::ExitFailure;
 
 // local library
 use crate::error::handle_error::throw_compiler_error_msg;
-use crate::file_handler::file::{
-    copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case,
-    load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case,
-};
+use crate::file_handler::file::{can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, is_extension_supported_or_error, load_testcases, remove_files, remove_files_with_prefix, remove_folder, save_test_case};
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::painter::style::{
@@ -56,6 +54,12 @@ pub fn run(
     // verify that the generator file exists
     file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
 
+    // verify that the target file extension is supported
+    is_extension_supported_or_error(target_file.to_str().unwrap())?;
+
+    // verify that the generator file extension is supported
+    is_extension_supported_or_error(gen_file.to_str().unwrap())?;
+
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
@@ -63,6 +67,9 @@ pub fn run(
         get_language_by_ext_set_output(root, gen_file, &GEN_BINARY_FILE, &QTEST_INPUT_FILE);
     let any_gen: Box<dyn Language> = any_gen.unwrap();
     let generator_file_lang: &dyn Language = any_gen.as_ref();
+
+    // verify that the program to run the generator file is installed
+    can_run_language_or_error(generator_file_lang)?;
 
     // Get the language depending on the extension of the target_file
     let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
@@ -75,6 +82,9 @@ pub fn run(
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
+
+    // verify that the program to run the target file is installed
+    can_run_language_or_error(target_file_lang)?;
 
     let can_compile_gen = generator_file_lang.build();
     if !can_compile_gen {

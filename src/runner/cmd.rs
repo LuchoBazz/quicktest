@@ -90,3 +90,12 @@ pub fn execute_program(
 
     StatusResponse::new(time, res_status)
 }
+
+pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
+    let mut cmd = Command::new(&program);
+    cmd.args(args);
+    cmd
+    .stdout(Stdio::piped())
+    .status()
+    .is_ok()
+}

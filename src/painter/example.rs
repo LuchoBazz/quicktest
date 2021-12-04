@@ -6,8 +6,16 @@
 
 use colored::*;
 
-pub fn show_examples_cmp_cmd() {
+fn show_command_examples_text() {
+    #[cfg(unix)]
     println!("   📕 {}\n", "Command Examples".bold().blue());
+
+    #[cfg(windows)]
+    println!("    {}\n", "Command Examples".bold().blue());
+}
+
+pub fn show_examples_cmp_cmd() {
+    show_command_examples_text();
     println!(
         "   $ {} {} {}",
         "quicktest".bold().green(),
@@ -17,7 +25,7 @@ pub fn show_examples_cmp_cmd() {
 }
 
 pub fn show_examples_tle_cmd() {
-    println!("   📕 {}\n", "Command Examples".bold().blue());
+    show_command_examples_text();
     println!(
         "   $ {} {} {}",
         "quicktest".bold().green(),
@@ -29,7 +37,7 @@ pub fn show_examples_tle_cmd() {
 }
 
 pub fn show_examples_check_cmd() {
-    println!("   📕 {}\n", "Command Examples".bold().blue());
+    show_command_examples_text();
     println!(
         "   $ {} {} {}",
         "quicktest".bold().green(),
