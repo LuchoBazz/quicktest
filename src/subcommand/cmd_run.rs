@@ -4,7 +4,7 @@ use exitfailure::ExitFailure;
 
 use crate::{
     constants::{
-        CACHE_FOLDER, GEN_BINARY_FILE, OUTPUT_FOLDER, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
+        CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
     },
     error::handle_error::throw_compiler_error_msg,
@@ -35,6 +35,8 @@ pub fn run(
     // verify that the target file extension is supported
     is_extension_supported_or_error(target_file.to_str().unwrap())?;
 
+    
+
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the target_file
@@ -58,11 +60,13 @@ pub fn run(
     }
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
-    load_testcases_from_prefix(&mut cases, OUTPUT_FOLDER, prefix)?;
+    load_testcases_from_prefix(&mut cases, prefix)?;
 
     let mut test_number: u32 = 0;
 
-    while (test_number as usize) < cases.len() {
+    let cases_len: usize = cases.len();
+
+    while (test_number as usize) < cases_len {
         test_number += 1;
 
         // Load test case in stdin

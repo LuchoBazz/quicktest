@@ -120,12 +120,23 @@ pub fn can_run_language_or_error(lang: &dyn Language) -> Result<(), ExitFailure>
     Ok(())
 }
 
-pub fn load_testcases_from_prefix(
+pub fn load_testcases_from_prefix_with_folder(
     queue: &mut VecDeque<PathBuf>,
     folder: &str,
     prefix: &str,
 ) -> Result<(), ExitFailure> {
     let paths = glob(&format!("{}/{}*", folder, prefix))?;
+    for path in paths.flatten() {
+        queue.push_back(path);
+    }
+    Ok(())
+}
+
+pub fn load_testcases_from_prefix(
+    queue: &mut VecDeque<PathBuf>,
+    prefix: &str,
+) -> Result<(), ExitFailure> {
+    let paths = glob(&format!("{}*", prefix))?;
     for path in paths.flatten() {
         queue.push_back(path);
     }
@@ -154,19 +165,19 @@ pub fn load_testcases_from_states(
     }
 
     if run_ac {
-        load_testcases_from_prefix(queue, folder, PREFIX_AC_FILES)?;
+        load_testcases_from_prefix_with_folder(queue, folder, PREFIX_AC_FILES)?;
     }
 
     if run_wa {
-        load_testcases_from_prefix(queue, folder, PREFIX_WA_FILES)?;
+        load_testcases_from_prefix_with_folder(queue, folder, PREFIX_WA_FILES)?;
     }
 
     if run_tle {
-        load_testcases_from_prefix(queue, folder, PREFIX_TLE_FILES)?;
+        load_testcases_from_prefix_with_folder(queue, folder, PREFIX_TLE_FILES)?;
     }
 
     if run_rte {
-        load_testcases_from_prefix(queue, folder, PREFIX_RTE_FILES)?;
+        load_testcases_from_prefix_with_folder(queue, folder, PREFIX_RTE_FILES)?;
     }
 
     Ok(())
