@@ -4,13 +4,13 @@ use exitfailure::ExitFailure;
 
 use crate::{
     constants::{
-        GEN_BINARY_FILE, OUTPUT_FOLDER, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
-        TARGET_BINARY_FILE,
+        CACHE_FOLDER, GEN_BINARY_FILE, OUTPUT_FOLDER, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
     },
     error::handle_error::throw_compiler_error_msg,
     file_handler::{
         file::{
-            can_run_language_or_error, copy_file, file_exists_or_error,
+            can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
             is_extension_supported_or_error, load_testcases_from_prefix, remove_files,
         },
         path::get_root_path,
@@ -26,6 +26,9 @@ pub fn run(
     timeout: u32,
     break_bad: bool,
 ) -> Result<(), ExitFailure> {
+    // Check if the CACHE_FOLDER folder is already created
+    create_folder_or_error(CACHE_FOLDER)?;
+
     // verify that the target file exists
     file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
 
