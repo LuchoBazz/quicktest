@@ -100,3 +100,23 @@ pub fn create_files_check(
     gen_file.write_all(gen_code.as_bytes())?;
     Ok(())
 }
+
+pub fn create_files_run(files: Vec<(&str, &str)>, new_folder: &str) -> Result<(), std::io::Error> {
+    if !Path::new(FOLDER).exists() {
+        std::fs::create_dir(FOLDER).expect(&format!("Unable to create {}", FOLDER));
+    }
+
+    for &item in files.iter() {
+        let folder_path = &format!("{}/{}", FOLDER, new_folder)[..];
+
+        if !Path::new(folder_path).exists() {
+            std::fs::create_dir(folder_path).expect(&format!("Unable to create {}", folder_path));
+        }
+
+        let filename = format!("{}/{}", folder_path, item.0);
+        let mut file = std::fs::File::create(PathBuf::from(filename))?;
+        file.write_all(item.1.as_bytes())?;
+    }
+
+    Ok(())
+}
