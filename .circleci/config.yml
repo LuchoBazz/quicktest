@@ -1,7 +1,7 @@
 jobs:
   build:
     docker:
-      - image: cimg/rust:1.*
+      - image: cimg/rust:latest
     
     working_directory: ~/quicktest_folder
 
