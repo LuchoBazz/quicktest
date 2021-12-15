@@ -190,8 +190,8 @@ pub enum Opt {
         break_bad: bool,
 
         /// Save all test cases
-        #[structopt(long = "save-all", alias = "save")]
-        save_all: bool,
+        #[structopt(long = "save-out")]
+        save_out: bool,
     },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]

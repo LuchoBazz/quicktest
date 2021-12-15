@@ -117,8 +117,8 @@ fn main() -> Result<(), ExitFailure> {
             prefix,
             timeout,
             break_bad,
-            save_all,
-        } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_all),
+            save_out,
+        } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
     }
 }

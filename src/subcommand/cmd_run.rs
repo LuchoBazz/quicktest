@@ -26,7 +26,7 @@ pub fn run(
     prefix: &str,
     timeout: u32,
     break_bad: bool,
-    save_all: bool,
+    save_out: bool,
 ) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
@@ -116,7 +116,7 @@ pub fn run(
                 return Ok(());
             }
         } else {
-            if save_all {
+            if save_out {
                 let file_name =
                     &get_filename_output(prefix, &case.file_name().unwrap().to_str().unwrap())[..];
 
