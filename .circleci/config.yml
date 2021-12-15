@@ -1,9 +1,9 @@
 jobs:
   build:
     docker:
-      - image: cimg/rust:1.52.1
+      - image: cimg/rust:1.*
     
-    working_directory: ~/repo
+    working_directory: ~/quicktest_folder
 
     steps:
       - checkout
@@ -12,3 +12,4 @@ jobs:
       - run: cargo test tle_subcommand -- --test-threads 1
       - run: cargo test cmp_subcommand -- --test-threads 1
       - run: cargo test check_subcommand -- --test-threads 1
+      - run: cargo test run_subcommand -- --test-threads 1
