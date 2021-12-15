@@ -192,8 +192,8 @@ pub fn get_filename_output(prefix: &str, filename: &str) -> String {
     // filename: testcase_ac_01.txt
     // output: examples/run/test_cases/out_testcase_ac_01.txt
 
-    let prefix_clone = prefix.clone().to_string();
-    let mut prefix_token = prefix_clone.split("/").collect::<Vec<&str>>();
+    let prefix_clone = prefix.to_string();
+    let mut prefix_token = prefix_clone.split('/').collect::<Vec<&str>>();
 
     // Check what filename is empty
     // if prefix_token.is_empty() {
@@ -204,12 +204,12 @@ pub fn get_filename_output(prefix: &str, filename: &str) -> String {
 
     let mut path = String::new();
 
-    for i in 0..prefix_token.len() {
+    for (i, &item) in prefix_token.iter().enumerate() {
         if i > 0 {
-            path.push_str("/");
+            path.push('/');
         }
-        path.push_str(prefix_token[i]);
+        path.push_str(item);
     }
 
-    format!("{}/out_{}", path, filename).clone()
+    format!("{}/out_{}", path, filename)
 }
