@@ -93,6 +93,10 @@ pub fn save_test_case(file_name: &str, from_path: &str) {
     if write_file(file_name, fs::read_to_string(from_path).unwrap().as_bytes()).is_ok() {}
 }
 
+pub fn save_test_case_output(file_name: &str, from_path: &str) {
+    if write_file(file_name, fs::read_to_string(from_path).unwrap().as_bytes()).is_ok() {}
+}
+
 pub fn copy_file(from: &str, to: &str) -> Result<(), ExitFailure> {
     if let Some(data) = read_file(from) {
         write_file(to, data.as_bytes())?;
@@ -181,4 +185,31 @@ pub fn load_testcases_from_states(
     }
 
     Ok(())
+}
+
+pub fn get_filename_output(prefix: &str, filename: &str) -> String {
+    // prefix:   examples/run/test_cases/testcase_ac
+    // filename: testcase_ac_01.txt
+    // output: examples/run/test_cases/out_testcase_ac_01.txt
+
+    let prefix_clone = prefix.clone().to_string();
+    let mut prefix_token = prefix_clone.split("/").collect::<Vec<&str>>();
+
+    // Check what filename is empty
+    // if prefix_token.is_empty() {
+    //     return throw_filename_cannot_be_empty();
+    // }
+
+    let _ = prefix_token.pop();
+
+    let mut path = String::new();
+
+    for i in 0..prefix_token.len() {
+        if i > 0 {
+            path.push_str("/");
+        }
+        path.push_str(prefix_token[i]);
+    }
+
+    format!("{}/out_{}", path, filename).clone()
 }

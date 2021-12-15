@@ -4,14 +4,15 @@ use exitfailure::ExitFailure;
 
 use crate::{
     constants::{
-        CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
+        CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
+        TARGET_BINARY_FILE,
     },
     error::handle_error::throw_compiler_error_msg,
     file_handler::{
         file::{
             can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
-            is_extension_supported_or_error, load_testcases_from_prefix, remove_files,
+            get_filename_output, is_extension_supported_or_error, load_testcases_from_prefix,
+            remove_files, save_test_case_output,
         },
         path::get_root_path,
     },
@@ -25,6 +26,7 @@ pub fn run(
     prefix: &str,
     timeout: u32,
     break_bad: bool,
+    save_all: bool,
 ) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
@@ -34,8 +36,6 @@ pub fn run(
 
     // verify that the target file extension is supported
     is_extension_supported_or_error(target_file.to_str().unwrap())?;
-
-    
 
     let root = &get_root_path()[..];
 
@@ -116,6 +116,13 @@ pub fn run(
                 return Ok(());
             }
         } else {
+            if save_all {
+                let file_name =
+                    &get_filename_output(prefix, &case.file_name().unwrap().to_str().unwrap())[..];
+
+                // save testcase
+                save_test_case_output(file_name, QTEST_OUTPUT_FILE);
+            }
             show_ran_successfully(test_number, mills_target as u32);
         }
     }

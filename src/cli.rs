@@ -188,6 +188,10 @@ pub enum Opt {
         /// Break if TLE or RTE states occurs
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
+
+        /// Save all test cases
+        #[structopt(long = "save-all", alias = "save")]
+        save_all: bool,
     },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]
