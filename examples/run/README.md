@@ -14,9 +14,17 @@ cd quicktest/examples/run
     ```shell
     quicktest run --target-file=cpp/main.cpp --prefix=test_cases/testcase_ac
     ```
+    Or which saves the output to a file
+    ```shell
+    quicktest run --target-file=cpp/main.cpp --prefix=test_cases/testcase_ac --save-out
+    ```
 
 * ### python examples
     
     ```shell
     quicktest run --target-file=python/main.py --prefix=test_cases/testcase_ac
+    ```
+    Or which saves the output to a file
+     ```shell
+    quicktest run --target-file=python/main.py --prefix=test_cases/testcase_ac --save-out
     ```
