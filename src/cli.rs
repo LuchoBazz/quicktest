@@ -171,6 +171,28 @@ pub enum Opt {
         #[structopt(long = "run-rte")]
         run_rte: bool,
     },
+    /// Run tescases
+    Run {
+        /// Target File
+        #[structopt(short = "t", long = "target-file", parse(from_os_str))]
+        target_file: PathBuf,
+
+        /// Prefix File
+        #[structopt(short = "p", long = "prefix")]
+        prefix: String,
+
+        /// Timeout
+        #[structopt(long = "timeout", default_value = "2000")]
+        timeout: u32,
+
+        /// Break if TLE or RTE states occurs
+        #[structopt(short = "b", alias = "break", long = "break-bad")]
+        break_bad: bool,
+
+        /// Save the output of the target file for each test case
+        #[structopt(long = "save-out")]
+        save_out: bool,
+    },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]
     Example {

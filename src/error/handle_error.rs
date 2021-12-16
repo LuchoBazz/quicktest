@@ -79,3 +79,8 @@ pub fn throw_break_found_msg(
     )));
     Ok(error.context(format!("{} status - break flag on", status))?)
 }
+
+pub fn throw_filename_cannot_be_empty() -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg("File Name cannot be empty"));
+    Ok(error.context("FILE_NAME_CANNOT_BE_EMPTY")?)
+}

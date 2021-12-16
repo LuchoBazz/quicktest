@@ -16,7 +16,11 @@ use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
     throw_time_limit_exceeded_msg,
 };
-use crate::file_handler::file::{can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error, format_filename_test_case, is_extension_supported_or_error, load_testcases, remove_files, remove_folder, save_test_case};
+use crate::file_handler::file::{
+    can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
+    format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
+    remove_files, remove_folder, save_test_case,
+};
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::painter::style::{
@@ -83,7 +87,7 @@ pub fn run(
     );
     let any_correct: Box<dyn Language> = any_correct.unwrap();
     let correct_file_lang: &dyn Language = any_correct.as_ref();
-    
+
     // verify that the program to run the correct file is installed
     can_run_language_or_error(correct_file_lang)?;
 
@@ -98,7 +102,7 @@ pub fn run(
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
-    
+
     // verify that the program to run the target file is installed
     can_run_language_or_error(target_file_lang)?;
 
@@ -132,7 +136,15 @@ pub fn run(
     }
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
-    load_testcases(&mut cases, run_all, run_ac, run_wa, run_tle, run_rte)?;
+    load_testcases_from_states(
+        &mut cases,
+        TEST_CASES_FOLDER,
+        run_all,
+        run_ac,
+        run_wa,
+        run_tle,
+        run_rte,
+    )?;
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
