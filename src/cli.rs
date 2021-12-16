@@ -189,7 +189,7 @@ pub enum Opt {
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 
-        /// Save all test cases
+        /// Save the output of the target file for each test case
         #[structopt(long = "save-out")]
         save_out: bool,
     },
