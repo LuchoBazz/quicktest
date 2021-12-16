@@ -94,8 +94,5 @@ pub fn execute_program(
 pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
     let mut cmd = Command::new(&program);
     cmd.args(args);
-    cmd
-    .stdout(Stdio::piped())
-    .status()
-    .is_ok()
+    cmd.stdout(Stdio::piped()).status().is_ok()
 }

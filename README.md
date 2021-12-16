@@ -65,6 +65,12 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp
         ```
 
+* **Run a target file with test case files matching a prefix:**
+    * **Sample:**
+        ```shell
+        quicktest run --target-file=main.cpp --prefix=testcase_ac
+        ```
+
 ## Commands
 
 **Note:** you can use the long command `quicktest` or the alias `qt`
@@ -121,6 +127,20 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--run-wa`     Run test cases Wrong Answer
     * `--save-all`   Save all test cases
     * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+
+---
+* `quicktest run | qt run`
+    
+    **Required Options**
+
+    * `-t=<value> | --target-file=<value>`
+    * `-p=<value> | --prefix=<value>`
+
+    **Other Options**
+
+    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
+    * `--save-out`   Save the output of the target file for each test case
 
 ---
 

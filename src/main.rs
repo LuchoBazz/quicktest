@@ -112,6 +112,13 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
         ),
+        Opt::Run {
+            target_file,
+            prefix,
+            timeout,
+            break_bad,
+            save_out,
+        } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
     }
 }

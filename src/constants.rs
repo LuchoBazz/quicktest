@@ -8,6 +8,8 @@ pub const CACHE_FOLDER: &str = ".qtest/";
 
 pub const TEST_CASES_FOLDER: &str = "test_cases";
 
+pub const OUTPUT_FOLDER: &str = "output";
+
 #[cfg(unix)]
 pub const TARGET_BINARY_FILE: &str = ".qtest/main.o";
 #[cfg(windows)]
