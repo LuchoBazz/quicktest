@@ -7,6 +7,7 @@
 use structopt::StructOpt;
 
 pub mod cli;
+pub mod config;
 pub mod constants;
 pub mod error;
 pub mod file_handler;
@@ -21,6 +22,8 @@ use crate::cli::Opt;
 use exitfailure::ExitFailure;
 
 fn main() -> Result<(), ExitFailure> {
+    config::scheme::load_default_config();
+
     let opt = Opt::from_args();
 
     #[cfg(windows)]

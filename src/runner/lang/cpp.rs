@@ -10,6 +10,8 @@ use std::process::Command;
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
+use lazy_static::lazy_static;
+
 #[derive(Debug, Clone)]
 pub struct Cpp {
     /// Example: g++
@@ -101,6 +103,19 @@ impl Language for Cpp {
     fn get_name(&self) -> String {
         "C++ Language".to_string()
     }
+}
+
+#[derive(Debug, PartialEq)]
+pub struct CppConfig {
+    pub program: String,
+    pub standard: String,
+}
+
+lazy_static! {
+    pub static ref DEFAULT_CPP_CONFIG: CppConfig = CppConfig {
+        program: "g++".to_string(),
+        standard: "-std=c++17".to_string(),
+    };
 }
 
 pub mod default {

@@ -16,14 +16,16 @@ exclude = ["docs/*", "examples/*", "*.md"]
 include = ["**/*.rs", "Cargo.toml",]
 
 [dependencies]
-process_control = "3.1.0"
-colored = "2.0.0"
 clap = "2.34.0"
-structopt = "0.3.25"
-rand = "0.8.4"
-glob = "0.3.0"
+colored = "2.0.0"
 exitfailure = "0.5.1"
 failure = "0.1.8"
+glob = "0.3.0"
+lazy_static = "1.4.0"
+process_control = "3.1.0"
+rand = "0.8.4"
+structopt = "0.3.25"
+yaml-rust = "0.4"
 
 [dev-dependencies]
 assert_cmd = "2.0.2"
