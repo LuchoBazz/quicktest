@@ -9,8 +9,6 @@ use std::path::PathBuf;
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
-use lazy_static::lazy_static;
-
 #[derive(Debug, Clone)]
 pub struct Python {
     /// Example: python, python3, pypy2 or pypy3
@@ -92,10 +90,12 @@ pub struct PythonConfig {
     pub program: String,
 }
 
-lazy_static! {
-    pub static ref DEFAULT_PYTHON_CONFIG: PythonConfig = PythonConfig {
-        program: "python3".to_string(),
-    };
+impl Default for PythonConfig {
+    fn default() -> Self {
+        PythonConfig {
+            program: "python3".to_string(),
+        }
+    }
 }
 
 pub mod default {

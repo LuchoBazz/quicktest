@@ -5,10 +5,7 @@ use yaml_rust::YamlLoader;
 use crate::{
     constants::{CONFIG_FILE, CONFIG_FOLDER},
     file_handler::file::{read_file, write_file},
-    runner::lang::{
-        cpp::{CppConfig, DEFAULT_CPP_CONFIG},
-        python::{PythonConfig, DEFAULT_PYTHON_CONFIG},
-    },
+    runner::lang::{cpp::CppConfig, python::PythonConfig},
 };
 
 #[derive(Debug, PartialEq)]
@@ -31,6 +28,9 @@ pub fn load_default_config() -> DefaultConfig {
     let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
     let config_folder = shellexpand::tilde(CONFIG_FOLDER).to_string();
 
+    let cpp_default = CppConfig::default();
+    let python_default = PythonConfig::default();
+
     if let Some(text) = read_file(config_file) {
         // if ~/.quicktest/config.yaml file exists, read the settings
         config_text.push_str(&text[..]);
@@ -49,19 +49,19 @@ pub fn load_default_config() -> DefaultConfig {
     let cpp_config_program = if let Some(program) = doc["cpp-config"]["program"].as_str() {
         program.to_string()
     } else {
-        DEFAULT_CPP_CONFIG.program.clone()
+        cpp_default.program.clone()
     };
 
     let cpp_config_standard = if let Some(standard) = doc["cpp-config"]["standard"].as_str() {
         standard.to_string()
     } else {
-        DEFAULT_CPP_CONFIG.standard.clone()
+        cpp_default.standard.clone()
     };
 
     let python_config_program = if let Some(program) = doc["python-config"]["program"].as_str() {
         program.to_string()
     } else {
-        DEFAULT_PYTHON_CONFIG.program.clone()
+        python_default.program.clone()
     };
 
     let tree = DefaultConfig {
