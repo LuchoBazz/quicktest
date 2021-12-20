@@ -1,8 +1,14 @@
+use std::fs;
+
 use yaml_rust::YamlLoader;
 
-use crate::runner::lang::{
-    cpp::{CppConfig, DEFAULT_CPP_CONFIG},
-    python::{PythonConfig, DEFAULT_PYTHON_CONFIG},
+use crate::{
+    constants::{CONFIG_FILE, CONFIG_FOLDER},
+    file_handler::file::{read_file, write_file},
+    runner::lang::{
+        cpp::{CppConfig, DEFAULT_CPP_CONFIG},
+        python::{PythonConfig, DEFAULT_PYTHON_CONFIG},
+    },
 };
 
 #[derive(Debug, PartialEq)]
@@ -11,15 +17,33 @@ pub struct DefaultConfig {
     python_config: PythonConfig,
 }
 
-pub fn load_default_config() -> Option<DefaultConfig> {
-    let s = "
+pub const DEFAULT_CONFIG_YAML: &str = "
 cpp-config:
     program: g++
     standard: -std=c++17
 python-config:
     program: python3
 ";
-    let docs = YamlLoader::load_from_str(s).unwrap();
+
+pub fn load_default_config() -> DefaultConfig {
+    let mut config_text = String::new();
+
+    let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
+    let config_folder = shellexpand::tilde(CONFIG_FOLDER).to_string();
+
+    if let Some(text) = read_file(config_file) {
+        // if ~/.quicktest/config.yaml file exists, read the settings
+        config_text.push_str(&text[..]);
+    } else {
+        // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
+        // with the default settings
+        if fs::create_dir_all(config_folder).is_ok()
+            && write_file(config_file, DEFAULT_CONFIG_YAML.as_bytes()).is_ok()
+        {}
+        config_text = DEFAULT_CONFIG_YAML.to_string();
+    }
+
+    let docs = YamlLoader::load_from_str(&config_text[..]).unwrap();
     let doc = &docs[0];
 
     let cpp_config_program = if let Some(program) = doc["cpp-config"]["program"].as_str() {
@@ -50,7 +74,5 @@ python-config:
         },
     };
 
-    println!("{:?}", tree);
-
-    Some(tree)
+    tree
 }
