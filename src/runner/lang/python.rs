@@ -14,7 +14,7 @@ use crate::runner::types::{Language, StatusResponse};
 #[derive(Debug, Clone)]
 pub struct Python {
     /// Example: python, python3, pypy2 or pypy3
-    pub program: &'static str,
+    pub program: String,
 
     /// Example: main.py
     file_name: PathBuf,
@@ -36,7 +36,7 @@ pub struct Python {
 
 impl Python {
     pub fn new(
-        program: &'static str,
+        program: String,
         file_name: PathBuf,
         flags: Vec<&'static str>,
         variables: Vec<&'static str>,
@@ -64,7 +64,7 @@ impl Language for Python {
 
     fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
         // Example: python3 main.py
-        let commands = vec![self.program, self.file_name.to_str().unwrap()];
+        let commands = vec![&self.program[..], self.file_name.to_str().unwrap()];
         execute_program(
             timeout,
             testcase,
@@ -104,6 +104,8 @@ impl Default for PythonConfig {
 pub mod default {
     use std::path::PathBuf;
 
+    use crate::config::scheme::load_default_config;
+
     use super::Python;
 
     pub fn python3_default(
@@ -117,8 +119,11 @@ pub mod default {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
         let stderr = PathBuf::from(format!("{}/{}", root, error_file));
 
+        let default_arg = load_default_config();
+        let python = default_arg.python_config;
+
         Python::new(
-            "python3",
+            python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
             vec![],
             vec!["ONLINE_JUDGE=1"],
@@ -131,8 +136,11 @@ pub mod default {
     pub fn python3_set_output(root: &str, file_name: &str, output_file: &str) -> Python {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
 
+        let default_arg = load_default_config();
+        let python = default_arg.python_config;
+
         Python::new(
-            "python3",
+            python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
             vec![],
             vec!["ONLINE_JUDGE=1"],

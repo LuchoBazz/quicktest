@@ -15,13 +15,13 @@ use crate::runner::types::{Language, StatusResponse};
 #[derive(Debug, Clone)]
 pub struct Cpp {
     /// Example: g++
-    pub program: &'static str,
+    pub program: String,
 
     /// Example: main.cpp
     file_name: PathBuf,
 
     /// Example: -std=c++17
-    standard: &'static str,
+    standard: String,
 
     /// Example: binary, binary.o, binary.exe etc..
     binary_file: PathBuf,
@@ -42,9 +42,9 @@ pub struct Cpp {
 impl Cpp {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        program: &'static str,
+        program: String,
         file_name: PathBuf,
-        standard: &'static str,
+        standard: String,
         binary_file: PathBuf,
         flags: Vec<&'static str>,
         variables: Vec<&'static str>,
@@ -68,8 +68,8 @@ impl Cpp {
 
 impl Language for Cpp {
     fn build(&self) -> bool {
-        let status = Command::new(self.program)
-            .arg(self.standard)
+        let status = Command::new(&self.program[..])
+            .arg(&self.standard[..])
             .args(&self.flags)
             .args(&self.variables)
             .arg("-o")
@@ -123,6 +123,8 @@ impl Default for CppConfig {
 pub mod default {
     use std::path::PathBuf;
 
+    use crate::config::scheme::load_default_config;
+
     use super::Cpp;
 
     pub fn gnucpp17_default(
@@ -137,10 +139,13 @@ pub mod default {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
         let stderr = PathBuf::from(format!("{}/{}", root, error_file));
 
+        let default_arg = load_default_config();
+        let cpp = default_arg.cpp_config;
+
         Cpp::new(
-            "g++",
+            cpp.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            "-std=c++17",
+            cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
             vec!["-Wall"],
             vec!["-DONLINE_JUDGE=1"],
@@ -158,10 +163,13 @@ pub mod default {
     ) -> Cpp {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
 
+        let default_arg = load_default_config();
+        let cpp = default_arg.cpp_config;
+
         Cpp::new(
-            "g++",
+            cpp.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            "-std=c++17",
+            cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
             vec!["-Wall"],
             vec!["-DLOCAL=1"],
