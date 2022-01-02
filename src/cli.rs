@@ -11,19 +11,19 @@ use structopt::StructOpt;
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
 pub enum SetUp {
-    /// Cpp Subcommand
+    /// Subcommand that allows to change C++ settings
     Cpp {
-        /// Set program argument in C++
+        /// Change the program argument of the compilation command in C++
         #[structopt(long = "program", default_value = "")]
         program: String,
 
-        /// Set standard argument in C++
+        /// Change the standard argument of the compilation command in C++
         #[structopt(long = "standard", default_value = "")]
         standard: String,
     },
-    /// Python Subcommand
+    /// Subcommand that allows to change python settings
     Python {
-        /// Set program argument in Python
+        /// Change the program argument of the run command in Python
         #[structopt(long = "program", default_value = "")]
         program: String,
     },
