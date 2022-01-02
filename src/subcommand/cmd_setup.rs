@@ -10,6 +10,7 @@ use crate::{
     config::scheme::{write_config_yaml, write_default_config_yaml, DefaultConfig},
     constants::CONFIG_FILE,
     file_handler::file::read_file,
+    painter::setup::show_argument_was_updated_success,
 };
 
 pub fn setup_cpp(program: &str, standard: &str) -> Result<(), ExitFailure> {
@@ -30,14 +31,17 @@ pub fn setup_cpp(program: &str, standard: &str) -> Result<(), ExitFailure> {
 
     if !program.is_empty() {
         deserializer.cpp_config.program = program.to_string();
+        show_argument_was_updated_success("C++", "program", &deserializer.cpp_config.program[..]);
     }
     if !standard.is_empty() {
         deserializer.cpp_config.standard = standard.to_string();
+        show_argument_was_updated_success("C++", "standard", &deserializer.cpp_config.standard[..]);
     }
 
     let serializer = serde_yaml::to_string(&deserializer).unwrap();
 
     write_config_yaml(&serializer[..]);
+
     Ok(())
 }
 
@@ -59,6 +63,11 @@ pub fn setup_python(program: &str) -> Result<(), ExitFailure> {
 
     if !program.is_empty() {
         deserializer.python_config.program = program.to_string();
+        show_argument_was_updated_success(
+            "Python",
+            "program",
+            &deserializer.python_config.program[..],
+        );
     }
 
     let serializer = serde_yaml::to_string(&deserializer).unwrap();

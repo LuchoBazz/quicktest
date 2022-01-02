@@ -63,3 +63,16 @@ pub fn execute_command_run(cmd: &mut Command, target_file: &str, prefix: &str) {
         .arg(format!("--prefix={}/{}/{}", FOLDER, FOLDER_RUN, prefix))
         .arg("--timeout=1000");
 }
+
+pub fn execute_command_setup_cpp(cmd: &mut Command, program_value: &str, standard_value: &str) {
+    cmd.arg("setup")
+        .arg("cpp")
+        .arg(format!("--program={}", program_value))
+        .arg(format!("--standard={}", standard_value));
+}
+
+pub fn execute_command_setup_python(cmd: &mut Command, program_value: &str) {
+    cmd.arg("setup")
+        .arg("python")
+        .arg(format!("{}", program_value));
+}

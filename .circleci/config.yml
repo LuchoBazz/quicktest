@@ -13,3 +13,4 @@ jobs:
       - run: cargo test cmp_subcommand -- --test-threads 1
       - run: cargo test check_subcommand -- --test-threads 1
       - run: cargo test run_subcommand -- --test-threads 1
+      - run: cargo test setup_subcommand -- --test-threads 1

@@ -7,4 +7,5 @@
 mod check_subcommand;
 mod cmp_subcommand;
 mod run_subcommand;
+mod setup_subcommand;
 mod tle_subcommand;
