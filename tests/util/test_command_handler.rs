@@ -74,5 +74,5 @@ pub fn execute_command_setup_cpp(cmd: &mut Command, program_value: &str, standar
 pub fn execute_command_setup_python(cmd: &mut Command, program_value: &str) {
     cmd.arg("setup")
         .arg("python")
-        .arg(format!("{}", program_value));
+        .arg(format!("--program={}", program_value));
 }
