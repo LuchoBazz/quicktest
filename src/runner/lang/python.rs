@@ -6,6 +6,8 @@
 
 use std::path::PathBuf;
 
+use serde::{Deserialize, Serialize};
+
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
@@ -18,6 +20,7 @@ pub struct Python {
     file_name: PathBuf,
 
     /// Example: -Wall
+    #[allow(unused)]
     flags: Vec<&'static str>,
 
     /// Example ONLINE_JUDGE=1, etc
@@ -85,7 +88,7 @@ impl Language for Python {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct PythonConfig {
     pub program: String,
 }

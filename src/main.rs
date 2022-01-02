@@ -4,6 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+use cli::SetUp;
 use structopt::StructOpt;
 
 pub mod cli;
@@ -122,6 +123,12 @@ fn main() -> Result<(), ExitFailure> {
             break_bad,
             save_out,
         } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
+        Opt::Setup { subcommand } => match subcommand {
+            SetUp::Cpp { program, standard } => {
+                subcommand::cmd_setup::setup_cpp(&program[..], &standard[..])
+            }
+            SetUp::Python { program } => subcommand::cmd_setup::setup_python(&program[..]),
+        },
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
     }
 }

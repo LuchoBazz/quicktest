@@ -1,5 +1,6 @@
 use std::fs;
 
+use serde::{Deserialize, Serialize};
 use yaml_rust::YamlLoader;
 
 use crate::{
@@ -8,25 +9,40 @@ use crate::{
     runner::lang::{cpp::CppConfig, python::PythonConfig},
 };
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct DefaultConfig {
-    cpp_config: CppConfig,
-    python_config: PythonConfig,
+    pub cpp_config: CppConfig,
+    pub python_config: PythonConfig,
 }
 
 pub const DEFAULT_CONFIG_YAML: &str = "
-cpp-config:
+cpp_config:
     program: g++
-    standard: -std=c++17
-python-config:
+    standard: \"-std=c++17\"
+python_config:
     program: python3
 ";
+
+pub fn write_config_yaml(yaml_content: &str) -> String {
+    let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
+    let config_folder = shellexpand::tilde(CONFIG_FOLDER).to_string();
+
+    // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
+    // with the default settings
+    if fs::create_dir_all(config_folder).is_ok()
+        && write_file(config_file, yaml_content.as_bytes()).is_ok()
+    {}
+    DEFAULT_CONFIG_YAML.to_string()
+}
+
+pub fn write_default_config_yaml() -> String {
+    write_config_yaml(DEFAULT_CONFIG_YAML)
+}
 
 pub fn load_default_config() -> DefaultConfig {
     let mut config_text = String::new();
 
     let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
-    let config_folder = shellexpand::tilde(CONFIG_FOLDER).to_string();
 
     let cpp_default = CppConfig::default();
     let python_default = PythonConfig::default();
@@ -37,34 +53,31 @@ pub fn load_default_config() -> DefaultConfig {
     } else {
         // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
         // with the default settings
-        if fs::create_dir_all(config_folder).is_ok()
-            && write_file(config_file, DEFAULT_CONFIG_YAML.as_bytes()).is_ok()
-        {}
-        config_text = DEFAULT_CONFIG_YAML.to_string();
+        config_text = write_default_config_yaml();
     }
 
     let docs = YamlLoader::load_from_str(&config_text[..]).unwrap();
     let doc = &docs[0];
 
-    let cpp_config_program = if let Some(program) = doc["cpp-config"]["program"].as_str() {
+    let cpp_config_program = if let Some(program) = doc["cpp_config"]["program"].as_str() {
         program.to_string()
     } else {
         cpp_default.program.clone()
     };
 
-    let cpp_config_standard = if let Some(standard) = doc["cpp-config"]["standard"].as_str() {
+    let cpp_config_standard = if let Some(standard) = doc["cpp_config"]["standard"].as_str() {
         standard.to_string()
     } else {
-        cpp_default.standard.clone()
+        cpp_default.standard
     };
 
-    let python_config_program = if let Some(program) = doc["python-config"]["program"].as_str() {
+    let python_config_program = if let Some(program) = doc["python_config"]["program"].as_str() {
         program.to_string()
     } else {
-        python_default.program.clone()
+        python_default.program
     };
 
-    let tree = DefaultConfig {
+    DefaultConfig {
         cpp_config: CppConfig {
             program: cpp_config_program,
             standard: cpp_config_standard,
@@ -72,7 +85,5 @@ pub fn load_default_config() -> DefaultConfig {
         python_config: PythonConfig {
             program: python_config_program,
         },
-    };
-
-    tree
+    }
 }

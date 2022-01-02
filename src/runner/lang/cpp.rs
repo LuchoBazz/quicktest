@@ -7,6 +7,8 @@
 use std::path::PathBuf;
 use std::process::Command;
 
+use serde::{Deserialize, Serialize};
+
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
@@ -103,7 +105,7 @@ impl Language for Cpp {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct CppConfig {
     pub program: String,
     pub standard: String,

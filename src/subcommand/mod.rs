@@ -8,4 +8,5 @@ pub mod cmd_check;
 pub mod cmd_cmp;
 pub mod cmd_example;
 pub mod cmd_run;
+pub mod cmd_setup;
 pub mod cmd_tle;
