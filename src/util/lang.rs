@@ -44,7 +44,7 @@ fn _get_language_by_ext_default(
     match ext {
         "cpp" => Box::new(gnucpp17_default(
             root,
-            &file_name.to_str().unwrap(),
+            file_name.to_str().unwrap(),
             binary_file,
             stdin,
             stdout,
@@ -52,10 +52,10 @@ fn _get_language_by_ext_default(
         )),
         "py" => Box::new(python3_default(
             root,
-            &file_name.to_str().unwrap(),
-            &stdin,
-            &stdout,
-            &stderr,
+            file_name.to_str().unwrap(),
+            stdin,
+            stdout,
+            stderr,
         )),
         _ => unreachable!(),
     }
@@ -91,13 +91,13 @@ fn _get_language_by_ext_set_output(
         "cpp" => Box::new(gnucpp17_set_output(
             root,
             file_name.to_str().unwrap(),
-            &binary_file,
-            &stdout,
+            binary_file,
+            stdout,
         )),
         "py" => Box::new(python3_set_output(
             root,
             file_name.to_str().unwrap(),
-            &stdout,
+            stdout,
         )),
         _ => unreachable!(),
     }

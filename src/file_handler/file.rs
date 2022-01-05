@@ -107,11 +107,11 @@ pub fn copy_file(from: &str, to: &str) -> Result<(), ExitFailure> {
 pub fn is_extension_supported_or_error(file_name: &str) -> Result<(), ExitFailure> {
     let path = Path::new(&file_name);
     let ext = match path.extension() {
-        Some(p) => p.to_str().unwrap_or(&""),
-        _ => &"",
+        Some(p) => p.to_str().unwrap_or(""),
+        _ => "",
     };
-    if !is_extension_supported(&ext) {
-        return throw_extension_not_supported_msg(&file_name, &ext);
+    if !is_extension_supported(ext) {
+        return throw_extension_not_supported_msg(file_name, ext);
     }
     Ok(())
 }

@@ -16,12 +16,12 @@ exclude = ["docs/*", "examples/*", "*.md"]
 include = ["**/*.rs", "Cargo.toml",]
 
 [dependencies]
-clap = "2.34.0"
+clap = "3.0.5"
 colored = "2.0.0"
 exitfailure = "0.5.1"
 failure = "0.1.8"
 glob = "0.3.0"
-process_control = "3.1.0"
+process_control = "2.0.2"
 rand = "0.8.4"
 shellexpand = "2.1.0"
 serde = { version = "1.0", features = ["derive"] }
