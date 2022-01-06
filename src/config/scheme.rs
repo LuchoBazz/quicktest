@@ -19,8 +19,13 @@ pub const DEFAULT_CONFIG_YAML: &str = "
 cpp_config:
     program: g++
     standard: \"-std=c++17\"
+    flags:
+        - \"-Wall\"
+        - \"-DONLINE_JUDGE=1\"
 python_config:
-    program: python3
+    program: python
+    flags:
+        - \"ONLINE_JUDGE=1\"
 ";
 
 pub fn write_config_yaml(yaml_content: &str) -> String {
@@ -71,19 +76,39 @@ pub fn load_default_config() -> DefaultConfig {
         cpp_default.standard
     };
 
+    let cpp_config_flags = if let Some(flags) = doc["cpp_config"]["flags"].as_vec() {
+        flags
+            .iter()
+            .map(|item| item.as_str().unwrap().to_string())
+            .collect::<Vec<String>>()
+    } else {
+        cpp_default.flags
+    };
+
     let python_config_program = if let Some(program) = doc["python_config"]["program"].as_str() {
         program.to_string()
     } else {
         python_default.program
     };
 
+    let python_config_flags = if let Some(flags) = doc["python_config"]["flags"].as_vec() {
+        flags
+            .iter()
+            .map(|item| item.as_str().unwrap().to_string())
+            .collect::<Vec<String>>()
+    } else {
+        python_default.flags
+    };
+
     DefaultConfig {
         cpp_config: CppConfig {
             program: cpp_config_program,
             standard: cpp_config_standard,
+            flags: cpp_config_flags,
         },
         python_config: PythonConfig {
             program: python_config_program,
+            flags: python_config_flags,
         },
     }
 }

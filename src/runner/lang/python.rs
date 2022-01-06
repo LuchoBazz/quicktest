@@ -19,13 +19,9 @@ pub struct Python {
     /// Example: main.py
     file_name: PathBuf,
 
-    /// Example: -Wall
+    /// Example: ONLINE_JUDGE=1, etc
     #[allow(unused)]
-    flags: Vec<&'static str>,
-
-    /// Example ONLINE_JUDGE=1, etc
-    #[allow(unused)]
-    variables: Vec<&'static str>,
+    flags: Vec<String>,
 
     stdin: Option<PathBuf>,
 
@@ -38,8 +34,7 @@ impl Python {
     pub fn new(
         program: String,
         file_name: PathBuf,
-        flags: Vec<&'static str>,
-        variables: Vec<&'static str>,
+        flags: Vec<String>,
         stdin: Option<PathBuf>,
         stdout: Option<PathBuf>,
         stderr: Option<PathBuf>,
@@ -48,7 +43,6 @@ impl Python {
             program,
             file_name,
             flags,
-            variables,
             stdin,
             stdout,
             stderr,
@@ -91,12 +85,14 @@ impl Language for Python {
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct PythonConfig {
     pub program: String,
+    pub flags: Vec<String>,
 }
 
 impl Default for PythonConfig {
     fn default() -> Self {
         PythonConfig {
             program: "python3".to_string(),
+            flags: vec!["ONLINE_JUDGE=1".to_string()],
         }
     }
 }
@@ -125,8 +121,7 @@ pub mod default {
         Python::new(
             python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            vec![],
-            vec!["ONLINE_JUDGE=1"],
+            python.flags,
             Some(stdin),
             Some(stdout),
             Some(stderr),
@@ -142,8 +137,7 @@ pub mod default {
         Python::new(
             python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            vec![],
-            vec!["ONLINE_JUDGE=1"],
+            python.flags,
             None,
             Some(stdout),
             None,

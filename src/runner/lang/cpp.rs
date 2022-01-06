@@ -26,11 +26,8 @@ pub struct Cpp {
     /// Example: binary, binary.o, binary.exe etc..
     binary_file: PathBuf,
 
-    /// Example: -Wall
-    flags: Vec<&'static str>,
-
-    /// Example -DLOCAL, -DONLINE_JUDGE, etc
-    variables: Vec<&'static str>,
+    /// Example: -Wall, -DLOCAL, -DONLINE_JUDGE, etc
+    flags: Vec<String>,
 
     stdin: Option<PathBuf>,
 
@@ -46,8 +43,7 @@ impl Cpp {
         file_name: PathBuf,
         standard: String,
         binary_file: PathBuf,
-        flags: Vec<&'static str>,
-        variables: Vec<&'static str>,
+        flags: Vec<String>,
         stdin: Option<PathBuf>,
         stdout: Option<PathBuf>,
         stderr: Option<PathBuf>,
@@ -58,7 +54,6 @@ impl Cpp {
             standard,
             binary_file,
             flags,
-            variables,
             stdin,
             stdout,
             stderr,
@@ -71,7 +66,6 @@ impl Language for Cpp {
         let status = Command::new(&self.program[..])
             .arg(&self.standard[..])
             .args(&self.flags)
-            .args(&self.variables)
             .arg("-o")
             .arg(self.binary_file.to_str().unwrap())
             .arg(self.file_name.to_str().unwrap())
@@ -109,6 +103,7 @@ impl Language for Cpp {
 pub struct CppConfig {
     pub program: String,
     pub standard: String,
+    pub flags: Vec<String>,
 }
 
 impl Default for CppConfig {
@@ -116,6 +111,7 @@ impl Default for CppConfig {
         CppConfig {
             program: "g++".to_string(),
             standard: "-std=c++17".to_string(),
+            flags: vec!["-Wall".to_string(), "-DONLINE_JUDGE=1".to_string()],
         }
     }
 }
@@ -147,8 +143,7 @@ pub mod default {
             PathBuf::from(format!("{}/{}", root, file_name)),
             cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
-            vec!["-Wall"],
-            vec!["-DONLINE_JUDGE=1"],
+            cpp.flags,
             Some(stdin),
             Some(stdout),
             Some(stderr),
@@ -171,8 +166,7 @@ pub mod default {
             PathBuf::from(format!("{}/{}", root, file_name)),
             cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
-            vec!["-Wall"],
-            vec!["-DLOCAL=1"],
+            cpp.flags,
             None,
             Some(stdout),
             None,
