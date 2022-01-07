@@ -3,6 +3,25 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 0.7.0 / 2022.01.06
+
+* feat: config schema and load_default_config were added [ae89f0b]
+* feat: read and configure settings from file [5928071]
+* feat: default configuration was updated from lazy_static to Default trait [58c7616]
+* feat: setup subcommand for cpp and python was added #51 [5752eb0]
+* test: test about setup command was added #51 [9ef7b9b]
+* issue: issue about setup command test 'cmd_setup_python_program' was fixed [ede3f94]
+* feat: default configuration for cpp and python was updated dinamically using ~/.quicktest/config.yaml file #51 [c049c1b]
+docs: docs about setup command was added #51 [e4a51ae]
+* feat: rust version was updated to 1.57.0 and cargo clippy was fixed [607168f]
+* feat: support of setup subcommand for c++ and python flags was added [abc68e5]
+* docs: examples about setup command were added [5410b02]
+* ci: set python3 program was added to .circleci/config.yml [b9a359a]
+* feat: cpp and python flags were support by setup command #51 [3cb99c3]
+* test: tests about setup command for flags were added [ffe9821]
+* fix: clippy errors were fixed [d1da0a6]
+* docs: examples about flags in setup command were added [3565fbc]
+
 ### 0.6.0 / 2021.12.16
 
 - feat: run command was added [9868f9c]
