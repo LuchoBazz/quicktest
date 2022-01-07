@@ -14,11 +14,15 @@
     `[`**default:** `-std=c++17` `]`
 
     ```shell
-    quicktest setup cpp --standard="-std=c++20" `]`
+    quicktest setup cpp --standard="-std=c++20"
     ```
 
-* * ### Change the `flags` argument of the compilation command in C+
+* ### Change the `flags` argument of the compilation command in C+
     `[`**default:** `-Wall -DONLINE_JUDGE=1` `]`
+
+    ```shell
+    quicktest setup cpp --flags="-Wall;-DONLINE_JUDGE=1"
+    ```
 
 ## Python
   
@@ -27,4 +31,11 @@
 
     ```shell
     quicktest setup python --program="python3"
+    ```
+
+* ### Change run command `flags` arguments in Python
+    `[`**default:** `ONLINE_JUDGE=1` `]`
+
+    ```shell
+    quicktest setup cpp --flags="ONLINE_JUDGE=1;LOCAL=1" `]`
     ```
