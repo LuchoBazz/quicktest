@@ -40,7 +40,7 @@ pub fn setup_cpp(program: &str, standard: &str, flags: &str) -> Result<(), ExitF
 
     if !flags.is_empty() {
         deserializer.cpp_config.flags = flags
-            .split(";")
+            .split(';')
             .collect::<Vec<_>>()
             .iter()
             .map(|&flag| flag.to_string())
@@ -86,7 +86,7 @@ pub fn setup_python(program: &str, flags: &str) -> Result<(), ExitFailure> {
 
     if !flags.is_empty() {
         deserializer.python_config.flags = flags
-            .split(";")
+            .split(';')
             .collect::<Vec<_>>()
             .iter()
             .map(|&flag| flag.to_string())
