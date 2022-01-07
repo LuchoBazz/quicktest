@@ -6,23 +6,22 @@
 
 use std::path::PathBuf;
 
+use serde::{Deserialize, Serialize};
+
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
 #[derive(Debug, Clone)]
 pub struct Python {
     /// Example: python, python3, pypy2 or pypy3
-    pub program: &'static str,
+    pub program: String,
 
     /// Example: main.py
     file_name: PathBuf,
 
-    /// Example: -Wall
-    flags: Vec<&'static str>,
-
-    /// Example ONLINE_JUDGE=1, etc
+    /// Example: ONLINE_JUDGE=1, etc
     #[allow(unused)]
-    variables: Vec<&'static str>,
+    flags: Vec<String>,
 
     stdin: Option<PathBuf>,
 
@@ -33,10 +32,9 @@ pub struct Python {
 
 impl Python {
     pub fn new(
-        program: &'static str,
+        program: String,
         file_name: PathBuf,
-        flags: Vec<&'static str>,
-        variables: Vec<&'static str>,
+        flags: Vec<String>,
         stdin: Option<PathBuf>,
         stdout: Option<PathBuf>,
         stderr: Option<PathBuf>,
@@ -45,7 +43,6 @@ impl Python {
             program,
             file_name,
             flags,
-            variables,
             stdin,
             stdout,
             stderr,
@@ -61,7 +58,7 @@ impl Language for Python {
 
     fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
         // Example: python3 main.py
-        let commands = vec![self.program, self.file_name.to_str().unwrap()];
+        let commands = vec![&self.program[..], self.file_name.to_str().unwrap()];
         execute_program(
             timeout,
             testcase,
@@ -85,8 +82,25 @@ impl Language for Python {
     }
 }
 
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct PythonConfig {
+    pub program: String,
+    pub flags: Vec<String>,
+}
+
+impl Default for PythonConfig {
+    fn default() -> Self {
+        PythonConfig {
+            program: "python3".to_string(),
+            flags: vec!["ONLINE_JUDGE=1".to_string()],
+        }
+    }
+}
+
 pub mod default {
     use std::path::PathBuf;
+
+    use crate::config::scheme::load_default_config;
 
     use super::Python;
 
@@ -101,11 +115,13 @@ pub mod default {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
         let stderr = PathBuf::from(format!("{}/{}", root, error_file));
 
+        let default_arg = load_default_config();
+        let python = default_arg.python_config;
+
         Python::new(
-            "python3",
+            python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            vec![],
-            vec!["ONLINE_JUDGE=1"],
+            python.flags,
             Some(stdin),
             Some(stdout),
             Some(stderr),
@@ -115,11 +131,13 @@ pub mod default {
     pub fn python3_set_output(root: &str, file_name: &str, output_file: &str) -> Python {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
 
+        let default_arg = load_default_config();
+        let python = default_arg.python_config;
+
         Python::new(
-            "python3",
+            python.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            vec![],
-            vec!["ONLINE_JUDGE=1"],
+            python.flags,
             None,
             Some(stdout),
             None,

@@ -1,7 +1,7 @@
 jobs:
   build:
     docker:
-      - image: cimg/rust:1.52
+      - image: cimg/rust:1.57.0
     
     working_directory: ~/quicktest_folder
 
@@ -9,7 +9,9 @@ jobs:
       - checkout
       - run: cargo build
       - run: cargo clippy -- -D warnings
+      - run: ./target/debug/quicktest setup python --program="python3"
       - run: cargo test tle_subcommand -- --test-threads 1
       - run: cargo test cmp_subcommand -- --test-threads 1
       - run: cargo test check_subcommand -- --test-threads 1
       - run: cargo test run_subcommand -- --test-threads 1
+      - run: cargo test setup_subcommand -- --test-threads 1

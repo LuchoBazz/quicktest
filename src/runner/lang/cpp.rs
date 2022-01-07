@@ -7,28 +7,27 @@
 use std::path::PathBuf;
 use std::process::Command;
 
+use serde::{Deserialize, Serialize};
+
 use crate::runner::cmd::{execute_program, has_installed_controller};
 use crate::runner::types::{Language, StatusResponse};
 
 #[derive(Debug, Clone)]
 pub struct Cpp {
     /// Example: g++
-    pub program: &'static str,
+    pub program: String,
 
     /// Example: main.cpp
     file_name: PathBuf,
 
     /// Example: -std=c++17
-    standard: &'static str,
+    standard: String,
 
     /// Example: binary, binary.o, binary.exe etc..
     binary_file: PathBuf,
 
-    /// Example: -Wall
-    flags: Vec<&'static str>,
-
-    /// Example -DLOCAL, -DONLINE_JUDGE, etc
-    variables: Vec<&'static str>,
+    /// Example: -Wall, -DLOCAL, -DONLINE_JUDGE, etc
+    flags: Vec<String>,
 
     stdin: Option<PathBuf>,
 
@@ -40,12 +39,11 @@ pub struct Cpp {
 impl Cpp {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        program: &'static str,
+        program: String,
         file_name: PathBuf,
-        standard: &'static str,
+        standard: String,
         binary_file: PathBuf,
-        flags: Vec<&'static str>,
-        variables: Vec<&'static str>,
+        flags: Vec<String>,
         stdin: Option<PathBuf>,
         stdout: Option<PathBuf>,
         stderr: Option<PathBuf>,
@@ -56,7 +54,6 @@ impl Cpp {
             standard,
             binary_file,
             flags,
-            variables,
             stdin,
             stdout,
             stderr,
@@ -66,10 +63,9 @@ impl Cpp {
 
 impl Language for Cpp {
     fn build(&self) -> bool {
-        let status = Command::new(self.program)
-            .arg(self.standard)
+        let status = Command::new(&self.program[..])
+            .arg(&self.standard[..])
             .args(&self.flags)
-            .args(&self.variables)
             .arg("-o")
             .arg(self.binary_file.to_str().unwrap())
             .arg(self.file_name.to_str().unwrap())
@@ -103,8 +99,27 @@ impl Language for Cpp {
     }
 }
 
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct CppConfig {
+    pub program: String,
+    pub standard: String,
+    pub flags: Vec<String>,
+}
+
+impl Default for CppConfig {
+    fn default() -> Self {
+        CppConfig {
+            program: "g++".to_string(),
+            standard: "-std=c++17".to_string(),
+            flags: vec!["-Wall".to_string(), "-DONLINE_JUDGE=1".to_string()],
+        }
+    }
+}
+
 pub mod default {
     use std::path::PathBuf;
+
+    use crate::config::scheme::load_default_config;
 
     use super::Cpp;
 
@@ -120,13 +135,15 @@ pub mod default {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
         let stderr = PathBuf::from(format!("{}/{}", root, error_file));
 
+        let default_arg = load_default_config();
+        let cpp = default_arg.cpp_config;
+
         Cpp::new(
-            "g++",
+            cpp.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            "-std=c++17",
+            cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
-            vec!["-Wall"],
-            vec!["-DONLINE_JUDGE=1"],
+            cpp.flags,
             Some(stdin),
             Some(stdout),
             Some(stderr),
@@ -141,13 +158,15 @@ pub mod default {
     ) -> Cpp {
         let stdout = PathBuf::from(format!("{}/{}", root, output_file));
 
+        let default_arg = load_default_config();
+        let cpp = default_arg.cpp_config;
+
         Cpp::new(
-            "g++",
+            cpp.program,
             PathBuf::from(format!("{}/{}", root, file_name)),
-            "-std=c++17",
+            cpp.standard,
             PathBuf::from(format!("{}/{}", root, binary_file)),
-            vec!["-Wall"],
-            vec!["-DLOCAL=1"],
+            cpp.flags,
             None,
             Some(stdout),
             None,
