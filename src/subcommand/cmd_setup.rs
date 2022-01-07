@@ -13,7 +13,7 @@ use crate::{
     painter::setup::show_argument_was_updated_success,
 };
 
-pub fn setup_cpp(program: &str, standard: &str) -> Result<(), ExitFailure> {
+pub fn setup_cpp(program: &str, standard: &str, flags: &str) -> Result<(), ExitFailure> {
     let mut config_text = String::new();
 
     let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
@@ -38,6 +38,20 @@ pub fn setup_cpp(program: &str, standard: &str) -> Result<(), ExitFailure> {
         show_argument_was_updated_success("C++", "standard", &deserializer.cpp_config.standard[..]);
     }
 
+    if !flags.is_empty() {
+        deserializer.cpp_config.flags = flags
+            .split(";")
+            .collect::<Vec<_>>()
+            .iter()
+            .map(|&flag| flag.to_string())
+            .collect::<Vec<_>>();
+        show_argument_was_updated_success(
+            "C++",
+            "flags",
+            &format!("{:?}", deserializer.cpp_config.flags)[..],
+        );
+    }
+
     let serializer = serde_yaml::to_string(&deserializer).unwrap();
 
     write_config_yaml(&serializer[..]);
@@ -45,7 +59,7 @@ pub fn setup_cpp(program: &str, standard: &str) -> Result<(), ExitFailure> {
     Ok(())
 }
 
-pub fn setup_python(program: &str) -> Result<(), ExitFailure> {
+pub fn setup_python(program: &str, flags: &str) -> Result<(), ExitFailure> {
     let mut config_text = String::new();
 
     let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
@@ -67,6 +81,20 @@ pub fn setup_python(program: &str) -> Result<(), ExitFailure> {
             "Python",
             "program",
             &deserializer.python_config.program[..],
+        );
+    }
+
+    if !flags.is_empty() {
+        deserializer.python_config.flags = flags
+            .split(";")
+            .collect::<Vec<_>>()
+            .iter()
+            .map(|&flag| flag.to_string())
+            .collect::<Vec<_>>();
+        show_argument_was_updated_success(
+            "Python",
+            "flags",
+            &format!("{:?}", deserializer.python_config.flags)[..],
         );
     }
 

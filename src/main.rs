@@ -124,10 +124,14 @@ fn main() -> Result<(), ExitFailure> {
             save_out,
         } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
         Opt::Setup { subcommand } => match subcommand {
-            SetUp::Cpp { program, standard } => {
-                subcommand::cmd_setup::setup_cpp(&program[..], &standard[..])
+            SetUp::Cpp {
+                program,
+                standard,
+                flags,
+            } => subcommand::cmd_setup::setup_cpp(&program[..], &standard[..], &flags[..]),
+            SetUp::Python { program, flags } => {
+                subcommand::cmd_setup::setup_python(&program[..], &flags[..])
             }
-            SetUp::Python { program } => subcommand::cmd_setup::setup_python(&program[..]),
         },
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
     }
