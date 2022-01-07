@@ -143,7 +143,24 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--save-out`   Save the output of the target file for each test case
 
 ---
+* `quicktest setup | qt setup`
 
+    **Subcommand**
+
+    * `cpp` Subcommand that allows to change C++ settings
+
+        **Options**
+
+        * `--program=<value> [default: g++]` Change the program argument of the compilation command in C++
+        * `--standard=<value> [default: -std=c++17]` Change the standard argument of the compilation command in C++
+
+    * `python` Subcommand that allows to change Python settings
+
+        **Options**
+        
+        * `--program=<value> [default: python]` Change the program argument of the run command in Python
+
+---
 * `quicktest example | qt example`
     
     **Flags**

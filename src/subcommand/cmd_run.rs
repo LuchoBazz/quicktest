@@ -43,10 +43,10 @@ pub fn run(
     let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
         target_file,
-        &TARGET_BINARY_FILE,
-        &QTEST_INPUT_FILE,
-        &QTEST_OUTPUT_FILE,
-        &QTEST_ERROR_FILE,
+        TARGET_BINARY_FILE,
+        QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE,
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
@@ -118,7 +118,7 @@ pub fn run(
         } else {
             if save_out {
                 let file_name =
-                    &get_filename_output(prefix, &case.file_name().unwrap().to_str().unwrap())[..];
+                    &get_filename_output(prefix, case.file_name().unwrap().to_str().unwrap())[..];
 
                 // save testcase
                 save_test_case_output(file_name, QTEST_OUTPUT_FILE);

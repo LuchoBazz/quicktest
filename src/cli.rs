@@ -8,6 +8,35 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
+/// Setup subcommand
+#[derive(StructOpt, Debug)]
+pub enum SetUp {
+    /// Subcommand that allows to change C++ settings
+    Cpp {
+        /// Change the program argument of the compile command in C++
+        #[structopt(long = "program", default_value = "")]
+        program: String,
+
+        /// Change the standard argument of the compile command in C++
+        #[structopt(long = "standard", default_value = "")]
+        standard: String,
+
+        /// Change build command flags arguments in C++
+        #[structopt(long = "flags", default_value = "")]
+        flags: String,
+    },
+    /// Subcommand that allows to change python settings
+    Python {
+        /// Change the program argument of the run command in Python
+        #[structopt(long = "program", default_value = "")]
+        program: String,
+
+        /// Change run command flags arguments in Python
+        #[structopt(long = "flags", default_value = "")]
+        flags: String,
+    },
+}
+
 /// CLI for stress testing in competitive programming contest
 #[derive(StructOpt, Debug)]
 #[structopt(name = "quicktest")]
@@ -192,6 +221,11 @@ pub enum Opt {
         /// Save the output of the target file for each test case
         #[structopt(long = "save-out")]
         save_out: bool,
+    },
+    /// Setup Subcommand
+    Setup {
+        #[structopt(subcommand)]
+        subcommand: SetUp,
     },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]

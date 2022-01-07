@@ -80,10 +80,10 @@ pub fn run(
     let any_correct: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
         correct_file,
-        &CORRECT_BINARY_FILE,
-        &QTEST_INPUT_FILE,
-        &QTEST_EXPECTED_FILE,
-        &QTEST_ERROR_FILE,
+        CORRECT_BINARY_FILE,
+        QTEST_INPUT_FILE,
+        QTEST_EXPECTED_FILE,
+        QTEST_ERROR_FILE,
     );
     let any_correct: Box<dyn Language> = any_correct.unwrap();
     let correct_file_lang: &dyn Language = any_correct.as_ref();
@@ -95,10 +95,10 @@ pub fn run(
     let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
         target_file,
-        &TARGET_BINARY_FILE,
-        &QTEST_INPUT_FILE,
-        &QTEST_OUTPUT_FILE,
-        &QTEST_ERROR_FILE,
+        TARGET_BINARY_FILE,
+        QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE,
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
@@ -108,7 +108,7 @@ pub fn run(
 
     // Get the language depending on the extension of the gen_file
     let any_gen: Option<Box<dyn Language>> =
-        get_language_by_ext_set_output(root, gen_file, &GEN_BINARY_FILE, &QTEST_INPUT_FILE);
+        get_language_by_ext_set_output(root, gen_file, GEN_BINARY_FILE, QTEST_INPUT_FILE);
     let any_gen: Box<dyn Language> = any_gen.unwrap();
     let generator_file_lang: &dyn Language = any_gen.as_ref();
 

@@ -72,5 +72,5 @@ pub fn map_extension(ext: &str) -> Extension {
 }
 
 pub fn is_extension_supported(ext: &str) -> bool {
-    map_extension(&ext) != Extension::NotExtensionSupported
+    map_extension(ext) != Extension::NotExtensionSupported
 }

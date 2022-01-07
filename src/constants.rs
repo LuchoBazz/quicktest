@@ -10,6 +10,10 @@ pub const TEST_CASES_FOLDER: &str = "test_cases";
 
 pub const OUTPUT_FOLDER: &str = "output";
 
+pub const CONFIG_FOLDER: &str = "~/.quicktest";
+
+pub const CONFIG_FILE: &str = "~/.quicktest/config.yaml";
+
 #[cfg(unix)]
 pub const TARGET_BINARY_FILE: &str = ".qtest/main.o";
 #[cfg(windows)]
