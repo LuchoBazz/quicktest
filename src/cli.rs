@@ -145,6 +145,10 @@ pub enum Opt {
         /// Run test cases with Runtime Error status
         #[structopt(long = "run-rte")]
         run_rte: bool,
+
+        /// Show differences between the expected file and the output file
+        #[structopt(long = "diff")]
+        diff: bool,
     },
     /// Check the correctness of the answer using a script <checker-file> (Special for cases that do not have a unique answer)
     Check {
