@@ -19,7 +19,7 @@ use crate::error::handle_error::{
 use crate::file_handler::file::{
     can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
     format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
-    remove_files, remove_folder, save_test_case,
+    remove_files, remove_folder, save_test_case, read_file,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
@@ -29,6 +29,7 @@ use crate::painter::style::{
 };
 use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
 use crate::util::lang::{get_language_by_ext_default, get_language_by_ext_set_output};
+use crate::diff::diff_line_by_line::diff_line_by_line;
 
 // Constants
 use crate::constants::{
@@ -52,6 +53,7 @@ pub fn run(
     run_wa: bool,
     run_tle: bool,
     run_rte: bool,
+    diff: bool,
 ) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
@@ -274,6 +276,13 @@ pub fn run(
                 wa_count += 1;
 
                 show_wrong_answer(test_number, mills_target as u32);
+
+                if diff {
+                    let mut tout = std::io::stdout();
+                    let expected = read_file(&file_expected[..]).unwrap();
+                    let output = read_file(&file_out[..]).unwrap();
+                    diff_line_by_line(&mut tout, &expected[..], &output[..]);
+                }
 
                 if save_bad || save_all {
                     // Example: test_cases/testcase_wa_01.txt
