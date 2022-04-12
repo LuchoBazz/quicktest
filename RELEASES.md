@@ -3,7 +3,7 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
-### 0.7.1 / 2022.04.11
+### 0.7.0 / 2022.04.11
 
 - feat: difference feature was added to cmp subcommand [a3c1612]
     - `--diff` flag was added to `quicktest cmp`
