@@ -32,7 +32,7 @@ pub fn diff_line_by_line<WriteType: std::io::Write>(
                 writeln!(tout, "{}{}", IDENTATION, text).ok();
             }
             Difference::Rem(ref text) => {
-                let text = format!("- {}", text.trim()).bold().red();
+                let text = format!("- {}", text.trim()).bold().bright_red();
                 writeln!(tout, "{}{}", IDENTATION, text).ok();
             }
         }
