@@ -129,7 +129,7 @@ impl LanguageHandler {
 
 impl Language for LanguageHandler {
     fn build(&self) -> bool {
-        println!("Compile {:#?}", self.compile);
+        // println!("Compile {:#?}", self.compile);
 
         let compile = self.compile.clone().unwrap();
         let commands_str = compile.split(" ").collect::<Vec<_>>();
@@ -146,7 +146,7 @@ impl Language for LanguageHandler {
     }
 
     fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
-        println!("Execute {}", self.execute);
+        // println!("Execute {}", self.execute);
         let execute = self.execute.clone();
         let commands_str = execute.split(" ").collect::<Vec<_>>();
 
@@ -165,7 +165,7 @@ impl Language for LanguageHandler {
     }
 
     fn is_installed(&self) -> bool {
-        println!("Is Installed {}", self.check_installed);
+        // println!("Is Installed {}", self.check_installed);
 
         let check_installed = self.check_installed.clone();
         let commands_str = check_installed.split(" ").collect::<Vec<_>>();
@@ -181,7 +181,7 @@ impl Language for LanguageHandler {
     }
 
     fn get_name(&self) -> String {
-        println!("Name {}", self.name);
+        // println!("Name {}", self.name);
         self.name.clone()
     }
 }
