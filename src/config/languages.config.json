@@ -43,7 +43,7 @@
             ],
             "description":"Interprete del Lenguaje Python 3",
             "env":{
-                "PROGRAM":"python"
+                "PROGRAM":"python3"
             },
             "execute":{
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
