@@ -19,8 +19,8 @@
                 "PROGRAM":"g++"
             },
             "compile":{
-                "unix":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o -Wall",
-                "windows":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe -Wall"
+                "unix":"${PROGRAM} -std=c++17 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o",
+                "windows":"${PROGRAM} -std=c++17 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
                 "unix":".qtest/${FILE_NAME_BINARY}.o",
