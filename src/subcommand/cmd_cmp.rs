@@ -12,6 +12,7 @@ use std::time::Duration;
 use exitfailure::ExitFailure;
 
 // local library
+use crate::diff::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
     throw_time_limit_exceeded_msg,
@@ -19,17 +20,17 @@ use crate::error::handle_error::{
 use crate::file_handler::file::{
     can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
     format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
-    remove_files, remove_folder, save_test_case, read_file,
+    read_file, remove_files, remove_folder, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
+use crate::language::language_handler::get_language_handler;
 use crate::painter::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
     show_time_limit_exceeded_correct, show_wrong_answer,
 };
 use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
 use crate::util::lang::{get_language_by_ext_default, get_language_by_ext_set_output};
-use crate::diff::diff_line_by_line::diff_line_by_line;
 
 // Constants
 use crate::constants::{
@@ -94,6 +95,7 @@ pub fn run(
     can_run_language_or_error(correct_file_lang)?;
 
     // Get the language depending on the extension of the target_file
+    /*
     let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
         root,
         target_file,
@@ -104,9 +106,18 @@ pub fn run(
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
     let target_file_lang: &dyn Language = any_target.as_ref();
+    */
+
+    let target_file_lang = *get_language_handler(
+        &target_file.into_os_string().into_string().unwrap()[..],
+        "<target-file>",
+        QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+        QTEST_ERROR_FILE,
+    )?;
 
     // verify that the program to run the target file is installed
-    can_run_language_or_error(target_file_lang)?;
+    // can_run_language_or_error(target_file_lang)?;
 
     // Get the language depending on the extension of the gen_file
     let any_gen: Option<Box<dyn Language>> =

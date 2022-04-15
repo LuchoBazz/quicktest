@@ -20,6 +20,7 @@ pub fn get_language_by_ext_default(
 ) -> Option<Box<dyn Language>> {
     let any: Box<dyn Any> =
         _get_language_by_ext_default(root, file_name, binary_file, stdin, stdout, stderr);
+
     if let Some(python_lang) = any.downcast_ref::<Python>() {
         let x = python_lang.clone();
         Some(Box::new(x))
@@ -29,6 +30,14 @@ pub fn get_language_by_ext_default(
     } else {
         unreachable!();
     }
+
+    /*
+    if let Some(lang) = any.downcast_ref::<LanguageHandler>() {
+        let x = lang.clone();
+        Some(Box::new(x))
+    } else {
+        unreachable!();
+    }*/
 }
 
 fn _get_language_by_ext_default(

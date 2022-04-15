@@ -1,0 +1,61 @@
+{
+    "languages":[
+        {
+            "id":"LanguageType::Cpp",
+            "name":"GNU C++17 (64)",
+            "extensions":[
+                "h",
+                "hh",
+                "hpp",
+                "hxx",
+                "h++",
+                "cc",
+                "cpp",
+                "cxx",
+                "c++"
+            ],
+            "description":"Compilador GNU C++ version 17",
+            "env":{
+                "PROGRAM":"g++"
+            },
+            "compile":{
+                "unix":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o ${FILE_NAME}.o -Wall",
+                "windows":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o ${FILE_NAME}.exe -Wall"
+            },
+            "execute":{
+                "unix":"${FILE_NAME}.o",
+                "windows":"${FILE_NAME}.exe"
+            },
+            "check_installed":"${PROGRAM} --help",
+            "libraries":[
+                {
+                    "name":"ac-library",
+                    "version":"1.4",
+                    "source":"https://github.com/atcoder/ac-library"
+                }
+            ]
+        },
+        {
+            "id":"LanguageType::Python",
+            "name":"Python 3",
+            "extensions":[
+                "py"
+            ],
+            "description":"Interprete del Lenguaje Python 3",
+            "env":{
+                "PROGRAM":"python3"
+            },
+            "execute":{
+                "unix":"${PROGRAM} ${FILE_NAME}.py",
+                "windows":"${PROGRAM} ${FILE_NAME}.py"
+            },
+            "check_installed":"${PROGRAM} --help",
+            "libraries":[
+                {
+                    "name":"numba",
+                    "version":"*"
+                }
+            ]
+        }
+    ]
+}
