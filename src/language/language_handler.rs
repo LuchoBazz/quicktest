@@ -67,13 +67,13 @@ impl LanguageHandler {
         let mut compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().unix)
         } else {
-            Some(String::new())
+            None
         };
         #[cfg(windows)]
         let compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().windows)
         } else {
-            Some(String::new())
+            None
         };
 
         LanguageHandler {
@@ -107,13 +107,13 @@ impl LanguageHandler {
         let mut compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().unix)
         } else {
-            Some(String::new())
+            None
         };
         #[cfg(windows)]
         let compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().windows)
         } else {
-            Some(String::new())
+            None
         };
         LanguageHandler {
             compile: compile,
@@ -130,6 +130,10 @@ impl LanguageHandler {
 impl Language for LanguageHandler {
     fn build(&self) -> bool {
         // println!("Compile {:#?}", self.compile);
+
+        if self.compile.is_none() {
+            return true;
+        }
 
         let compile = self.compile.clone().unwrap();
         let commands_str = compile.split(" ").collect::<Vec<_>>();
@@ -210,6 +214,13 @@ pub fn get_language_handler(
     let file_name = file_name.join(".");
 
     lang_out.add_env_variable(&String::from("FILE_NAME"), &file_name);
+    let mut file_name = file_name.split("/").collect::<Vec<_>>();
+    file_name.reverse();
+    while file_name.len() > 1 {
+        file_name.pop();
+    }
+    let file_name = file_name.join(".");
+    lang_out.add_env_variable(&String::from("FILE_NAME_BINARY"), &file_name);
 
     let handler =
         LanguageHandler::get_language(lang_out.clone(), input_file, output_file, error_file);

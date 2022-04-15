@@ -105,8 +105,8 @@ pub fn run(
         QTEST_ERROR_FILE,
     );
     let any_target: Box<dyn Language> = any_target.unwrap();
-    let target_file_lang: &dyn Language = any_target.as_ref();
-    */
+    let target_file_lang: &dyn Language = any_target.as_ref();*/
+    
 
     let target_file_lang = *get_language_handler(
         &target_file.into_os_string().into_string().unwrap()[..],

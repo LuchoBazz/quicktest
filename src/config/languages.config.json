@@ -19,12 +19,12 @@
                 "PROGRAM":"g++"
             },
             "compile":{
-                "unix":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o ${FILE_NAME}.o -Wall",
-                "windows":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o ${FILE_NAME}.exe -Wall"
+                "unix":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o -Wall",
+                "windows":"${PROGRAM} -std=c++17 -O2 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe -Wall"
             },
             "execute":{
-                "unix":"${FILE_NAME}.o",
-                "windows":"${FILE_NAME}.exe"
+                "unix":".qtest/${FILE_NAME_BINARY}.o",
+                "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help",
             "libraries":[
@@ -43,7 +43,7 @@
             ],
             "description":"Interprete del Lenguaje Python 3",
             "env":{
-                "PROGRAM":"python3"
+                "PROGRAM":"python"
             },
             "execute":{
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
