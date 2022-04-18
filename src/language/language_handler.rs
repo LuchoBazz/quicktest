@@ -9,7 +9,7 @@ use exitfailure::ExitFailure;
 use std::process::Command;
 
 use crate::{
-    config::load_config::get_root_path,
+    file_handler::path::get_root_path,
     language::extension,
     runner::{
         cmd::{execute_program, has_installed_controller},

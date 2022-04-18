@@ -5,42 +5,11 @@
  */
 
 use crate::constants::{CONFIG_FOLDER, LANGUAGE_CONFIG_FILE, LANGUAGE_CONFIG_FILE_DEFAULT};
-use crate::error::handle_error::throw_couldnt_write_to_file_msg;
+use crate::file_handler::file::{read_file, write_file};
+use crate::file_handler::path::get_root_path;
 use crate::language::json::language_scheme::Languages;
-use exitfailure::ExitFailure;
 use std::fs::File;
-use std::io::Write;
 use std::{fs, io::Read};
-
-// ---------------------------------------
-pub fn get_root_path() -> String {
-    let root = match std::env::current_dir() {
-        Ok(it) => it,
-        _ => unreachable!(),
-    };
-
-    let root = match root.to_str() {
-        Some(s) => s.to_string(),
-        _ => unreachable!(),
-    };
-    root
-}
-pub fn write_file(file_name: &str, bytes: &[u8]) -> Result<(), ExitFailure> {
-    if let Ok(mut file) = std::fs::File::create(file_name) {
-        if file.write_all(bytes).is_err() {
-            return throw_couldnt_write_to_file_msg(file_name);
-        }
-    }
-    Ok(())
-}
-
-pub fn read_file(file_name: &str) -> Option<String> {
-    if let Ok(data) = fs::read_to_string(file_name) {
-        return Some(data);
-    }
-    None
-}
-// ---------------------------------------
 
 pub fn write_config_data(json: &str) {
     let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
