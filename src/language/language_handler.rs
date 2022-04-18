@@ -227,3 +227,38 @@ pub fn get_language_handler(
 
     Ok(Box::new(handler))
 }
+
+pub fn get_generator_handler(
+    file_name: &str,
+    file_label: &str,
+    output_file: &str,
+) -> Result<Box<LanguageHandler>, ExitFailure> {
+    let mut lang_out = LanguageScheme::new();
+
+    let path = Path::new(&file_name);
+
+    let ext: &str = get_extension(&path).unwrap();
+
+    if let Err(err) = extension::map_extension(file_label, ext, &mut lang_out) {
+        return Err(err);
+    }
+
+    let name = path.file_stem().unwrap().to_str().unwrap();
+
+    let mut file_name = file_name.split(".").collect::<Vec<_>>();
+    file_name.pop();
+    let file_name = file_name.join(".");
+
+    lang_out.add_env_variable(&String::from("FILE_NAME"), &file_name);
+    let mut file_name = file_name.split("/").collect::<Vec<_>>();
+    file_name.reverse();
+    while file_name.len() > 1 {
+        file_name.pop();
+    }
+    let file_name = file_name.join(".");
+    lang_out.add_env_variable(&String::from("FILE_NAME_BINARY"), &file_name);
+
+    let handler = LanguageHandler::get_generator(lang_out.clone(), output_file);
+
+    Ok(Box::new(handler))
+}
