@@ -76,6 +76,14 @@ pub fn throw_program_not_installed_msg(program: &str) -> Result<(), ExitFailure>
     Ok(error.context("PROGRAM_NOT_INSTALLED_ERROR".to_string())?)
 }
 
+pub fn throw_setup_label_is_not_correct_msg(label: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(format!(
+        "Setup label '{}' is not correct",
+        label
+    )));
+    Ok(error.context("SETUP_LABEL_IS_NOT_CORRECT_ERROR".to_string())?)
+}
+
 pub fn throw_break_found_msg(
     status_name: &str,
     status: &str,

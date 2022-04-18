@@ -6,6 +6,7 @@
 
 use crate::constants::{CONFIG_FOLDER, LANGUAGE_CONFIG_FILE, LANGUAGE_CONFIG_FILE_DEFAULT};
 use crate::error::handle_error::throw_couldnt_write_to_file_msg;
+use crate::language::json::language_scheme::Languages;
 use exitfailure::ExitFailure;
 use std::fs::File;
 use std::io::Write;
@@ -41,7 +42,7 @@ pub fn read_file(file_name: &str) -> Option<String> {
 }
 // ---------------------------------------
 
-pub fn write_config_yaml(json: &str) {
+pub fn write_config_data(json: &str) {
     let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
     let config_folder = shellexpand::tilde(CONFIG_FOLDER).to_string();
 
@@ -75,8 +76,14 @@ pub fn read_language_configuration() -> String {
 
         config_text = data.iter().map(|ch| *ch as char).collect::<String>();
 
-        write_config_yaml(&config_text[..]);
+        write_config_data(&config_text[..]);
     }
 
     config_text
+}
+
+pub fn write_language_configuration(data: &Languages) -> serde_json::Result<()> {
+    let lang_str = serde_json::to_string_pretty(&data)?;
+    write_config_data(&lang_str[..]);
+    Ok(())
 }

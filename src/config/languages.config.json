@@ -1,7 +1,7 @@
 {
     "languages":[
         {
-            "id":"LanguageType::Cpp",
+            "id":"Language::Cpp",
             "name":"GNU C++17 (64)",
             "extensions":[
                 "h",
@@ -16,11 +16,12 @@
             ],
             "description":"Compilador GNU C++ version 17",
             "env":{
-                "PROGRAM":"g++"
+                "PROGRAM":"g++",
+                "STANDARD":"-std=c++17"
             },
             "compile":{
-                "unix":"${PROGRAM} -std=c++17 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o",
-                "windows":"${PROGRAM} -std=c++17 ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o",
+                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
                 "unix":".qtest/${FILE_NAME_BINARY}.o",
@@ -36,7 +37,7 @@
             ]
         },
         {
-            "id":"LanguageType::Python",
+            "id":"Language::Python",
             "name":"Python 3",
             "extensions":[
                 "py"

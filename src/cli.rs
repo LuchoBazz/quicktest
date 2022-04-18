@@ -8,6 +8,7 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
+/*
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
 pub enum SetUp {
@@ -36,6 +37,7 @@ pub enum SetUp {
         flags: String,
     },
 }
+*/
 
 /// CLI for stress testing in competitive programming contest
 #[derive(StructOpt, Debug)]
@@ -228,8 +230,13 @@ pub enum Opt {
     },
     /// Setup Subcommand
     Setup {
-        #[structopt(subcommand)]
-        subcommand: SetUp,
+        /// Label of the configuration to update
+        #[structopt(short = "l", long = "label")]
+        label: String,
+
+        /// Value of the configuration to update
+        #[structopt(short = "v", long = "value")]
+        value: String,
     },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]
