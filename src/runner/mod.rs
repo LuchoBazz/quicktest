@@ -5,5 +5,4 @@
  */
 
 pub mod cmd;
-pub mod lang;
 pub mod types;
