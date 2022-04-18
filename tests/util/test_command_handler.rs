@@ -64,11 +64,7 @@ pub fn execute_command_run(cmd: &mut Command, target_file: &str, prefix: &str) {
         .arg("--timeout=1000");
 }
 
-pub fn execute_command_setup(
-    cmd: &mut Command,
-    label: &str,
-    value: &str,
-) {
+pub fn execute_command_setup(cmd: &mut Command, label: &str, value: &str) {
     cmd.arg("setup")
         .arg(format!("--label={}", label))
         .arg(format!("--value={}", value));
