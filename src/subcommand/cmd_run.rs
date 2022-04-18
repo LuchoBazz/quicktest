@@ -8,17 +8,14 @@ use crate::{
         TARGET_BINARY_FILE,
     },
     error::handle_error::throw_compiler_error_msg,
-    file_handler::{
-        file::{
-            can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
-            get_filename_output, is_extension_supported_or_error, load_testcases_from_prefix,
-            remove_files, save_test_case_output,
-        },
-        path::get_root_path,
+    file_handler::file::{
+        can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
+        get_filename_output, is_extension_supported_or_error, load_testcases_from_prefix,
+        remove_files, save_test_case_output,
     },
+    language::language_handler::get_language_handler,
     painter::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded},
     runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language},
-    util::lang::get_language_by_ext_default,
 };
 
 pub fn run(
@@ -37,22 +34,17 @@ pub fn run(
     // verify that the target file extension is supported
     is_extension_supported_or_error(target_file.to_str().unwrap())?;
 
-    let root = &get_root_path()[..];
-
     // Get the language depending on the extension of the target_file
-    let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
-        root,
-        target_file,
-        TARGET_BINARY_FILE,
+    let target_file_lang = *get_language_handler(
+        &target_file.into_os_string().into_string().unwrap()[..],
+        "<target-file>",
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
         QTEST_ERROR_FILE,
-    );
-    let any_target: Box<dyn Language> = any_target.unwrap();
-    let target_file_lang: &dyn Language = any_target.as_ref();
+    )?;
 
     // verify that the program to run the target file is installed
-    can_run_language_or_error(target_file_lang)?;
+    can_run_language_or_error(&target_file_lang)?;
 
     let can_compile_target = target_file_lang.build();
     if !can_compile_target {
