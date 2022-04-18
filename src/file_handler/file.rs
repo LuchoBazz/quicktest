@@ -23,7 +23,8 @@ use crate::{
         throw_couldnt_write_to_file_msg, throw_extension_not_supported_msg,
         throw_program_not_installed_msg,
     },
-    runner::types::{is_extension_supported, Language},
+    language::extension::is_extension_supported,
+    runner::types::Language,
     util::file::file_exists,
 };
 

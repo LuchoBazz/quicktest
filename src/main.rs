@@ -14,6 +14,7 @@ pub mod diff;
 pub mod error;
 pub mod file_handler;
 pub mod generator;
+pub mod language;
 pub mod painter;
 pub mod runner;
 pub mod subcommand;

@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present - Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -12,6 +12,7 @@ use std::time::Duration;
 use exitfailure::ExitFailure;
 
 // local library
+use crate::diff::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
     throw_time_limit_exceeded_msg,
@@ -19,17 +20,16 @@ use crate::error::handle_error::{
 use crate::file_handler::file::{
     can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
     format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
-    remove_files, remove_folder, save_test_case, read_file,
+    read_file, remove_files, remove_folder, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
+use crate::language::language_handler::{get_generator_handler, get_language_handler};
 use crate::painter::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
     show_time_limit_exceeded_correct, show_wrong_answer,
 };
 use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
-use crate::util::lang::{get_language_by_ext_default, get_language_by_ext_set_output};
-use crate::diff::diff_line_by_line::diff_line_by_line;
 
 // Constants
 use crate::constants::{
@@ -79,43 +79,38 @@ pub fn run(
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the correct_file
-    let any_correct: Option<Box<dyn Language>> = get_language_by_ext_default(
-        root,
-        correct_file,
-        CORRECT_BINARY_FILE,
+    let correct_file_lang = *get_language_handler(
+        &correct_file.into_os_string().into_string().unwrap()[..],
+        "<correct-file>",
         QTEST_INPUT_FILE,
         QTEST_EXPECTED_FILE,
         QTEST_ERROR_FILE,
-    );
-    let any_correct: Box<dyn Language> = any_correct.unwrap();
-    let correct_file_lang: &dyn Language = any_correct.as_ref();
+    )?;
 
     // verify that the program to run the correct file is installed
-    can_run_language_or_error(correct_file_lang)?;
+    can_run_language_or_error(&correct_file_lang)?;
 
     // Get the language depending on the extension of the target_file
-    let any_target: Option<Box<dyn Language>> = get_language_by_ext_default(
-        root,
-        target_file,
-        TARGET_BINARY_FILE,
+    let target_file_lang = *get_language_handler(
+        &target_file.into_os_string().into_string().unwrap()[..],
+        "<target-file>",
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
         QTEST_ERROR_FILE,
-    );
-    let any_target: Box<dyn Language> = any_target.unwrap();
-    let target_file_lang: &dyn Language = any_target.as_ref();
+    )?;
 
     // verify that the program to run the target file is installed
-    can_run_language_or_error(target_file_lang)?;
+    can_run_language_or_error(&target_file_lang)?;
 
     // Get the language depending on the extension of the gen_file
-    let any_gen: Option<Box<dyn Language>> =
-        get_language_by_ext_set_output(root, gen_file, GEN_BINARY_FILE, QTEST_INPUT_FILE);
-    let any_gen: Box<dyn Language> = any_gen.unwrap();
-    let generator_file_lang: &dyn Language = any_gen.as_ref();
+    let generator_file_lang = *get_generator_handler(
+        &gen_file.into_os_string().into_string().unwrap()[..],
+        "<gen-file>",
+        QTEST_INPUT_FILE,
+    )?;
 
     // verify that the program to run the generator file is installed
-    can_run_language_or_error(generator_file_lang)?;
+    can_run_language_or_error(&generator_file_lang)?;
 
     let can_compile_gen = generator_file_lang.build();
     if !can_compile_gen {
@@ -170,7 +165,7 @@ pub fn run(
             }
         } else {
             // run generator
-            execute_generator(generator_file_lang, timeout, test_number)?;
+            execute_generator(&generator_file_lang, timeout, test_number)?;
         }
 
         let response_correct = correct_file_lang.execute(timeout as u32, test_number);

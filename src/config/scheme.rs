@@ -6,8 +6,38 @@ use yaml_rust::YamlLoader;
 use crate::{
     constants::{CONFIG_FILE, CONFIG_FOLDER},
     file_handler::file::{read_file, write_file},
-    runner::lang::{cpp::CppConfig, python::PythonConfig},
 };
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct CppConfig {
+    pub program: String,
+    pub standard: String,
+    pub flags: Vec<String>,
+}
+
+impl Default for CppConfig {
+    fn default() -> Self {
+        CppConfig {
+            program: "g++".to_string(),
+            standard: "-std=c++17".to_string(),
+            flags: vec!["-Wall".to_string(), "-DONLINE_JUDGE=1".to_string()],
+        }
+    }
+}
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct PythonConfig {
+    pub program: String,
+    pub flags: Vec<String>,
+}
+
+impl Default for PythonConfig {
+    fn default() -> Self {
+        PythonConfig {
+            program: "python3".to_string(),
+            flags: vec!["ONLINE_JUDGE=1".to_string()],
+        }
+    }
+}
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct DefaultConfig {

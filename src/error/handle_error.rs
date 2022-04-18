@@ -60,6 +60,14 @@ pub fn throw_extension_not_supported_msg(file: &str, ext: &str) -> Result<(), Ex
     Ok(error.context("EXTENSION_NOT_SOPPORTED_ERROR".to_string())?)
 }
 
+pub fn throw_configuration_file_error_msg(file_config: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(format!(
+        "Configuration file {} contains errors",
+        file_config
+    )));
+    Ok(error.context("CONFIGURATION_FILE_ERROR".to_string())?)
+}
+
 pub fn throw_program_not_installed_msg(program: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
         "Can't run program {} because you don't have an application installed",
