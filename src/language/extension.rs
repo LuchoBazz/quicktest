@@ -40,3 +40,25 @@ pub fn map_extension(
 
     throw_configuration_file_error_msg("~/.quicktest/languages.config.json")
 }
+
+pub fn is_extension_supported(ext: &str) -> bool {
+    let text = read_language_configuration();
+
+    let langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
+
+    if let Ok(lg) = langs {
+        let ext_str = ext.to_string();
+
+        for idx in 0..lg.languages.len() {
+            let pos = lg.languages[idx]
+                .extensions
+                .iter()
+                .position(|item| *item == ext_str);
+
+            if pos.is_some() {
+                return true;
+            }
+        }
+    }
+    false
+}
