@@ -24,8 +24,11 @@ pub fn throw_runtime_error_msg(file_name: &str, label: &str) -> Result<(), ExitF
 }
 
 pub fn throw_time_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
-    let error = Err(failure::err_msg(format!("{} very slow", file_name)));
-    Ok(error.context(format!("{} TLE", label))?)
+    let error = Err(failure::err_msg(format!(
+        "{} very slow / label {}",
+        file_name, label
+    )));
+    Ok(error.context("QTEST_TIME_LIMIT_EXCEEDED")?)
 }
 
 pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailure> {
@@ -33,15 +36,15 @@ pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailur
         "Could not create folder {}",
         file_name
     )));
-    Ok(error.context(format!("{} folder", file_name))?)
+    Ok(error.context("QTEST_COULDNT_CREATE_FOLDER")?)
 }
 
 pub fn throw_couldnt_open_file_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
-        "Can't open the file {}",
-        file_name
+        "Can't open the file {} / label {}",
+        file_name, label
     )));
-    Ok(error.context(format!("{} Not found", label))?)
+    Ok(error.context("QTEST_COULDNT_OPEN_FILE")?)
 }
 
 pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailure> {
@@ -49,7 +52,7 @@ pub fn throw_couldnt_write_to_file_msg(file_name: &str) -> Result<(), ExitFailur
         "Could not write to folder {}",
         file_name
     )));
-    Ok(error.context(format!("{} file", file_name))?)
+    Ok(error.context("QTEST_COULDNT_WRITE_TO_FILE")?)
 }
 
 pub fn throw_extension_not_supported_msg(file: &str, ext: &str) -> Result<(), ExitFailure> {
