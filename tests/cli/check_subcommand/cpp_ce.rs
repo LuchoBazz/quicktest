@@ -42,7 +42,7 @@ fn cmd_check_target_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <target-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the target file / label <target-file>",
     ));
 
     Ok(())
@@ -71,7 +71,7 @@ fn cmd_check_checker_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <checker-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the checker file / label <checker-file>",
     ));
 
     Ok(())
@@ -100,7 +100,7 @@ fn cmd_check_gen_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <gen-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the generator file / label <gen-file>",
     ));
 
     Ok(())

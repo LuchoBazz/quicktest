@@ -64,22 +64,9 @@ pub fn execute_command_run(cmd: &mut Command, target_file: &str, prefix: &str) {
         .arg("--timeout=1000");
 }
 
-pub fn execute_command_setup_cpp(
-    cmd: &mut Command,
-    program_value: &str,
-    standard_value: &str,
-    flags_value: &str,
-) {
+pub fn execute_command_setup(cmd: &mut Command, label: &str, value: &str) {
     cmd.arg("setup")
-        .arg("cpp")
-        .arg(format!("--program={}", program_value))
-        .arg(format!("--standard={}", standard_value))
-        .arg(format!("--flags={}", flags_value));
-}
-
-pub fn execute_command_setup_python(cmd: &mut Command, program_value: &str, flags_value: &str) {
-    cmd.arg("setup")
-        .arg("python")
-        .arg(format!("--program={}", program_value))
-        .arg(format!("--flags={}", flags_value));
+        .arg("config")
+        .arg(format!("--label={}", label))
+        .arg(format!("--value={}", value));
 }

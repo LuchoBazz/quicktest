@@ -40,7 +40,7 @@ fn cmd_cmp_target_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <target-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the target file / label <target-file>",
     ));
 
     Ok(())
@@ -69,7 +69,7 @@ fn cmd_cmp_correct_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <correct-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the correct file / label <correct-file>",
     ));
 
     Ok(())
@@ -98,7 +98,7 @@ fn cmd_cmp_gen_ce_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: compilation of <gen-file> failed",
+        "Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the generator file / label <gen-file>",
     ));
 
     Ok(())
