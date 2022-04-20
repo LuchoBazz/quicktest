@@ -47,7 +47,7 @@ fn cmd_tle_gen_rte_py() -> Result<(), Box<dyn Error>> {
     execute_command_tle(&mut cmd, TARGET_FILE_PY, GEN_FILE_PY, cases);
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: Runtime Error of <gen-file>",
+        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by generator file exited by Runtime Error / label <gen-file>\n",
     ));
 
     Ok(())

@@ -53,7 +53,7 @@ fn cmd_tle_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     execute_command_tle(&mut cmd, TARGET_FILE_CPP, GEN_FILE_CPP, cases);
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: Runtime Error of <gen-file>",
+        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by generator file exited by Runtime Error / label <gen-file>\n",
     ));
 
     Ok(())

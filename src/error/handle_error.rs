@@ -17,10 +17,10 @@ pub fn throw_compiler_error_msg(file_name: &str, label: &str) -> Result<(), Exit
 
 pub fn throw_runtime_error_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
-        "{} file exited by Runtime Error - {}",
+        "{} file exited by Runtime Error / label {}",
         file_name, label
     )));
-    Ok(error.context(format!("Runtime Error of {}", label))?)
+    Ok(error.context("QTEST_RUNTIME_ERROR")?)
 }
 
 pub fn throw_time_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {

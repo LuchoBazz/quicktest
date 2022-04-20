@@ -69,7 +69,7 @@ fn cmd_check_checker_rte_py() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: Runtime Error of <checker-file>",
+        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by checker file exited by Runtime Error / label <checker-file>\n",
     ));
 
     Ok(())
@@ -98,7 +98,7 @@ fn cmd_check_gen_rte_py() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: Runtime Error of <gen-file>",
+        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by generator file exited by Runtime Error / label <gen-file>\n",
     ));
 
     Ok(())
