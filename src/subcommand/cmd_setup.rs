@@ -7,20 +7,21 @@
 use exitfailure::ExitFailure;
 
 use crate::{
+    cli::structures::SetupCommand,
     config::load_config::{read_language_configuration, write_language_configuration},
     error::handle_error::throw_setup_label_is_not_correct_msg,
     language::json::language_scheme::Languages,
     painter::setup::show_argument_was_updated_success,
 };
 
-pub fn run(label: &str, value: &str) -> Result<(), ExitFailure> {
+pub fn run(command: &SetupCommand) -> Result<(), ExitFailure> {
     let text = read_language_configuration();
+    let label: &str = &command.label[..];
+    let value: &str = &command.value[..];
 
     let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
 
     let cmds: Vec<&str> = label.split('.').collect();
-
-    println!("{:?}", cmds);
 
     if cmds.len() != 2 {
         return throw_setup_label_is_not_correct_msg(label);

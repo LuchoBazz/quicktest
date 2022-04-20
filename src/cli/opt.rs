@@ -10,37 +10,6 @@ use structopt::StructOpt;
 
 use crate::subcommand::cmd_setup::show_help_setup;
 
-/*
-/// Setup subcommand
-#[derive(StructOpt, Debug)]
-pub enum SetUp {
-    /// Subcommand that allows to change C++ settings
-    Cpp {
-        /// Change the program argument of the compile command in C++
-        #[structopt(long = "program", default_value = "")]
-        program: String,
-
-        /// Change the standard argument of the compile command in C++
-        #[structopt(long = "standard", default_value = "")]
-        standard: String,
-
-        /// Change build command flags arguments in C++
-        #[structopt(long = "flags", default_value = "")]
-        flags: String,
-    },
-    /// Subcommand that allows to change python settings
-    Python {
-        /// Change the program argument of the run command in Python
-        #[structopt(long = "program", default_value = "")]
-        program: String,
-
-        /// Change run command flags arguments in Python
-        #[structopt(long = "flags", default_value = "")]
-        flags: String,
-    },
-}
-*/
-
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
 pub enum SetUp {
@@ -48,10 +17,7 @@ pub enum SetUp {
     #[structopt(after_help = show_help_setup())]
     Config {
         /// Label of the configuration to update
-        #[structopt(
-            short = "l",
-            long = "label"
-        )]
+        #[structopt(short = "l", long = "label")]
         label: String,
 
         /// Value of the configuration to update

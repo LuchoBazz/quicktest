@@ -6,16 +6,17 @@
 
 use exitfailure::ExitFailure;
 
-use crate::painter::example::{
-    show_examples_check_cmd, show_examples_cmp_cmd, show_examples_tle_cmd,
+use crate::{
+    cli::structures::ExampleCommand,
+    painter::example::{show_examples_check_cmd, show_examples_cmp_cmd, show_examples_tle_cmd},
 };
 
-pub fn run(cmp: bool, tle: bool, check: bool) -> Result<(), ExitFailure> {
-    if cmp {
+pub fn run(command: &ExampleCommand) -> Result<(), ExitFailure> {
+    if command.cmp {
         show_examples_cmp_cmd();
-    } else if tle {
+    } else if command.tle {
         show_examples_tle_cmd();
-    } else if check {
+    } else if command.check {
         show_examples_check_cmd();
     }
     Ok(())

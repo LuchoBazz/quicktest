@@ -13,6 +13,7 @@ use std::time::Duration;
 // dependencies
 use exitfailure::ExitFailure;
 
+use crate::cli::structures::TLECommand;
 // local library
 use crate::error::handle_error::throw_compiler_error_msg;
 use crate::file_handler::file::{
@@ -33,39 +34,30 @@ use crate::constants::{
     QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
-#[allow(clippy::too_many_arguments)]
-pub fn run(
-    target_file: PathBuf,
-    gen_file: PathBuf,
-    test_cases: u32,
-    timeout: u32,
-    break_bad: bool,
-    save_bad: bool,
-    save_all: bool,
-    run_all: bool,
-    run_ac: bool,
-    run_wa: bool,
-    run_tle: bool,
-    run_rte: bool,
-) -> Result<(), ExitFailure> {
+pub fn run(command: &TLECommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 
     // verify that the target file exists
-    file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
+    file_exists_or_error(command.target_file.to_str().unwrap(), "<target-file>")?;
 
     // verify that the generator file exists
-    file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
+    file_exists_or_error(command.gen_file.to_str().unwrap(), "<gen-file>")?;
 
     // verify that the target file extension is supported
-    is_extension_supported_or_error(target_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.target_file.to_str().unwrap())?;
 
     // verify that the generator file extension is supported
-    is_extension_supported_or_error(gen_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.gen_file.to_str().unwrap())?;
 
     // Get the language depending on the extension of the gen_file
     let generator_file_lang = *get_generator_handler(
-        &gen_file.into_os_string().into_string().unwrap()[..],
+        &command
+            .gen_file
+            .clone()
+            .into_os_string()
+            .into_string()
+            .unwrap()[..],
         "<gen-file>",
         QTEST_INPUT_FILE,
     )?;
@@ -75,7 +67,12 @@ pub fn run(
 
     // Get the language depending on the extension of the target_file
     let target_file_lang = *get_language_handler(
-        &target_file.into_os_string().into_string().unwrap()[..],
+        &command
+            .target_file
+            .clone()
+            .into_os_string()
+            .into_string()
+            .unwrap()[..],
         "<target-file>",
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
@@ -95,10 +92,10 @@ pub fn run(
         return throw_compiler_error_msg("target", "<target-file>");
     }
 
-    if save_all {
+    if command.save_all {
         // Remove all previous test cases
         remove_folder(TEST_CASES_FOLDER);
-    } else if save_bad {
+    } else if command.save_bad {
         // remove test cases prefixed with test_cases/testcase_tle*.txt
         let prefix = &format!("{}/{}*", TEST_CASES_FOLDER, PREFIX_TLE_FILES)[..];
         remove_files_with_prefix(prefix);
@@ -108,21 +105,22 @@ pub fn run(
     load_testcases_from_states(
         &mut cases,
         TEST_CASES_FOLDER,
-        run_all,
-        run_ac,
-        run_wa,
-        run_tle,
-        run_rte,
+        command.run_all,
+        command.run_ac,
+        command.run_wa,
+        command.run_tle,
+        command.run_rte,
     )?;
 
     let mut tle_count: u32 = 0;
     let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
 
-    let load_case: bool = run_all || run_ac || run_wa || run_tle || run_rte;
+    let load_case: bool =
+        command.run_all || command.run_ac || command.run_wa || command.run_tle || command.run_rte;
 
     let mut test_number: u32 = 0;
-    while test_number < test_cases || load_case {
+    while test_number < command.test_cases || load_case {
         test_number += 1;
 
         if load_case {
@@ -135,10 +133,10 @@ pub fn run(
             }
         } else {
             // run generator
-            execute_generator(&generator_file_lang, timeout, test_number)?;
+            execute_generator(&generator_file_lang, command.timeout, test_number)?;
         }
 
-        let response_target = target_file_lang.execute(timeout as u32, test_number);
+        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 
@@ -146,7 +144,7 @@ pub fn run(
             rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
             // Save the input of the test case that gave status tle
-            if save_bad || save_all {
+            if command.save_bad || command.save_all {
                 // Example: test_cases/testcase_rte_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
@@ -154,7 +152,7 @@ pub fn run(
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
             // check if the tle_breck flag is high
-            if break_bad {
+            if command.break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -171,15 +169,15 @@ pub fn run(
             return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        if time_target >= Duration::from_millis(timeout as u64)
+        if time_target >= Duration::from_millis(command.timeout as u64)
             || is_time_limit_exceeded(&response_target.status)
         {
             // TLE Target file
             tle_count += 1;
-            show_time_limit_exceeded(test_number, timeout);
+            show_time_limit_exceeded(test_number, command.timeout);
 
             // Save the input of the test case that gave status tle
-            if save_bad || save_all {
+            if command.save_bad || command.save_all {
                 // Example: test_cases/testcase_tle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
@@ -188,7 +186,7 @@ pub fn run(
             }
 
             // check if the tle_breck flag is high
-            if break_bad {
+            if command.break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -202,7 +200,7 @@ pub fn run(
             }
         } else {
             ac_count += 1;
-            if save_all {
+            if command.save_all {
                 // Example: test_cases/testcase_ac_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_AC_FILES, ac_count)[..];

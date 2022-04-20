@@ -11,6 +11,7 @@ use std::time::Duration;
 // dependencies
 use exitfailure::ExitFailure;
 
+use crate::cli::structures::CmpCommand;
 // local library
 use crate::diff::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
@@ -39,48 +40,38 @@ use crate::constants::{
 };
 
 #[allow(clippy::too_many_arguments)]
-pub fn run(
-    target_file: PathBuf,
-    correct_file: PathBuf,
-    gen_file: PathBuf,
-    timeout: u32,
-    test_cases: u32,
-    break_bad: bool,
-    save_bad: bool,
-    save_all: bool,
-    run_all: bool,
-    run_ac: bool,
-    run_wa: bool,
-    run_tle: bool,
-    run_rte: bool,
-    diff: bool,
-) -> Result<(), ExitFailure> {
+pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
 
     // verify that the target file exists
-    file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
+    file_exists_or_error(command.target_file.to_str().unwrap(), "<target-file>")?;
 
     // verify that the correct file exists
-    file_exists_or_error(correct_file.to_str().unwrap(), "<correct-file>")?;
+    file_exists_or_error(command.correct_file.to_str().unwrap(), "<correct-file>")?;
 
     // verify that the generator file exists
-    file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
+    file_exists_or_error(command.gen_file.to_str().unwrap(), "<gen-file>")?;
 
     // verify that the target file extension is supported
-    is_extension_supported_or_error(target_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.target_file.to_str().unwrap())?;
 
     // verify that the correct file extension is supported
-    is_extension_supported_or_error(correct_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.correct_file.to_str().unwrap())?;
 
     // verify that the generator file extension is supported
-    is_extension_supported_or_error(gen_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.gen_file.to_str().unwrap())?;
 
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the correct_file
     let correct_file_lang = *get_language_handler(
-        &correct_file.into_os_string().into_string().unwrap()[..],
+        &command
+            .correct_file
+            .clone()
+            .into_os_string()
+            .into_string()
+            .unwrap()[..],
         "<correct-file>",
         QTEST_INPUT_FILE,
         QTEST_EXPECTED_FILE,
@@ -92,7 +83,12 @@ pub fn run(
 
     // Get the language depending on the extension of the target_file
     let target_file_lang = *get_language_handler(
-        &target_file.into_os_string().into_string().unwrap()[..],
+        &command
+            .target_file
+            .clone()
+            .into_os_string()
+            .into_string()
+            .unwrap()[..],
         "<target-file>",
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
@@ -104,7 +100,12 @@ pub fn run(
 
     // Get the language depending on the extension of the gen_file
     let generator_file_lang = *get_generator_handler(
-        &gen_file.into_os_string().into_string().unwrap()[..],
+        &command
+            .gen_file
+            .clone()
+            .into_os_string()
+            .into_string()
+            .unwrap()[..],
         "<gen-file>",
         QTEST_INPUT_FILE,
     )?;
@@ -127,7 +128,7 @@ pub fn run(
         return throw_compiler_error_msg("correct", "<correct-file>");
     }
 
-    if save_bad || save_all {
+    if command.save_bad || command.save_all {
         // Remove all previous test cases
         remove_folder(TEST_CASES_FOLDER);
     }
@@ -136,11 +137,11 @@ pub fn run(
     load_testcases_from_states(
         &mut cases,
         TEST_CASES_FOLDER,
-        run_all,
-        run_ac,
-        run_wa,
-        run_tle,
-        run_rte,
+        command.run_all,
+        command.run_ac,
+        command.run_wa,
+        command.run_tle,
+        command.run_rte,
     )?;
 
     let mut tle_count: u32 = 0;
@@ -148,11 +149,12 @@ pub fn run(
     let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
 
-    let load_case: bool = run_all || run_ac || run_wa || run_tle || run_rte;
+    let load_case: bool =
+        command.run_all || command.run_ac || command.run_wa || command.run_tle || command.run_rte;
 
     let mut test_number: u32 = 0;
 
-    while test_number < test_cases || load_case {
+    while test_number < command.test_cases || load_case {
         test_number += 1;
 
         if load_case {
@@ -165,10 +167,10 @@ pub fn run(
             }
         } else {
             // run generator
-            execute_generator(&generator_file_lang, timeout, test_number)?;
+            execute_generator(&generator_file_lang, command.timeout, test_number)?;
         }
 
-        let response_correct = correct_file_lang.execute(timeout as u32, test_number);
+        let response_correct = correct_file_lang.execute(command.timeout as u32, test_number);
         let time_correct: Duration = response_correct.time;
 
         if is_runtime_error(&response_correct.status) {
@@ -177,27 +179,27 @@ pub fn run(
             return throw_compiler_error_msg("correct", "<correct-file>");
         }
 
-        if time_correct >= Duration::from_millis(timeout as u64) {
+        if time_correct >= Duration::from_millis(command.timeout as u64) {
             // TLE Correct file
-            show_time_limit_exceeded_correct(test_number, timeout);
+            show_time_limit_exceeded_correct(test_number, command.timeout);
             return throw_time_limit_exceeded_msg("correct", "<correct-file>");
         }
 
-        let response_target = target_file_lang.execute(timeout as u32, test_number);
+        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
             rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
-            if save_bad || save_all {
+            if command.save_bad || command.save_all {
                 // Example: test_cases/testcase_rte_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
-            if break_bad {
+            if command.break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -209,21 +211,21 @@ pub fn run(
                     CORRECT_BINARY_FILE,
                 ]);
 
-                return throw_break_found_msg("Wrong Answer", "WA", test_cases);
+                return throw_break_found_msg("Wrong Answer", "WA", command.test_cases);
             }
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
         }
 
-        if time_target >= Duration::from_millis(timeout as u64) {
+        if time_target >= Duration::from_millis(command.timeout as u64) {
             // TLE Target file
 
             tle_count += 1;
 
-            show_time_limit_exceeded(test_number, timeout);
+            show_time_limit_exceeded(test_number, command.timeout);
 
-            if save_bad || save_all {
+            if command.save_bad || command.save_all {
                 // Example: test_cases/testcase_tle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
@@ -232,7 +234,7 @@ pub fn run(
             }
 
             // check if the break_bad flag is high
-            if break_bad {
+            if command.break_bad {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -256,7 +258,7 @@ pub fn run(
                 // is OK
                 show_accepted(test_number, mills_target as u32);
 
-                if save_all {
+                if command.save_all {
                     // Example: test_cases/testcase_ac_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -272,14 +274,14 @@ pub fn run(
 
                 show_wrong_answer(test_number, mills_target as u32);
 
-                if diff {
+                if command.diff {
                     let mut tout = std::io::stdout();
                     let expected = read_file(&file_expected[..]).unwrap();
                     let output = read_file(&file_out[..]).unwrap();
                     diff_line_by_line(&mut tout, &expected[..], &output[..]);
                 }
 
-                if save_bad || save_all {
+                if command.save_bad || command.save_all {
                     // Example: test_cases/testcase_wa_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -290,7 +292,7 @@ pub fn run(
                     save_test_case(file_name, QTEST_INPUT_FILE);
                 }
 
-                if break_bad {
+                if command.break_bad {
                     // remove input, output and error files
                     remove_files(vec![
                         QTEST_INPUT_FILE,
@@ -302,7 +304,7 @@ pub fn run(
                         CORRECT_BINARY_FILE,
                     ]);
 
-                    return throw_break_found_msg("Wrong Answer", "WA", test_cases);
+                    return throw_break_found_msg("Wrong Answer", "WA", command.test_cases);
                 }
             }
         }

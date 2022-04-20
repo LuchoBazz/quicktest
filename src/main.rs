@@ -4,7 +4,10 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use structopt::StructOpt;
+use crate::cli::opt::Opt;
+use cli::structures::{
+    CheckCommand, CmpCommand, ExampleCommand, RunCommand, SetupCommand, TLECommand,
+};
 
 pub mod cli;
 pub mod config;
@@ -19,9 +22,8 @@ pub mod runner;
 pub mod subcommand;
 pub mod util;
 
-use crate::cli::Opt;
-
 use exitfailure::ExitFailure;
+use structopt::StructOpt;
 
 fn main() -> Result<(), ExitFailure> {
     let opt = Opt::from_args();
@@ -43,7 +45,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
-        } => subcommand::cmd_tle::run(
+        } => subcommand::cmd_tle::run(&TLECommand::new(
             target_file,
             gen_file,
             test_cases,
@@ -56,7 +58,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
-        ),
+        )),
         Opt::Cmp {
             target_file,
             correct_file,
@@ -72,7 +74,7 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             diff,
-        } => subcommand::cmd_cmp::run(
+        } => subcommand::cmd_cmp::run(&CmpCommand::new(
             target_file,
             correct_file,
             gen_file,
@@ -87,7 +89,7 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             diff,
-        ),
+        )),
         Opt::Check {
             target_file,
             checker_file,
@@ -102,7 +104,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
-        } => subcommand::cmd_check::run(
+        } => subcommand::cmd_check::run(&CheckCommand::new(
             target_file,
             checker_file,
             gen_file,
@@ -116,19 +118,27 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
-        ),
+        )),
         Opt::Run {
             target_file,
             prefix,
             timeout,
             break_bad,
             save_out,
-        } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
+        } => subcommand::cmd_run::run(&RunCommand::new(
+            target_file,
+            prefix,
+            timeout,
+            break_bad,
+            save_out,
+        )),
         Opt::Setup { subcommand } => match subcommand {
-            cli::SetUp::Config { label, value } => {
-                subcommand::cmd_setup::run(&label[..], &value[..])
+            cli::opt::SetUp::Config { label, value } => {
+                subcommand::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
-        Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
+        Opt::Example { cmp, tle, check } => {
+            subcommand::cmd_example::run(&ExampleCommand::new(cmp, tle, check))
+        }
     }
 }
