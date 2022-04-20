@@ -57,7 +57,7 @@ pub fn throw_extension_not_supported_msg(file: &str, ext: &str) -> Result<(), Ex
         "extension '{}' of file '{}' is not supported",
         ext, file
     )));
-    Ok(error.context("EXTENSION_NOT_SOPPORTED_ERROR".to_string())?)
+    Ok(error.context("QTEST_EXTENSION_NOT_SOPPORTED_ERROR".to_string())?)
 }
 
 pub fn throw_configuration_file_error_msg(file_config: &str) -> Result<(), ExitFailure> {
@@ -65,7 +65,7 @@ pub fn throw_configuration_file_error_msg(file_config: &str) -> Result<(), ExitF
         "Configuration file {} contains errors",
         file_config
     )));
-    Ok(error.context("CONFIGURATION_FILE_ERROR".to_string())?)
+    Ok(error.context("QTEST_CONFIGURATION_FILE_ERROR".to_string())?)
 }
 
 pub fn throw_program_not_installed_msg(program: &str) -> Result<(), ExitFailure> {
@@ -73,7 +73,7 @@ pub fn throw_program_not_installed_msg(program: &str) -> Result<(), ExitFailure>
         "Can't run program {} because you don't have an application installed",
         program
     )));
-    Ok(error.context("PROGRAM_NOT_INSTALLED_ERROR".to_string())?)
+    Ok(error.context("QTEST_PROGRAM_NOT_INSTALLED_ERROR".to_string())?)
 }
 
 pub fn throw_setup_label_is_not_correct_msg(label: &str) -> Result<(), ExitFailure> {
@@ -81,7 +81,7 @@ pub fn throw_setup_label_is_not_correct_msg(label: &str) -> Result<(), ExitFailu
         "Setup label '{}' is not correct",
         label
     )));
-    Ok(error.context("SETUP_LABEL_IS_NOT_CORRECT_ERROR".to_string())?)
+    Ok(error.context("QTEST_SETUP_LABEL_IS_NOT_CORRECT_ERROR".to_string())?)
 }
 
 pub fn throw_break_found_msg(
@@ -99,5 +99,5 @@ pub fn throw_break_found_msg(
 #[allow(dead_code)]
 pub fn throw_filename_cannot_be_empty() -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg("File Name cannot be empty"));
-    Ok(error.context("FILE_NAME_CANNOT_BE_EMPTY")?)
+    Ok(error.context("QTEST_FILE_NAME_CANNOT_BE_EMPTY")?)
 }
