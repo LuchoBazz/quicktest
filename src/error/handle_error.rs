@@ -9,16 +9,16 @@ use failure::ResultExt;
 
 pub fn throw_compiler_error_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
-        "failed to compile the {} file",
-        file_name
+        "failed to compile the {} file / label {}",
+        file_name, label
     )));
-    Ok(error.context(format!("compilation of {} failed", label))?)
+    Ok(error.context("QTEST_COMPILER_ERROR")?)
 }
 
 pub fn throw_runtime_error_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
-        "{} file exited by Runtime Error",
-        file_name
+        "{} file exited by Runtime Error - {}",
+        file_name, label
     )));
     Ok(error.context(format!("Runtime Error of {}", label))?)
 }
