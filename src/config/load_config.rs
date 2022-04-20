@@ -36,6 +36,7 @@ pub fn read_language_configuration() -> String {
         let root = &get_root_path()[..];
 
         let config_file_default = &format!("{}/{}", root, LANGUAGE_CONFIG_FILE_DEFAULT)[..];
+        println!("{}", config_file_default);
         let mut config_file_default = File::open(config_file_default).expect("Unable to open file");
 
         let mut data = Vec::new();
