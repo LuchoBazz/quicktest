@@ -4,9 +4,9 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+use crate::constants::IDENTATION;
 use colored::*;
 use difference::{Changeset, Difference};
-use crate::constants::IDENTATION;
 
 pub fn diff_line_by_line<WriteType: std::io::Write>(
     tout: &mut WriteType,

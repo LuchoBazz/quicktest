@@ -3,6 +3,26 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 0.9.0 / 2022.04.20
+
+- feat: Added build functionality via a config file [5131600]
+- feat: tle, cmp, check and run subcommands were updated to use the LanguageHandler trait [fa3c6b1, 2030aea, 52984ac, 77d10c3]
+- feat: show help setup after help dynamically [683b0e8]
+- feat: Setup subcommand was updated for new languages.config.json structure [496e1dc, 0f3aa8f]
+- refactory: old cpp and python structures were removed [13aa497]
+- refactory: is_extension_supported was updated [4e1bf15]
+- refactory: yaml configuration was deleted [d2a39eb]
+- refactory: The parameters of the run functions of the subcommands were refactored. [f53f1d0]
+- docs: comments about help setup after help was added [e9cb0ca]
+- docs: errors mapping was initialized [44dd66d]
+- docs: docs about QTEST_COMPILER_ERROR and QTEST_RUNTIME_ERROR were  added [8c82da7, 0de6b85]
+- docs: mapping error was updated [a9ca52d, b90c8af, 93e866e]
+- docs: docs about cmp --diff and setup config subcommand were updated [22e7df0]
+- issue: issue about binary path was fixed [316079c]
+- issue: issue about python3 was fixed [ae55054]
+- issue: issue about RTE was fixed [f046f4d]
+- fix: issue about circleci config file was fixed [65855ca]
+
 ### 0.8.0 / 2022.04.11
 
 - feat: difference feature was added to cmp subcommand [a3c1612]
