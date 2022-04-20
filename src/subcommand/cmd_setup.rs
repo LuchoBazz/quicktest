@@ -46,3 +46,25 @@ pub fn run(label: &str, value: &str) -> Result<(), ExitFailure> {
 
     throw_setup_label_is_not_correct_msg(label)
 }
+
+pub fn show_help_setup() -> &'static str {
+    let text = read_language_configuration();
+
+    let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
+
+    let mut labels = vec!["EXAMPLES:".to_string()];
+
+    if let Ok(lg) = &mut langs {
+        for idx in 0..lg.languages.len() {
+            for (key, value) in &lg.languages[idx].env {
+                let label = format!(
+                    "    quicktest setup config --label=\"{}.{}\" --value=\"{}\"",
+                    lg.languages[idx].id, key, value
+                );
+                labels.push(label);
+            }
+        }
+    }
+    let labels: String = labels.join("\n");
+    Box::leak(labels.into_boxed_str())
+}

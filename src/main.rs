@@ -124,7 +124,11 @@ fn main() -> Result<(), ExitFailure> {
             break_bad,
             save_out,
         } => subcommand::cmd_run::run(target_file, &prefix[..], timeout, break_bad, save_out),
-        Opt::Setup { label, value } => subcommand::cmd_setup::run(&label[..], &value[..]),
+        Opt::Setup { subcommand } => match subcommand {
+            cli::SetUp::Config { label, value } => {
+                subcommand::cmd_setup::run(&label[..], &value[..])
+            }
+        },
         Opt::Example { cmp, tle, check } => subcommand::cmd_example::run(cmp, tle, check),
     }
 }

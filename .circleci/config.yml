@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run: cargo build
       - run: cargo clippy -- -D warnings
-      - run: ./target/debug/quicktest setup --label="Language::Python.PROGRAM" --value="python3"
+      - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       - run: cargo test tle_subcommand -- --test-threads 1
       - run: cargo test cmp_subcommand -- --test-threads 1
       - run: cargo test check_subcommand -- --test-threads 1

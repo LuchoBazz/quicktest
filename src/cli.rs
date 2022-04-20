@@ -8,6 +8,8 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
+use crate::subcommand::cmd_setup::show_help_setup;
+
 /*
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
@@ -38,6 +40,25 @@ pub enum SetUp {
     },
 }
 */
+
+/// Setup subcommand
+#[derive(StructOpt, Debug)]
+pub enum SetUp {
+    /// Subcommand that allows to change settings
+    #[structopt(after_help = show_help_setup())]
+    Config {
+        /// Label of the configuration to update
+        #[structopt(
+            short = "l",
+            long = "label"
+        )]
+        label: String,
+
+        /// Value of the configuration to update
+        #[structopt(short = "v", long = "value")]
+        value: String,
+    },
+}
 
 /// CLI for stress testing in competitive programming contest
 #[derive(StructOpt, Debug)]
@@ -230,13 +251,8 @@ pub enum Opt {
     },
     /// Setup Subcommand
     Setup {
-        /// Label of the configuration to update
-        #[structopt(short = "l", long = "label")]
-        label: String,
-
-        /// Value of the configuration to update
-        #[structopt(short = "v", long = "value")]
-        value: String,
+        #[structopt(subcommand)]
+        subcommand: SetUp,
     },
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]

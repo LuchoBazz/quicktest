@@ -66,6 +66,7 @@ pub fn execute_command_run(cmd: &mut Command, target_file: &str, prefix: &str) {
 
 pub fn execute_command_setup(cmd: &mut Command, label: &str, value: &str) {
     cmd.arg("setup")
+        .arg("config")
         .arg(format!("--label={}", label))
         .arg(format!("--value={}", value));
 }
