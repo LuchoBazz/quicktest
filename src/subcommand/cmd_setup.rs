@@ -47,6 +47,12 @@ pub fn run(label: &str, value: &str) -> Result<(), ExitFailure> {
     throw_setup_label_is_not_correct_msg(label)
 }
 
+// Show Help setup after help: quicktest setup config --help
+// EXAMPLES:
+//     quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
+//     quicktest setup config --label="Language::Cpp.STANDARD" --value="-std=c++17"
+//     quicktest setup config --label="Language::Python.PROGRAM" --value="python"
+
 pub fn show_help_setup() -> &'static str {
     let text = read_language_configuration();
 
