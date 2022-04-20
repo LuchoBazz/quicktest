@@ -33,7 +33,7 @@ fn cmd_tle_target_ce_cpp() -> Result<(), Box<dyn Error>> {
 
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("Error: compilation of <target-file> failed").count(1));
+        .stderr(predicate::str::contains("Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the target file / label <target-file>").count(1));
 
     Ok(())
 }
@@ -54,7 +54,7 @@ fn cmd_tle_gen_ce_cpp() -> Result<(), Box<dyn Error>> {
 
     cmd.assert()
         .failure()
-        .stderr(predicate::str::contains("Error: compilation of <gen-file> failed").count(1));
+        .stderr(predicate::str::contains("Error: QTEST_COMPILER_ERROR\nInfo: caused by failed to compile the generator file / label <gen-file>").count(1));
 
     Ok(())
 }

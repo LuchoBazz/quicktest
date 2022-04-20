@@ -14,6 +14,9 @@ pub const CONFIG_FOLDER: &str = "~/.quicktest";
 
 pub const CONFIG_FILE: &str = "~/.quicktest/config.yaml";
 
+pub const LANGUAGE_CONFIG_FILE: &str = "~/.quicktest/languages.config.json";
+pub const LANGUAGE_CONFIG_FILE_DEFAULT: &str = "src/config/languages.config.json";
+
 #[cfg(unix)]
 pub const TARGET_BINARY_FILE: &str = ".qtest/main.o";
 #[cfg(windows)]

@@ -87,6 +87,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     * `--test-cases=<value> | --cases=<value> [default: 1000]`
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--diff`  Show differences between the expected file and the output file
 
 ---
 
@@ -147,18 +148,12 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Subcommand**
 
-    * `cpp` Subcommand that allows to change C++ settings
+    * `config` Subcommand that allows to change C++ settings
 
         **Options**
 
-        * `--program=<value> [default: g++]` Change the program argument of the compilation command in C++
-        * `--standard=<value> [default: -std=c++17]` Change the standard argument of the compilation command in C++
-
-    * `python` Subcommand that allows to change Python settings
-
-        **Options**
-        
-        * `--program=<value> [default: python]` Change the program argument of the run command in Python
+        * `--label=<value>` Label with the path of the configuration that you want to change
+        * `--value=<value>` value you want to change a selected label to
 
 ---
 * `quicktest example | qt example`

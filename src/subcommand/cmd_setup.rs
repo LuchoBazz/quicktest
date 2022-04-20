@@ -7,99 +7,71 @@
 use exitfailure::ExitFailure;
 
 use crate::{
-    config::scheme::{write_config_yaml, write_default_config_yaml, DefaultConfig},
-    constants::CONFIG_FILE,
-    file_handler::file::read_file,
+    cli::structures::SetupCommand,
+    config::load_config::{read_language_configuration, write_language_configuration},
+    error::handle_error::throw_setup_label_is_not_correct_msg,
+    language::json::language_scheme::Languages,
     painter::setup::show_argument_was_updated_success,
 };
 
-pub fn setup_cpp(program: &str, standard: &str, flags: &str) -> Result<(), ExitFailure> {
-    let mut config_text = String::new();
+pub fn run(command: &SetupCommand) -> Result<(), ExitFailure> {
+    let text = read_language_configuration();
+    let label: &str = &command.label[..];
+    let value: &str = &command.value[..];
 
-    let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
+    let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
 
-    if let Some(text) = read_file(config_file) {
-        // if ~/.quicktest/config.yaml file exists, read the settings
-        config_text.push_str(&text[..]);
-    } else {
-        // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
-        // with the default settings
-        config_text = write_default_config_yaml();
+    let cmds: Vec<&str> = label.split('.').collect();
+
+    if cmds.len() != 2 {
+        return throw_setup_label_is_not_correct_msg(label);
     }
 
-    let mut deserializer: DefaultConfig = serde_yaml::from_str(&config_text[..])?;
+    if let Ok(lg) = &mut langs {
+        let lang_label = &(*cmds[0]);
+        let label = &(*cmds[1]);
 
-    if !program.is_empty() {
-        deserializer.cpp_config.program = program.to_string();
-        show_argument_was_updated_success("C++", "program", &deserializer.cpp_config.program[..]);
-    }
-    if !standard.is_empty() {
-        deserializer.cpp_config.standard = standard.to_string();
-        show_argument_was_updated_success("C++", "standard", &deserializer.cpp_config.standard[..]);
-    }
+        for idx in 0..lg.languages.len() {
+            if lg.languages[idx].id == lang_label && lg.languages[idx].env.contains_key(label) {
+                lg.languages[idx]
+                    .env
+                    .insert(label.to_string(), value.to_string());
+                write_language_configuration(&langs.unwrap())?;
 
-    if !flags.is_empty() {
-        deserializer.cpp_config.flags = flags
-            .split(';')
-            .collect::<Vec<_>>()
-            .iter()
-            .map(|&flag| flag.to_string())
-            .collect::<Vec<_>>();
-        show_argument_was_updated_success(
-            "C++",
-            "flags",
-            &format!("{:?}", deserializer.cpp_config.flags)[..],
-        );
+                show_argument_was_updated_success(lang_label, label, value);
+
+                return Ok(());
+            }
+        }
     }
 
-    let serializer = serde_yaml::to_string(&deserializer).unwrap();
-
-    write_config_yaml(&serializer[..]);
-
-    Ok(())
+    throw_setup_label_is_not_correct_msg(label)
 }
 
-pub fn setup_python(program: &str, flags: &str) -> Result<(), ExitFailure> {
-    let mut config_text = String::new();
+// Show Help setup after help: quicktest setup config --help
+// EXAMPLES:
+//     quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
+//     quicktest setup config --label="Language::Cpp.STANDARD" --value="-std=c++17"
+//     quicktest setup config --label="Language::Python.PROGRAM" --value="python"
 
-    let config_file = &shellexpand::tilde(CONFIG_FILE).to_string()[..];
+pub fn show_help_setup() -> &'static str {
+    let text = read_language_configuration();
 
-    if let Some(text) = read_file(config_file) {
-        // if ~/.quicktest/config.yaml file exists, read the settings
-        config_text.push_str(&text[..]);
-    } else {
-        // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
-        // with the default settings
-        config_text = write_default_config_yaml();
+    let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
+
+    let mut labels = vec!["EXAMPLES:".to_string()];
+
+    if let Ok(lg) = &mut langs {
+        for idx in 0..lg.languages.len() {
+            for (key, value) in &lg.languages[idx].env {
+                let label = format!(
+                    "    quicktest setup config --label=\"{}.{}\" --value=\"{}\"",
+                    lg.languages[idx].id, key, value
+                );
+                labels.push(label);
+            }
+        }
     }
-
-    let mut deserializer: DefaultConfig = serde_yaml::from_str(&config_text[..])?;
-
-    if !program.is_empty() {
-        deserializer.python_config.program = program.to_string();
-        show_argument_was_updated_success(
-            "Python",
-            "program",
-            &deserializer.python_config.program[..],
-        );
-    }
-
-    if !flags.is_empty() {
-        deserializer.python_config.flags = flags
-            .split(';')
-            .collect::<Vec<_>>()
-            .iter()
-            .map(|&flag| flag.to_string())
-            .collect::<Vec<_>>();
-        show_argument_was_updated_success(
-            "Python",
-            "flags",
-            &format!("{:?}", deserializer.python_config.flags)[..],
-        );
-    }
-
-    let serializer = serde_yaml::to_string(&deserializer).unwrap();
-
-    write_config_yaml(&serializer[..]);
-    Ok(())
+    let labels: String = labels.join("\n");
+    Box::leak(labels.into_boxed_str())
 }
