@@ -4,12 +4,11 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use crate::constants::{CONFIG_FOLDER, LANGUAGE_CONFIG_FILE, LANGUAGE_CONFIG_FILE_DEFAULT};
+use crate::config::languages_config::LANGUAGES_CONFIG_JSON;
+use crate::constants::{CONFIG_FOLDER, LANGUAGE_CONFIG_FILE};
 use crate::file_handler::file::{read_file, write_file};
-use crate::file_handler::path::get_root_path;
 use crate::language::json::language_scheme::Languages;
-use std::fs::File;
-use std::{fs, io::Read};
+use std::fs;
 
 pub fn write_config_data(json: &str) {
     let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
@@ -33,16 +32,8 @@ pub fn read_language_configuration() -> String {
     } else {
         // create the folder ~/.quicktest and the file ~/.quicktest/config.yaml
         // with the default settings
-        let root = &get_root_path()[..];
 
-        let config_file_default = &format!("{}/{}", root, LANGUAGE_CONFIG_FILE_DEFAULT)[..];
-        println!("{}", config_file_default);
-        let mut config_file_default = File::open(config_file_default).expect("Unable to open file");
-
-        let mut data = Vec::new();
-        config_file_default
-            .read_to_end(&mut data)
-            .expect("Unable to read data");
+        let data = LANGUAGES_CONFIG_JSON.as_bytes().to_vec();
 
         config_text = data.iter().map(|ch| *ch as char).collect::<String>();
 
