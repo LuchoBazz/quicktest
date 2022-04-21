@@ -4,4 +4,5 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+pub mod languages_config;
 pub mod load_config;
