@@ -10,7 +10,7 @@ use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
-use process_control::{ChildExt, Timeout};
+use process_control::{ChildExt, Control};
 use rand::distributions::{Distribution, Uniform};
 
 use super::types::{CPStatus, StatusResponse};
@@ -54,9 +54,11 @@ pub fn execute_program(
     let mut res_status = CPStatus::AC;
 
     if let Ok(child_output) = child {
+        // TODO: add memory_limit method
         let response = child_output
-            .with_output_timeout(Duration::from_millis(timeout as u64))
-            .terminating()
+            .controlled_with_output()
+            .time_limit(Duration::from_millis(timeout as u64))
+            .terminate_for_timeout()
             .wait();
 
         if let Ok(output_option) = response {
