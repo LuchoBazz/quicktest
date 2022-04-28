@@ -9,8 +9,8 @@ use std::time::Duration;
 use crate::error::handle_error::{
     throw_compiler_error_msg, throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
-use crate::painter::style::show_time_limit_exceeded_generator;
 use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::views::style::show_time_limit_exceeded_generator;
 use exitfailure::ExitFailure;
 
 pub fn execute_generator(

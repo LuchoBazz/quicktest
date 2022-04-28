@@ -1,21 +1,21 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 use std::process::Command;
 
-use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_TLE};
+use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_STRESS};
 
 use super::test_constants::FOLDER_RUN;
 
-pub fn execute_command_tle(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
-    cmd.arg("tle")
+pub fn execute_command_stress(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
+    cmd.arg("stress")
         .arg("--target-file")
-        .arg(format!("{}/{}/{}", FOLDER, FOLDER_TLE, target_file))
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_STRESS, target_file))
         .arg("--gen-file")
-        .arg(format!("{}/{}/{}", FOLDER, FOLDER_TLE, gen_file))
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_STRESS, gen_file))
         .arg("--timeout=1000")
         .arg(format!("--test-cases={}", cases));
 }

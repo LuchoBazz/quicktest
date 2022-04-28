@@ -1,11 +1,11 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 pub const FOLDER: &str = "target/.code";
-pub const FOLDER_TLE: &str = "tle";
+pub const FOLDER_STRESS: &str = "stress";
 pub const FOLDER_CMP: &str = "cmp";
 pub const FOLDER_CHECK: &str = "checker";
 pub const FOLDER_RUN: &str = "run";

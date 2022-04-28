@@ -26,11 +26,11 @@ use crate::file_handler::file::{
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
-use crate::painter::style::{
+use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
+use crate::views::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
     show_time_limit_exceeded_correct, show_wrong_answer,
 };
-use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
 
 // Constants
 use crate::constants::{

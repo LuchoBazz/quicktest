@@ -1,6 +1,6 @@
 [package]
 name = "quicktest"
-version = "0.9.2"
+version = "0.10.0"
 authors = ["Luis Miguel Báez <es.luismiguelbaez@gmail.com>"]
 license = "MIT"
 description = "Command Line Interface (CLI) for stress testing for competitive programming contest"
@@ -13,7 +13,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 exclude = ["docs/*", "examples/*", "*.md"]
-include = ["**/*.rs", "Cargo.toml", "src/config/languages.config.json"]
+include = ["**/*.rs", "Cargo.toml"]
 
 [dependencies]
 clap = "3.0.5"
@@ -23,7 +23,7 @@ exitfailure = "0.5.1"
 failure = "0.1.8"
 glob = "0.3.0"
 serde_json = "1.0"
-process_control = "2.0.2"
+process_control = "3.4.0"
 rand = "0.8.4"
 regex = "1.5.5"
 shellexpand = "2.1.0"
