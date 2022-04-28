@@ -8,7 +8,7 @@ use exitfailure::ExitFailure;
 
 use crate::{
     cli::structures::ExampleCommand,
-    painter::example::{show_examples_check_cmd, show_examples_cmp_cmd, show_examples_tle_cmd},
+    views::example::{show_examples_check_cmd, show_examples_cmp_cmd, show_examples_tle_cmd},
 };
 
 pub fn run(command: &ExampleCommand) -> Result<(), ExitFailure> {

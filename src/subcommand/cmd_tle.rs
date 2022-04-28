@@ -23,10 +23,10 @@ use crate::file_handler::file::{
 };
 use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
-use crate::painter::style::{
+use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::views::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
 };
-use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
 
 // Constants
 use crate::constants::{

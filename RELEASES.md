@@ -3,6 +3,14 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 0.9.2 / 2022.04.21
+
+- fixed: issue about No such file or directory v2 [8697c01]
+
+### 0.9.1 / 2022.04.21
+
+- fixed: issue about No such file or directory [2b4ddda]
+
 ### 0.9.0 / 2022.04.20
 
 - feat: Added build functionality via a config file [5131600]

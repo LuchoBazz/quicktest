@@ -17,10 +17,10 @@ pub mod error;
 pub mod file_handler;
 pub mod generator;
 pub mod language;
-pub mod painter;
 pub mod runner;
 pub mod subcommand;
 pub mod util;
+pub mod views;
 
 use exitfailure::ExitFailure;
 use structopt::StructOpt;

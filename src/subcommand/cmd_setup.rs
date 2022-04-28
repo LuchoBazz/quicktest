@@ -11,7 +11,7 @@ use crate::{
     config::load_config::{read_language_configuration, write_language_configuration},
     error::handle_error::throw_setup_label_is_not_correct_msg,
     language::json::language_scheme::Languages,
-    painter::setup::show_argument_was_updated_success,
+    views::setup::show_argument_was_updated_success,
 };
 
 pub fn run(command: &SetupCommand) -> Result<(), ExitFailure> {
