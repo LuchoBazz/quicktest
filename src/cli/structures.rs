@@ -2,11 +2,11 @@ use std::path::PathBuf;
 
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub struct TLECommand {
+pub struct StressCommand {
     pub target_file: PathBuf,
     pub gen_file: PathBuf,
     pub timeout: u32,
@@ -22,7 +22,7 @@ pub struct TLECommand {
 }
 
 #[allow(clippy::too_many_arguments)]
-impl TLECommand {
+impl StressCommand {
     pub fn new(
         target_file: PathBuf,
         gen_file: PathBuf,
@@ -36,8 +36,8 @@ impl TLECommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
-    ) -> TLECommand {
-        TLECommand {
+    ) -> StressCommand {
+        StressCommand {
             target_file,
             gen_file,
             timeout,
@@ -186,14 +186,14 @@ impl RunCommand {
 }
 
 pub struct ExampleCommand {
-    pub tle: bool,
+    pub stress: bool,
     pub cmp: bool,
     pub check: bool,
 }
 
 impl ExampleCommand {
-    pub fn new(tle: bool, cmp: bool, check: bool) -> ExampleCommand {
-        ExampleCommand { tle, cmp, check }
+    pub fn new(stress: bool, cmp: bool, check: bool) -> ExampleCommand {
+        ExampleCommand { stress, cmp, check }
     }
 }
 

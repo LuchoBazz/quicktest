@@ -1,12 +1,12 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 use crate::cli::opt::Opt;
 use cli::structures::{
-    CheckCommand, CmpCommand, ExampleCommand, RunCommand, SetupCommand, TLECommand,
+    CheckCommand, CmpCommand, ExampleCommand, RunCommand, SetupCommand, StressCommand,
 };
 
 pub mod cli;
@@ -17,10 +17,10 @@ pub mod error;
 pub mod file_handler;
 pub mod generator;
 pub mod language;
-pub mod painter;
 pub mod runner;
 pub mod subcommand;
 pub mod util;
+pub mod views;
 
 use exitfailure::ExitFailure;
 use structopt::StructOpt;
@@ -32,7 +32,7 @@ fn main() -> Result<(), ExitFailure> {
     let _ = colored::control::set_virtual_terminal(true);
 
     match opt {
-        Opt::TLE {
+        Opt::Stress {
             target_file,
             gen_file,
             test_cases,
@@ -45,7 +45,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
-        } => subcommand::cmd_tle::run(&TLECommand::new(
+        } => subcommand::cmd_stress::run(&StressCommand::new(
             target_file,
             gen_file,
             test_cases,
@@ -137,8 +137,8 @@ fn main() -> Result<(), ExitFailure> {
                 subcommand::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
-        Opt::Example { cmp, tle, check } => {
-            subcommand::cmd_example::run(&ExampleCommand::new(cmp, tle, check))
+        Opt::Example { cmp, stress, check } => {
+            subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check))
         }
     }
 }

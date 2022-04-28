@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -13,7 +13,7 @@ use std::time::Duration;
 // dependencies
 use exitfailure::ExitFailure;
 
-use crate::cli::structures::TLECommand;
+use crate::cli::structures::StressCommand;
 // local library
 use crate::error::handle_error::throw_compiler_error_msg;
 use crate::file_handler::file::{
@@ -23,10 +23,10 @@ use crate::file_handler::file::{
 };
 use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
-use crate::painter::style::{
+use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::views::style::{
     show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
 };
-use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
 
 // Constants
 use crate::constants::{
@@ -34,7 +34,7 @@ use crate::constants::{
     QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
-pub fn run(command: &TLECommand) -> Result<(), ExitFailure> {
+pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 

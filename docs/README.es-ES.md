@@ -26,7 +26,7 @@ Actualmente, Quick Test CLI admite tres tipos de pruebas que se enumeran a conti
 * **Detectar casos con TLE:** Verifique que el tiempo de ejecución del código no exceda lo permitido, utilizando un generador aleatorio para múltiples casos de prueba.
     * **Ejemplo:**
         ```shell
-        quicktest tle --target-file=”main.cpp” --gen-file=”gen.cpp” --timeout=2000 --test-cases=1000
+        quicktest stress --target-file=”main.cpp” --gen-file=”gen.cpp” --timeout=2000 --test-cases=1000
         ```
 
 * **Verifique la correctitud del código comparandola con una versión más lenta:** Verifica que el código no tenga respuestas incorrectas para algunos casos de prueba, utilizando un generador aleatorio y una versión más lenta qué es seguro qué es totalmente correcta con la cual se van a comparar las respuestas.

@@ -15,8 +15,8 @@ use crate::{
         remove_files, save_test_case_output,
     },
     language::language_handler::get_language_handler,
-    painter::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded},
     runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language},
+    views::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded},
 };
 
 pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
