@@ -3,6 +3,12 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 0.10.0 / 2022.04.27
+
+- feat: rust version was updated to 1.58.0 and process_controll version was updated [1e7dc52]
+- refactor: painter was renamed to views [b3c9bf8]
+- feat: command was updated to #45 [e04998f]
+
 ### 0.9.2 / 2022.04.21
 
 - fixed: issue about No such file or directory v2 [8697c01]
