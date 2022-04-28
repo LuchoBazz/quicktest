@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021  Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -32,7 +32,7 @@ pub enum SetUp {
 pub enum Opt {
     /// Check TLE
     #[allow(clippy::upper_case_acronyms)]
-    TLE {
+    Stress {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
         target_file: PathBuf,
@@ -223,9 +223,9 @@ pub enum Opt {
     /// Shows examples of the selected subcommand
     #[structopt(group = ArgGroup::with_name("cmd").required(true))]
     Example {
-        /// Show examples of the tle subcommand
-        #[structopt(long = "tle", group = "cmd")]
-        tle: bool,
+        /// Show examples of the stress subcommand
+        #[structopt(long = "stress", group = "cmd")]
+        stress: bool,
 
         /// Show examples of the cmp subcommand
         #[structopt(long = "cmp", group = "cmd")]

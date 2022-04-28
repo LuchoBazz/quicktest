@@ -1,4 +1,4 @@
-`quicktest tle | qt tle`
+`quicktest stress | qt stress`
 ============
 
 **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
@@ -9,22 +9,22 @@
     ```shell
     git clone https://github.com/LuisMBaezCo/quicktest.git
 
-    cd quicktest/examples/tle/cpp
+    cd quicktest/examples/stress/cpp
     ```
 
     ```shell
-    quicktest tle --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000
+    quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000
     ```
 
 * ### python examples
     ```shell
     git clone https://github.com/LuisMBaezCo/quicktest.git
 
-    cd quicktest/examples/tle/python
+    cd quicktest/examples/stress/python
     ```
 
     ```shell
-    quicktest tle --target-file=main.py --gen-file=gen.py --test-cases=15 --timeout=1000
+    quicktest stress --target-file=main.py --gen-file=gen.py --test-cases=15 --timeout=1000
     ```
 
 ## Save Test Cases
@@ -36,7 +36,7 @@ you can use the following flags
 for example
 
 ```shell
-quicktest tle --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --save-bad
+quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --save-bad
 ```
 
 ## Run Saved Test Cases
@@ -52,5 +52,5 @@ you can use the following flags
 for example
 
 ```shell
-quicktest tle --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --run-tle
+quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --run-tle
 ```

@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -24,12 +24,12 @@ pub fn show_examples_cmp_cmd() {
     );
 }
 
-pub fn show_examples_tle_cmd() {
+pub fn show_examples_stress_cmd() {
     show_command_examples_text();
     println!(
         "   $ {} {} {}",
         "quicktest".bold().green(),
-        "tle".bold().blue(),
+        "stress".bold().blue(),
         "--target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000"
             .bold()
             .white()

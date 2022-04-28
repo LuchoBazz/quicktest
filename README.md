@@ -56,7 +56,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 * **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
     * **Sample:**
         ```shell
-        quicktest tle --target-file=main.cpp --gen-file=gen.cpp
+        quicktest stress --target-file=main.cpp --gen-file=gen.cpp
         ```
 
 * **Verify the correctness of the code using a verifier script:** Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
@@ -91,7 +91,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
 ---
 
-* `quicktest tle | qt tle`
+* `quicktest stress | qt stress`
     
     **Required Options**
 
@@ -118,7 +118,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
 ---
 
-* **Flags of the `cmp`, `tle` and `check` subcommands**
+* **Flags of the `cmp`, `stress` and `check` subcommands**
 
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--run-ac`     Run test cases Accepted
@@ -162,7 +162,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     
     * `--check`   Show examples of the check subcommand
     * `--cmp`     Show examples of the cmp subcommand
-    * `--tle`     Show examples of the tle subcommand
+    * `--stress`  Show examples of the stress subcommand
     
     **Nota:** can only use one flag at a time
 
