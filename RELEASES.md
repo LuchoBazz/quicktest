@@ -3,6 +3,9 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+- feat: documentation website using docusaurus was initialized [3c240b9]
+- docs: initial documentation was added [61dc8e5]
+
 ### 0.10.0 / 2022.04.27
 
 - feat: rust version was updated to 1.58.0 and process_controll version was updated [1e7dc52]
