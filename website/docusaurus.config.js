@@ -8,12 +8,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Quick Test CLI',
   tagline: 'CLI for stress testing in competitive programming contest',
-  url: 'https://luismbaezco.github.com/quicktest',
+  url: 'https://LuisMBaezCo.github.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'Quick Test CLI', // Usually your GitHub org/user name.
+  organizationName: 'LuisMBaezCo', // Usually your GitHub org/user name.
   projectName: 'quicktest', // Usually your repo name.
 
   presets: [
