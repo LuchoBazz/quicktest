@@ -17,12 +17,4 @@ pub fn show_argument_was_updated_success(lang: &str, argument_name: &str, value:
         lang.bold().yellow(),
         value.bold().yellow(),
     );
-
-    /*println!(
-        "  {} [{}] {} {}ms",
-        case.to_string().bold().white(),
-        "OK".bold().green(),
-        "Finished in".bold().green(),
-        time
-    );*/
 }

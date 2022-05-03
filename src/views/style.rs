@@ -5,6 +5,8 @@
  */
 
 use colored::*;
+use pad::*;
+use separator::Separatable;
 
 pub fn show_accepted(test_number: u32, time: u32) {
     println!(
@@ -106,22 +108,59 @@ pub fn show_ran_successfully(test_number: u32, time: u32) {
     );
 }
 
+// Report example:
+// ╭────────────────────────────────╮
+// │           λ Report             │
+// ├────────────────────────────────┤
+// │          9/10          AC      │
+// │          1/10          WA      │
+// │          0/10          TLE     │
+// │          0/10          RTE     │
+// ├────────────────────────────────┤
+// │        Final Status:   WA      │
+// ╰────────────────────────────────╯
 pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
-    #[cfg(unix)]
-    println!("\n  📌{}\n", "-Stats-".bold().white());
+    let total = ac + wa + tle + rte;
 
-    #[cfg(windows)]
-    println!("\n  {}\n", "-Stats-".bold().white());
+    let final_status = if ac == total {
+        "AC".with_exact_width(3).bold().green()
+    } else if rte > 0 {
+        "RTE".with_exact_width(3).bold().red()
+    } else if wa > 0 {
+        "WA".with_exact_width(3).bold().red()
+    } else if tle > 0 {
+        "TLE".with_exact_width(3).bold().red()
+    } else {
+        "WA".with_exact_width(3).bold().red()
+    };
 
     println!(
-        "  {}={}, {}={}, {}={}, {}={}",
-        "AC".bold().green(),
-        ac.to_string().bold().white(),
-        "WA".bold().red(),
-        wa.to_string().bold().white(),
-        "TLE".bold().red(),
-        tle.to_string().bold().white(),
-        "RTE".bold().red(),
-        rte.to_string().bold().white()
+        r#"
+╭────────────────────────────────╮
+│           {}             │
+├────────────────────────────────┤
+│ {:>10}/{:10}  {}     │
+│ {:>10}/{:10}  {}     │
+│ {:>10}/{:10}  {}     │
+│ {:>10}/{:10}  {}     │
+├────────────────────────────────┤
+│        {}   {}     │
+╰────────────────────────────────╯
+"#,
+        "λ Report".italic().bold().blue(),
+        ac.separated_string(),
+        total.separated_string(),
+        "AC".with_exact_width(3).bold().green(),
+        wa.separated_string(),
+        total.separated_string(),
+        "WA".with_exact_width(3).bold().red(),
+        tle.separated_string(),
+        total.separated_string(),
+        "TLE".with_exact_width(3).bold().red(),
+        rte.separated_string(),
+        total.separated_string(),
+        "RTE".with_exact_width(3).bold().red(),
+        "Final Status:".bold(),
+        final_status
     );
 }
