@@ -13,8 +13,8 @@ pub fn show_argument_was_updated_success(lang: &str, argument_name: &str, value:
     println!(
         "  [{}] Argument {} in {} was updated to {} successfully",
         "INFO".bold().green(),
-        argument_name.bold().yellow(),
-        lang.bold().yellow(),
-        value.bold().yellow(),
+        argument_name.bold().blue(),
+        lang.bold().blue(),
+        value.bold().blue(),
     );
 }

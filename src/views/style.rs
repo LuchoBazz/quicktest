@@ -43,7 +43,7 @@ pub fn show_time_limit_exceeded(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "TLE".bold().red(),
-        "Time Limit Exceeded :".bold().red(),
+        "Time Limit Exceeded".bold().red(),
         time
     );
 }
@@ -53,7 +53,7 @@ pub fn show_time_limit_exceeded_case(case: &str, time: u32) {
         "  {} [{}] {} {}ms",
         case.to_string().bold().white(),
         "TLE".bold().red(),
-        "Time Limit Exceeded :".bold().red(),
+        "Time Limit Exceeded".bold().red(),
         time
     );
 }
@@ -63,7 +63,7 @@ pub fn show_time_limit_exceeded_generator(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "TLE".bold().red(),
-        "Generator Time Limit Exceeded :".bold().red(),
+        "Generator Time Limit Exceeded".bold().red(),
         time
     );
 }
@@ -73,7 +73,7 @@ pub fn show_time_limit_exceeded_checker(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "TLE".bold().red(),
-        "Checker Time Limit Exceeded :".bold().red(),
+        "Checker Time Limit Exceeded".bold().red(),
         time
     );
 }
@@ -83,7 +83,7 @@ pub fn show_time_limit_exceeded_correct(test_number: u32, time: u32) {
         "  {} [{}] {} {}ms",
         test_number.to_string().bold().white(),
         "TLE".bold().red(),
-        "Correct File Time Limit Exceeded :".bold().red(),
+        "Correct File Time Limit Exceeded".bold().red(),
         time
     );
 }
