@@ -189,11 +189,19 @@ pub struct ExampleCommand {
     pub stress: bool,
     pub cmp: bool,
     pub check: bool,
+    pub run: bool,
+    pub setup: bool,
 }
 
 impl ExampleCommand {
-    pub fn new(cmp: bool, stress: bool, check: bool) -> ExampleCommand {
-        ExampleCommand { stress, cmp, check }
+    pub fn new(cmp: bool, stress: bool, check: bool, run: bool, setup: bool) -> ExampleCommand {
+        ExampleCommand {
+            stress,
+            cmp,
+            check,
+            run,
+            setup,
+        }
     }
 }
 

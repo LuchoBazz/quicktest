@@ -86,3 +86,47 @@ pub fn show_examples_check_cmd() {
             .white()
     );
 }
+
+pub fn show_examples_run_cmd() {
+    show_command_examples_text();
+    println!(
+        "   $ {} {} {}",
+        "quicktest".bold().green(),
+        "run".bold().blue(),
+        "--target-file=main.cpp --prefix=test_cases/testcase_ac"
+            .bold()
+            .white()
+    );
+
+    show_shorter_text();
+
+    println!(
+        "   $ {} {} {}",
+        "qt".bold().green(),
+        "run".bold().blue(),
+        "-t main.cpp -p test_cases/testcase_ac".bold().white()
+    );
+}
+
+pub fn show_examples_setup_config_cmd() {
+    show_command_examples_text();
+    println!(
+        "   $ {} {} {}",
+        "quicktest".bold().green(),
+        "setup config".bold().blue(),
+        "--label=\"Language::Python.PROGRAM\" --value=\"python3\""
+            .bold()
+            .white()
+    );
+
+    show_shorter_text();
+
+    println!(
+        "   $ {} {} {}",
+        "qt".bold().green(),
+        "setup config".bold().blue(),
+        "-l \"Language::Python.PROGRAM\" -v \"python3\""
+            .bold()
+            .white()
+    );
+}

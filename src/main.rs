@@ -137,8 +137,12 @@ fn main() -> Result<(), ExitFailure> {
                 subcommand::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
-        Opt::Example { cmp, stress, check } => {
-            subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check))
-        }
+        Opt::Example {
+            cmp,
+            stress,
+            check,
+            run,
+            setup,
+        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, run, setup)),
     }
 }

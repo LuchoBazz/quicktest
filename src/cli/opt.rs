@@ -234,5 +234,13 @@ pub enum Opt {
         /// Show examples of the check subcommand
         #[structopt(long = "check", group = "cmd")]
         check: bool,
+
+        /// Show examples of the run subcommand
+        #[structopt(long = "run", group = "cmd")]
+        run: bool,
+
+        /// Show examples of the setup subcommand
+        #[structopt(long = "setup", group = "cmd")]
+        setup: bool,
     },
 }
