@@ -192,7 +192,7 @@ pub struct ExampleCommand {
 }
 
 impl ExampleCommand {
-    pub fn new(stress: bool, cmp: bool, check: bool) -> ExampleCommand {
+    pub fn new(cmp: bool, stress: bool, check: bool) -> ExampleCommand {
         ExampleCommand { stress, cmp, check }
     }
 }
