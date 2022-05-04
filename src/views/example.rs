@@ -104,7 +104,9 @@ pub fn show_examples_run_cmd() {
         "   $ {} {} {}",
         "qt".bold().green(),
         "run".bold().blue(),
-        "-t main.cpp -p test_cases/testcase_ac --tout 1000".bold().white()
+        "-t main.cpp -p test_cases/testcase_ac --tout 1000"
+            .bold()
+            .white()
     );
 }
 
