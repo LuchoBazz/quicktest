@@ -29,6 +29,6 @@ qt run -t main.cpp -p testcase_ac
 
     **Other Options**
 
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--save-out`   Save the output of the target file for each test case

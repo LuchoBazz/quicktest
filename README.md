@@ -85,8 +85,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> | --cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--test-cases=<value> | --tc=<value> [default: 1000]`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--diff`  Show differences between the expected file and the output file
 
 ---
@@ -100,8 +100,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> | --cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--test-cases=<value> | --tc=<value> [default: 1000]`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
 ---
 
 * `quicktest check | qt check`
@@ -114,8 +114,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--test-cases=<value> | --cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--test-cases=<value> | --tc=<value> [default: 1000]`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
 ---
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
@@ -139,7 +139,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     **Other Options**
 
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--save-out`   Save the output of the target file for each test case
 
@@ -163,15 +163,17 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--check`   Show examples of the check subcommand
     * `--cmp`     Show examples of the cmp subcommand
     * `--stress`  Show examples of the stress subcommand
+    * `--run`     Show examples of the run subcommand
+    * `--setup`   Show examples of the setup subcommand
     
     **Nota:** can only use one flag at a time
 
 ## Supported Languages
 
-| Language           |       Version          |
-|--------------------|------------------------|
-| C++                | -std=c++17             |
-| Python             | Version 3              |
+| Language           |
+|--------------------|
+| C++                |
+| Python             |
 
 ## Compilation and Execution Commands
 

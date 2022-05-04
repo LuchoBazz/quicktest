@@ -10,6 +10,8 @@ sidebar_label: Example
 quicktest example --stress
 quicktest example --cmp
 quicktest example --check
+quicktest example --run
+quicktest example --setup
 ```
 
 or shorter
@@ -18,6 +20,8 @@ or shorter
 qt example --stress
 qt example --cmp
 qt example --check
+qt example --run
+qt example --setup
 ```
 
 ### Subcommand Structure
@@ -29,5 +33,7 @@ qt example --check
     * `--check`   Show examples of the check subcommand
     * `--cmp`     Show examples of the cmp subcommand
     * `--stress`  Show examples of the stress subcommand
+    * `--run`     Show examples of the run subcommand
+    * `--setup`   Show examples of the setup subcommand
     
     **Nota:** can only use one flag at a time
