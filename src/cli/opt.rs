@@ -31,7 +31,6 @@ pub enum SetUp {
 #[structopt(name = "quicktest")]
 pub enum Opt {
     /// Check TLE
-    #[allow(clippy::upper_case_acronyms)]
     Stress {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
@@ -41,15 +40,15 @@ pub enum Opt {
         #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
         gen_file: PathBuf,
 
-        /// Timeout
-        #[structopt(long = "timeout", default_value = "2000")]
+        /// Timeout (alias --tout)
+        #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
-        /// Number of test cases
-        #[structopt(long = "test-cases", alias = "cases", default_value = "1000")]
+        /// Number of test cases (alias --tc)
+        #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
 
-        /// Break if TLE or RTE states occurs
+        /// Break if TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 
@@ -95,15 +94,15 @@ pub enum Opt {
         #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
         gen_file: PathBuf,
 
-        /// Timeout
-        #[structopt(long = "timeout", default_value = "2000")]
+        /// Timeout (Alias --tout)
+        #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
-        /// Number of test cases
-        #[structopt(long = "test-cases", alias = "cases", default_value = "1000")]
+        /// Number of test cases (Alias --tc)
+        #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
 
-        /// Break if WA, TLE or RTE states occurs
+        /// Break if WA, TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 
@@ -136,7 +135,7 @@ pub enum Opt {
         run_rte: bool,
 
         /// Show differences between the expected file and the output file
-        #[structopt(long = "diff")]
+        #[structopt(short = "d", long = "diff")]
         diff: bool,
     },
     /// Check the correctness of the answer using a script <checker-file> (Special for cases that do not have a unique answer)
@@ -153,15 +152,15 @@ pub enum Opt {
         #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
         gen_file: PathBuf,
 
-        /// Timeout
-        #[structopt(long = "timeout", default_value = "2000")]
+        /// Timeout (Alias --tout)
+        #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
-        /// Number of test cases
-        #[structopt(long = "test-cases", alias = "cases", default_value = "1000")]
+        /// Number of test cases (Alias --tc)
+        #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
 
-        /// Break if WA, TLE or RTE states occurs
+        /// Break if WA, TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break_bad")]
         break_bad: bool,
 
@@ -203,11 +202,11 @@ pub enum Opt {
         #[structopt(short = "p", long = "prefix")]
         prefix: String,
 
-        /// Timeout
-        #[structopt(long = "timeout", default_value = "2000")]
+        /// Timeout (Alias --tout)
+        #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
-        /// Break if TLE or RTE states occurs
+        /// Break if TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 

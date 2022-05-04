@@ -24,7 +24,7 @@ pub fn show_examples_cmp_cmd() {
         "   $ {} {} {}",
         "quicktest".bold().green(),
         "cmp".bold().blue(),
-        "--target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000"
+        "--target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --timeout=1000 --test-cases=1000"
             .bold()
             .white()
     );
@@ -35,7 +35,7 @@ pub fn show_examples_cmp_cmd() {
         "   $ {} {} {}",
         "qt".bold().green(),
         "cmp".bold().blue(),
-        "-t main.cpp -c correct.cpp -g gen.cpp --timeout 2000 --test-cases 1000"
+        "-t main.cpp -c correct.cpp -g gen.cpp --tout 1000 --tc 1000"
             .bold()
             .white()
     );
@@ -47,7 +47,7 @@ pub fn show_examples_stress_cmd() {
         "   $ {} {} {}",
         "quicktest".bold().green(),
         "stress".bold().blue(),
-        "--target-file=main.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000"
+        "--target-file=main.cpp --gen-file=gen.cpp --timeout=1000 --test-cases=1000"
             .bold()
             .white()
     );
@@ -58,7 +58,7 @@ pub fn show_examples_stress_cmd() {
         "   $ {} {} {}",
         "qt".bold().green(),
         "stress".bold().blue(),
-        "-t main.cpp -g gen.cpp --timeout 2000 --test-cases 1000"
+        "-t main.cpp -g gen.cpp --tout 1000 --tc 1000"
             .bold()
             .white()
     );
@@ -70,7 +70,7 @@ pub fn show_examples_check_cmd() {
         "   $ {} {} {}",
         "quicktest".bold().green(),
         "check".bold().blue(),
-        "--target-file=main.cpp --checker-file=check.cpp --gen-file=gen.cpp --timeout=2000 --test-cases=1000"
+        "--target-file=main.cpp --checker-file=check.cpp --gen-file=gen.cpp --timeout=1000 --test-cases=1000"
             .bold()
             .white()
     );
@@ -81,7 +81,7 @@ pub fn show_examples_check_cmd() {
         "   $ {} {} {}",
         "qt".bold().green(),
         "check".bold().blue(),
-        "-t main.cpp -c check.cpp -g gen.cpp --timeout=2000 --test-cases=1000"
+        "-t main.cpp -c check.cpp -g gen.cpp --tout 1000 --tc 1000"
             .bold()
             .white()
     );
@@ -104,7 +104,7 @@ pub fn show_examples_run_cmd() {
         "   $ {} {} {}",
         "qt".bold().green(),
         "run".bold().blue(),
-        "-t main.cpp -p test_cases/testcase_ac".bold().white()
+        "-t main.cpp -p test_cases/testcase_ac --tout 1000".bold().white()
     );
 }
 
