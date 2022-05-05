@@ -168,14 +168,9 @@ pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
 pub fn show_input_test_case<WriteType: std::io::Write>(tout: &mut WriteType, input: &str) {
     let input = input.split('\n');
 
-    writeln!(tout, "").ok();
+    writeln!(tout).ok();
 
     for line in input {
-        writeln!(
-            tout,
-            "{}",
-            line.trim().dimmed().bold().black().on_white()
-        )
-        .ok();
+        writeln!(tout, "{}", line.trim().dimmed().bold().black().on_white()).ok();
     }
 }
