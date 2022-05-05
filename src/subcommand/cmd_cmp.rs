@@ -28,7 +28,7 @@ use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
 use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
 use crate::views::style::{
-    show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
+    show_accepted, show_input_test_case, show_runtime_error, show_stats, show_time_limit_exceeded,
     show_time_limit_exceeded_correct, show_wrong_answer,
 };
 
@@ -249,6 +249,7 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             }
         } else {
             // The time is in the allowed range
+            let file_in = format!("{}/{}", root, QTEST_INPUT_FILE);
             let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
             let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
 
@@ -276,8 +277,10 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
 
                 if command.diff {
                     let mut tout = std::io::stdout();
+                    let input = read_file(&file_in[..]).unwrap();
                     let expected = read_file(&file_expected[..]).unwrap();
                     let output = read_file(&file_out[..]).unwrap();
+                    show_input_test_case(&mut tout, &input[..]);
                     diff_line_by_line(&mut tout, &expected[..], &output[..]);
                 }
 
