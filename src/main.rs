@@ -45,6 +45,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         } => subcommand::cmd_stress::run(&StressCommand::new(
             target_file,
             gen_file,
@@ -58,6 +59,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         )),
         Opt::Cmp {
             target_file,
