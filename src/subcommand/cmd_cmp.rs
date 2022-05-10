@@ -152,8 +152,12 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
     let mut ac_count: u32 = 0;
     let mut mle_count: u32 = 0;
 
-    let load_case: bool =
-        command.run_all || command.run_ac || command.run_wa || command.run_tle || command.run_rte;
+    let load_case: bool = command.run_all
+        || command.run_ac
+        || command.run_wa
+        || command.run_tle
+        || command.run_rte
+        || command.run_mle;
 
     let mut test_number: u32 = 0;
 

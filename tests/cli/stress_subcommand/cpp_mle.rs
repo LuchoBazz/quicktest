@@ -10,7 +10,7 @@ use assert_cmd::assert::OutputAssertExt;
 use predicates::prelude::predicate;
 
 use crate::util::{
-    test_command_handler::{execute_command_stress_with_timeout},
+    test_command_handler::execute_command_stress_with_timeout,
     test_constants::{BINARY, FOLDER_STRESS, GEN_FILE_CPP, MLE_CPP, TARGET_FILE_CPP},
     test_utilities::create_files_tle,
 };
