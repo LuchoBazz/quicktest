@@ -7,9 +7,12 @@
 use std::time::Duration;
 
 use crate::error::handle_error::{
-    throw_compiler_error_msg, throw_runtime_error_msg, throw_time_limit_exceeded_msg,
+    throw_compiler_error_msg, throw_memory_limit_exceeded_msg, throw_runtime_error_msg,
+    throw_time_limit_exceeded_msg,
 };
-use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::runner::types::{
+    is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded, Language,
+};
 use crate::views::style::show_time_limit_exceeded_generator;
 use exitfailure::ExitFailure;
 
@@ -25,6 +28,8 @@ pub fn execute_generator(
         return throw_runtime_error_msg("generator", "<gen-file>");
     } else if is_compiled_error(&response_gen.status) {
         return throw_compiler_error_msg("generator", "<gen-file>");
+    } else if is_memory_limit_exceeded(&response_gen.status) {
+        return throw_memory_limit_exceeded_msg("generator", "<gen-file>");
     }
 
     if time_gen >= Duration::from_millis(timeout as u64)

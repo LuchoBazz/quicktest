@@ -27,6 +27,17 @@ pub fn execute_command_cmp(
     gen_file: &str,
     cases: usize,
 ) {
+    execute_command_cmp_with_timeout(cmd, target_file, correct_file, gen_file, cases, 1000usize);
+}
+
+pub fn execute_command_cmp_with_timeout(
+    cmd: &mut Command,
+    target_file: &str,
+    correct_file: &str,
+    gen_file: &str,
+    cases: usize,
+    timeout: usize,
+) {
     cmd.arg("cmp")
         .arg("--target-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, target_file))
@@ -34,7 +45,7 @@ pub fn execute_command_cmp(
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, correct_file))
         .arg("--gen-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CMP, gen_file))
-        .arg("--timeout=1000")
+        .arg(format!("--timeout={}", timeout))
         .arg(format!("--test-cases={}", cases));
 }
 

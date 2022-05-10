@@ -47,5 +47,6 @@ pub const PREFIX_AC_FILES: &str = "testcase_ac";
 pub const PREFIX_TLE_FILES: &str = "testcase_tle";
 pub const PREFIX_WA_FILES: &str = "testcase_wa";
 pub const PREFIX_RTE_FILES: &str = "testcase_rte";
+pub const PREFIX_MLE_FILES: &str = "testcase_mle";
 
 pub const IDENTATION: &str = "  ";

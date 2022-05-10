@@ -73,6 +73,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         } => subcommand::cmd_cmp::run(&CmpCommand::new(
             target_file,
@@ -88,6 +89,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         )),
         Opt::Check {

@@ -51,3 +51,20 @@ int main() {
     Generate Compiler Error
 }
 "#;
+
+// MLE CODES
+pub const MLE_CPP: &str = r#"
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    vector<long long> vec;
+    while(true) vec.push_back(1LL);
+}
+"#;
+
+// not used because python throws an RTE (MemoryError) when it exceeds memory
+pub const MLE_PY: &str = r#"
+data = []
+while True:
+    data.append(1 << 128)
+"#;

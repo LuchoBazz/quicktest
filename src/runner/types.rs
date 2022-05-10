@@ -33,6 +33,7 @@ pub enum CPStatus {
     TLE,
     CE,
     RTE,
+    MLE,
 }
 
 pub fn is_accepted(status: &CPStatus) -> bool {
@@ -53,6 +54,10 @@ pub fn is_compiled_error(status: &CPStatus) -> bool {
 
 pub fn is_runtime_error(status: &CPStatus) -> bool {
     *status == CPStatus::RTE
+}
+
+pub fn is_memory_limit_exceeded(status: &CPStatus) -> bool {
+    *status == CPStatus::MLE
 }
 
 // Extension

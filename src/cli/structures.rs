@@ -68,6 +68,7 @@ pub struct CmpCommand {
     pub run_wa: bool,
     pub run_tle: bool,
     pub run_rte: bool,
+    pub run_mle: bool,
     pub diff: bool,
 }
 
@@ -87,6 +88,7 @@ impl CmpCommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
+        run_mle: bool,
         diff: bool,
     ) -> CmpCommand {
         CmpCommand {
@@ -103,6 +105,7 @@ impl CmpCommand {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         }
     }

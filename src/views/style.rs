@@ -98,6 +98,16 @@ pub fn show_runtime_error(test_number: u32, time: u32) {
     );
 }
 
+pub fn show_memory_limit_exceeded_error(test_number: u32, time: u32) {
+    println!(
+        "  {} [{}] {} {}ms",
+        test_number.to_string().bold().white(),
+        "MLE".bold().red(),
+        "Memory Limit Exceeded :".bold().red(),
+        time
+    );
+}
+
 pub fn show_ran_successfully(test_number: u32, time: u32) {
     println!(
         "  {} [{}] {} {}ms",

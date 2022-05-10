@@ -53,10 +53,13 @@ pub fn execute_program(
 
     let mut res_status = CPStatus::AC;
 
+    const ONE_GB: usize = 1e9 as usize; // 1000000000usize;
+
     if let Ok(child_output) = child {
         // TODO: add memory_limit method
         let response = child_output
             .controlled_with_output()
+            .memory_limit(ONE_GB)
             .time_limit(Duration::from_millis(timeout as u64))
             .terminate_for_timeout()
             .wait();
@@ -77,7 +80,19 @@ pub fn execute_program(
 
                     res_status = CPStatus::AC;
                 } else {
-                    res_status = CPStatus::RTE;
+                    #[cfg(unix)]
+                    if let Some(6) = output.status.signal() {
+                        res_status = CPStatus::MLE;
+                    } else {
+                        res_status = CPStatus::RTE;
+                    }
+
+                    #[cfg(windows)]
+                    if let Some(3) = output.status.code() {
+                        res_status = CPStatus::MLE;
+                    } else {
+                        es_status = CPStatus::RTE;
+                    }
                 }
             } else {
                 res_status = CPStatus::TLE;

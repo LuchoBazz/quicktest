@@ -130,6 +130,10 @@ pub enum Opt {
         #[structopt(long = "run-tle")]
         run_tle: bool,
 
+        /// Run test cases with Memory Limited Exceeded status
+        #[structopt(long = "run-mle")]
+        run_mle: bool,
+
         /// Run test cases with Runtime Error status
         #[structopt(long = "run-rte")]
         run_rte: bool,
