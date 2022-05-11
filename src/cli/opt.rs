@@ -199,6 +199,10 @@ pub enum Opt {
         /// Run test cases with Runtime Error status
         #[structopt(long = "run-rte")]
         run_rte: bool,
+
+        /// Run test cases with MLE status
+        #[structopt(long = "run-mle")]
+        run_mle: bool,
     },
     /// Run tescases
     Run {

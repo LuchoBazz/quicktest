@@ -128,6 +128,7 @@ pub struct CheckCommand {
     pub run_wa: bool,
     pub run_tle: bool,
     pub run_rte: bool,
+    pub run_mle: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -146,6 +147,7 @@ impl CheckCommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
+        run_mle: bool,
     ) -> CheckCommand {
         CheckCommand {
             target_file,
@@ -161,6 +163,7 @@ impl CheckCommand {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         }
     }
 }

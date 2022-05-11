@@ -66,6 +66,17 @@ pub fn execute_command_check(
     gen_file: &str,
     cases: usize,
 ) {
+    execute_command_check_with_timeout(cmd, target_file, checker_file, gen_file, cases, 1000usize);
+}
+
+pub fn execute_command_check_with_timeout(
+    cmd: &mut Command,
+    target_file: &str,
+    checker_file: &str,
+    gen_file: &str,
+    cases: usize,
+    timeout: usize,
+) {
     cmd.arg("check")
         .arg("--target-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CHECK, target_file))
@@ -73,7 +84,7 @@ pub fn execute_command_check(
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CHECK, checker_file))
         .arg("--gen-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CHECK, gen_file))
-        .arg("--timeout=1000")
+        .arg(format!("--timeout={}", timeout))
         .arg(format!("--test-cases={}", cases));
 }
 

@@ -12,8 +12,8 @@ use std::time::Duration;
 use crate::cli::structures::CheckCommand;
 // local library
 use crate::error::handle_error::{
-    throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
-    throw_time_limit_exceeded_msg,
+    throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
+    throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
     can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
@@ -23,10 +23,12 @@ use crate::file_handler::file::{
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
-use crate::runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language};
+use crate::runner::types::{
+    is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded, Language,
+};
 use crate::views::style::{
-    show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
-    show_time_limit_exceeded_checker, show_wrong_answer,
+    show_accepted, show_memory_limit_exceeded_error, show_runtime_error, show_stats,
+    show_time_limit_exceeded, show_time_limit_exceeded_checker, show_wrong_answer,
 };
 
 // dependencies
@@ -34,9 +36,9 @@ use exitfailure::ExitFailure;
 
 // Constants
 use crate::constants::{
-    CACHE_FOLDER, CHECKER_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES,
-    PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_CHECKER_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE,
-    QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
+    CACHE_FOLDER, CHECKER_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_MLE_FILES,
+    PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_CHECKER_FILE, QTEST_ERROR_FILE,
+    QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
 #[allow(clippy::too_many_arguments)]
@@ -148,9 +150,14 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     let mut wa_count: u32 = 0;
     let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
+    let mut mle_count: u32 = 0;
 
-    let load_case: bool =
-        command.run_all || command.run_ac || command.run_wa || command.run_tle || command.run_rte;
+    let load_case: bool = command.run_all
+        || command.run_ac
+        || command.run_wa
+        || command.run_tle
+        || command.run_rte
+        || command.run_mle;
 
     let mut test_number: u32 = 0;
 
@@ -201,6 +208,33 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
+        } else if is_memory_limit_exceeded(&response_target.status) {
+            mle_count += 1;
+            show_memory_limit_exceeded_error(test_number, mills_target as u32);
+
+            if command.save_bad || command.save_all {
+                // Example: test_cases/testcase_mle_01.txt
+                let file_name: &str =
+                    &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_MLE_FILES, mle_count)[..];
+                // save testcase
+                save_test_case(file_name, QTEST_INPUT_FILE);
+            }
+
+            if command.break_bad {
+                // remove input, output and error files
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    QTEST_CHECKER_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                    CHECKER_BINARY_FILE,
+                ]);
+
+                return throw_break_found_msg("Memory Limit Exceeded", "MLE", command.test_cases);
+            }
+            continue;
         }
 
         let response_checker = checker_file_lang_lang.execute(command.timeout as u32, test_number);
@@ -210,6 +244,8 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             return throw_runtime_error_msg("checker", "<checker-file>");
         } else if is_compiled_error(&response_checker.status) {
             return throw_compiler_error_msg("checker", "<checker-file>");
+        } else if is_memory_limit_exceeded(&response_checker.status) {
+            return throw_memory_limit_exceeded_msg("checker", "<checker-file>");
         }
 
         if time_checker >= Duration::from_millis(command.timeout as u64) {

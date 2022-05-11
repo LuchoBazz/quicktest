@@ -108,6 +108,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         } => subcommand::cmd_check::run(&CheckCommand::new(
             target_file,
             checker_file,
@@ -122,6 +123,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         )),
         Opt::Run {
             target_file,
