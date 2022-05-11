@@ -15,8 +15,8 @@ use crate::{
         remove_files, save_test_case_output,
     },
     language::language_handler::get_language_handler,
-    runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language},
-    views::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded},
+    runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language, is_memory_limit_exceeded},
+    views::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded, show_memory_limit_exceeded_error},
 };
 
 pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
@@ -88,6 +88,22 @@ pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
+        } else if is_memory_limit_exceeded(&response_target.status) {
+            show_memory_limit_exceeded_error(test_number, mills_target as u32);
+            // check if the tle_breck flag is high
+            if command.break_bad {
+                // remove input, output and error files
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                ]);
+
+                return Ok(());
+            }
+            continue;
         }
 
         if time_target >= Duration::from_millis(command.timeout as u64)
