@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021-present - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -44,7 +44,7 @@ fn cmd_cmp_target_mle_cpp() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert()
-        .success()
+        .failure()
         .stdout(predicate::str::contains("[MLE]").count(cases));
 
     Ok(())

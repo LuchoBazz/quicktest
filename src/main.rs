@@ -31,7 +31,7 @@ fn main() -> Result<(), ExitFailure> {
     #[cfg(windows)]
     let _ = colored::control::set_virtual_terminal(true);
 
-    match opt {
+    let status = match opt {
         Opt::Stress {
             target_file,
             gen_file,
@@ -158,5 +158,10 @@ fn main() -> Result<(), ExitFailure> {
             run,
             setup,
         } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, run, setup)),
+    };
+
+    if let Err(err) = status {
+        return Err(err);
     }
+    std::process::exit(exitcode::OK);
 }

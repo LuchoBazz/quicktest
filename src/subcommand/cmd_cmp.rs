@@ -1,11 +1,12 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021-present - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 use std::collections::VecDeque;
 use std::path::PathBuf;
+use std::process;
 use std::time::Duration;
 
 // dependencies
@@ -369,6 +370,10 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         GEN_BINARY_FILE,
         CORRECT_BINARY_FILE,
     ]);
+
+    if (wa_count + tle_count + rte_count + mle_count) > 0 {
+        process::exit(exitcode::SOFTWARE);
+    }
 
     Ok(())
 }
