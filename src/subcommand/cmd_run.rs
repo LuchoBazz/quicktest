@@ -71,7 +71,8 @@ pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
         let case = cases.pop_front().unwrap();
         copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
 
-        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
+        let response_target =
+            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 

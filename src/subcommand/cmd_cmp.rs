@@ -175,10 +175,16 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             }
         } else {
             // run generator
-            execute_generator(&generator_file_lang, command.timeout, test_number)?;
+            execute_generator(
+                &generator_file_lang,
+                command.timeout,
+                command.memory_limit,
+                test_number,
+            )?;
         }
 
-        let response_correct = correct_file_lang.execute(command.timeout as u32, test_number);
+        let response_correct =
+            correct_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_correct: Duration = response_correct.time;
 
         if is_runtime_error(&response_correct.status) {
@@ -195,7 +201,8 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             return throw_time_limit_exceeded_msg("correct", "<correct-file>");
         }
 
-        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
+        let response_target =
+            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 

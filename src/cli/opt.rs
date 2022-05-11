@@ -44,6 +44,10 @@ pub enum Opt {
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
+        /// Memory Limit (alias --ml) 1GB
+        #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
+        memory_limit: u64,
+
         /// Number of test cases (alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
@@ -101,6 +105,10 @@ pub enum Opt {
         /// Timeout (Alias --tout)
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
+
+        /// Memory Limit (alias --ml) 1GB
+        #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
+        memory_limit: u64,
 
         /// Number of test cases (Alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
@@ -164,6 +172,10 @@ pub enum Opt {
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
+        /// Memory Limit (alias --ml) 1GB
+        #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
+        memory_limit: u64,
+
         /// Number of test cases (Alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
@@ -217,6 +229,10 @@ pub enum Opt {
         /// Timeout (Alias --tout)
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
+
+        /// Memory Limit (alias --ml) 1GB
+        #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
+        memory_limit: u64,
 
         /// Break if TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]

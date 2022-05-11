@@ -17,6 +17,7 @@ use super::types::{CPStatus, StatusResponse};
 
 pub fn execute_program(
     timeout: u32,
+    memory_limit: u64,
     testcase: u32,
     commands: Vec<&str>,
     stdin: Option<PathBuf>,
@@ -53,13 +54,10 @@ pub fn execute_program(
 
     let mut res_status = CPStatus::AC;
 
-    const ONE_GB: usize = 1e9 as usize; // 1000000000usize;
-
     if let Ok(child_output) = child {
-        // TODO: add memory_limit method
         let response = child_output
             .controlled_with_output()
-            .memory_limit(ONE_GB)
+            .memory_limit(memory_limit as usize) // bytes
             .time_limit(Duration::from_millis(timeout as u64))
             .terminate_for_timeout()
             .wait();

@@ -175,10 +175,16 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             }
         } else {
             // run generator
-            execute_generator(&generator_file_lang, command.timeout, test_number)?;
+            execute_generator(
+                &generator_file_lang,
+                command.timeout,
+                command.memory_limit,
+                test_number,
+            )?;
         }
 
-        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
+        let response_target =
+            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
@@ -238,7 +244,11 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             continue;
         }
 
-        let response_checker = checker_file_lang_lang.execute(command.timeout as u32, test_number);
+        let response_checker = checker_file_lang_lang.execute(
+            command.timeout as u32,
+            command.memory_limit,
+            test_number,
+        );
         let time_checker: Duration = response_checker.time;
 
         if is_runtime_error(&response_checker.status) {
