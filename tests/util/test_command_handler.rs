@@ -8,7 +8,7 @@ use std::process::Command;
 
 use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_STRESS};
 
-use super::test_constants::FOLDER_RUN;
+use super::test_constants::FOLDER_OUTPUT;
 
 pub fn execute_command_stress(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
     execute_command_stress_with_timeout(cmd, target_file, gen_file, cases, 1000usize);
@@ -88,11 +88,11 @@ pub fn execute_command_check_with_timeout(
         .arg(format!("--test-cases={}", cases));
 }
 
-pub fn execute_command_run(cmd: &mut Command, target_file: &str, prefix: &str) {
-    cmd.arg("run")
+pub fn execute_command_output(cmd: &mut Command, target_file: &str, prefix: &str) {
+    cmd.arg("output")
         .arg("--target-file")
-        .arg(format!("{}/{}/{}", FOLDER, FOLDER_RUN, target_file))
-        .arg(format!("--prefix={}/{}/{}", FOLDER, FOLDER_RUN, prefix))
+        .arg(format!("{}/{}/{}", FOLDER, FOLDER_OUTPUT, target_file))
+        .arg(format!("--prefix={}/{}/{}", FOLDER, FOLDER_OUTPUT, prefix))
         .arg("--timeout=1000");
 }
 

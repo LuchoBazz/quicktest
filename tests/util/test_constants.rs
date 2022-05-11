@@ -8,7 +8,7 @@ pub const FOLDER: &str = "target/.code";
 pub const FOLDER_STRESS: &str = "stress";
 pub const FOLDER_CMP: &str = "cmp";
 pub const FOLDER_CHECK: &str = "checker";
-pub const FOLDER_RUN: &str = "run";
+pub const FOLDER_OUTPUT: &str = "output";
 
 #[cfg(unix)]
 pub const BINARY: &str = "./target/debug/quicktest";

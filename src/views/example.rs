@@ -87,12 +87,12 @@ pub fn show_examples_check_cmd() {
     );
 }
 
-pub fn show_examples_run_cmd() {
+pub fn show_examples_output_cmd() {
     show_command_examples_text();
     println!(
         "   $ {} {} {}",
         "quicktest".bold().green(),
-        "run".bold().blue(),
+        "output".bold().blue(),
         "--target-file=main.cpp --prefix=test_cases/testcase_ac"
             .bold()
             .white()
@@ -103,7 +103,7 @@ pub fn show_examples_run_cmd() {
     println!(
         "   $ {} {} {}",
         "qt".bold().green(),
-        "run".bold().blue(),
+        "output".bold().blue(),
         "-t main.cpp -p test_cases/testcase_ac --tout 1000"
             .bold()
             .white()

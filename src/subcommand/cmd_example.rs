@@ -9,7 +9,7 @@ use exitfailure::ExitFailure;
 use crate::{
     cli::structures::ExampleCommand,
     views::example::{
-        show_examples_check_cmd, show_examples_cmp_cmd, show_examples_run_cmd,
+        show_examples_check_cmd, show_examples_cmp_cmd, show_examples_output_cmd,
         show_examples_setup_config_cmd, show_examples_stress_cmd,
     },
 };
@@ -21,8 +21,8 @@ pub fn run(command: &ExampleCommand) -> Result<(), ExitFailure> {
         show_examples_stress_cmd();
     } else if command.check {
         show_examples_check_cmd();
-    } else if command.run {
-        show_examples_run_cmd();
+    } else if command.output {
+        show_examples_output_cmd();
     } else if command.setup {
         show_examples_setup_config_cmd();
     }

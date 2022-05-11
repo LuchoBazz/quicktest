@@ -68,7 +68,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 * **Run a target file with test case files matching a prefix:**
     * **Sample:**
         ```shell
-        quicktest run --target-file=main.cpp --prefix=testcase_ac
+        quicktest output --target-file=main.cpp --prefix=testcase_ac
         ```
 
 ## Commands
@@ -130,7 +130,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--save-bad`   Save only bad cases with WA, TLE or RTE states
 
 ---
-* `quicktest run | qt run`
+* `quicktest output | qt output`
     
     **Required Options**
 
@@ -163,7 +163,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--check`   Show examples of the check subcommand
     * `--cmp`     Show examples of the cmp subcommand
     * `--stress`  Show examples of the stress subcommand
-    * `--run`     Show examples of the run subcommand
+    * `--output`     Show examples of the output subcommand
     * `--setup`   Show examples of the setup subcommand
     
     **Nota:** can only use one flag at a time

@@ -1,9 +1,15 @@
+/*
+*  Quick Test: CLI for stress testing in competitive programming
+*  Copyright (C) 2021-present / Luis Miguel Báez
+*  License: MIT (See the LICENSE file in the repository root directory)
+*/
+
 use std::{collections::VecDeque, path::PathBuf, time::Duration};
 
 use exitfailure::ExitFailure;
 
 use crate::{
-    cli::structures::RunCommand,
+    cli::structures::OutputCommand,
     constants::{
         CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
         TARGET_BINARY_FILE,
@@ -25,7 +31,7 @@ use crate::{
     },
 };
 
-pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
+pub fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
 

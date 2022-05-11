@@ -1,11 +1,10 @@
-use std::path::PathBuf;
-
 /*
- *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021-present / Luis Miguel Báez
- *  License: MIT (See the LICENSE file in the repository root directory)
- */
+*  Quick Test: CLI for stress testing in competitive programming
+*  Copyright (C) 2021-present / Luis Miguel Báez
+*  License: MIT (See the LICENSE file in the repository root directory)
+*/
 
+use std::path::PathBuf;
 pub struct StressCommand {
     pub target_file: PathBuf,
     pub gen_file: PathBuf,
@@ -177,7 +176,7 @@ impl CheckCommand {
     }
 }
 
-pub struct RunCommand {
+pub struct OutputCommand {
     pub target_file: PathBuf,
     pub prefix: String,
     pub timeout: u32,
@@ -186,7 +185,7 @@ pub struct RunCommand {
     pub save_out: bool,
 }
 
-impl RunCommand {
+impl OutputCommand {
     pub fn new(
         target_file: PathBuf,
         prefix: String,
@@ -194,8 +193,8 @@ impl RunCommand {
         memory_limit: u64,
         break_bad: bool,
         save_out: bool,
-    ) -> RunCommand {
-        RunCommand {
+    ) -> OutputCommand {
+        OutputCommand {
             target_file,
             prefix,
             timeout,
@@ -210,17 +209,17 @@ pub struct ExampleCommand {
     pub stress: bool,
     pub cmp: bool,
     pub check: bool,
-    pub run: bool,
+    pub output: bool,
     pub setup: bool,
 }
 
 impl ExampleCommand {
-    pub fn new(cmp: bool, stress: bool, check: bool, run: bool, setup: bool) -> ExampleCommand {
+    pub fn new(cmp: bool, stress: bool, check: bool, output: bool, setup: bool) -> ExampleCommand {
         ExampleCommand {
             stress,
             cmp,
             check,
-            run,
+            output,
             setup,
         }
     }

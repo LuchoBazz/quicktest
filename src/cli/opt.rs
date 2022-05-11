@@ -216,8 +216,8 @@ pub enum Opt {
         #[structopt(long = "run-mle")]
         run_mle: bool,
     },
-    /// Run tescases
-    Run {
+    /// Run tescases and create an output file for each test case
+    Output {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
         target_file: PathBuf,
@@ -262,9 +262,9 @@ pub enum Opt {
         #[structopt(long = "check", group = "cmd")]
         check: bool,
 
-        /// Show examples of the run subcommand
-        #[structopt(long = "run", group = "cmd")]
-        run: bool,
+        /// Show examples of the output subcommand
+        #[structopt(long = "output", group = "cmd")]
+        output: bool,
 
         /// Show examples of the setup subcommand
         #[structopt(long = "setup", group = "cmd")]

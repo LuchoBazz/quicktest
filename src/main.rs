@@ -6,7 +6,7 @@
 
 use crate::cli::opt::Opt;
 use cli::structures::{
-    CheckCommand, CmpCommand, ExampleCommand, RunCommand, SetupCommand, StressCommand,
+    CheckCommand, CmpCommand, ExampleCommand, OutputCommand, SetupCommand, StressCommand,
 };
 
 pub mod cli;
@@ -131,14 +131,14 @@ fn main() -> Result<(), ExitFailure> {
             run_rte,
             run_mle,
         )),
-        Opt::Run {
+        Opt::Output {
             target_file,
             prefix,
             timeout,
             memory_limit,
             break_bad,
             save_out,
-        } => subcommand::cmd_run::run(&RunCommand::new(
+        } => subcommand::cmd_output::run(&OutputCommand::new(
             target_file,
             prefix,
             timeout,
@@ -155,9 +155,9 @@ fn main() -> Result<(), ExitFailure> {
             cmp,
             stress,
             check,
-            run,
+            output,
             setup,
-        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, run, setup)),
+        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
     };
 
     if let Err(err) = status {
