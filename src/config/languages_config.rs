@@ -34,14 +34,7 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "unix":".qtest/${FILE_NAME_BINARY}.o",
                 "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
-            "check_installed":"${PROGRAM} --help",
-            "libraries":[
-                {
-                    "name":"ac-library",
-                    "version":"1.4",
-                    "source":"https://github.com/atcoder/ac-library"
-                }
-            ]
+            "check_installed":"${PROGRAM} --help"
         },
         {
             "id":"Language::Python",
@@ -57,13 +50,7 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
                 "windows":"${PROGRAM} ${FILE_NAME}.py"
             },
-            "check_installed":"${PROGRAM} --help",
-            "libraries":[
-                {
-                    "name":"numba",
-                    "version":"*"
-                }
-            ]
+            "check_installed":"${PROGRAM} --help"
         }
     ]
 }
