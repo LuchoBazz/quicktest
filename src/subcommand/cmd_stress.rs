@@ -106,6 +106,7 @@ pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
     }
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
+
     load_testcases_from_states(
         &mut cases,
         TEST_CASES_FOLDER,
@@ -114,6 +115,7 @@ pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
         command.run_wa,
         command.run_tle,
         command.run_rte,
+        command.run_mle,
     )?;
 
     let mut tle_count: u32 = 0;
@@ -243,7 +245,7 @@ pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
             show_accepted(test_number, mills_target as u32);
         }
     }
-    show_stats(ac_count, 0, tle_count, rte_count);
+    show_stats(ac_count, 0, tle_count, rte_count, mle_count);
 
     // remove input, output and error files
     remove_files(vec![

@@ -129,8 +129,8 @@ pub fn show_ran_successfully(test_number: u32, time: u32) {
 // ├────────────────────────────────┤
 // │        Final Status:   WA      │
 // ╰────────────────────────────────╯
-pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
-    let total = ac + wa + tle + rte;
+pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32, mle: u32) {
+    let total = ac + wa + tle + rte + mle;
 
     let final_status = if ac == total {
         "AC".with_exact_width(3).bold().green()
@@ -140,6 +140,8 @@ pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
         "WA".with_exact_width(3).bold().red()
     } else if tle > 0 {
         "TLE".with_exact_width(3).bold().red()
+    } else if mle > 0 {
+        "MLE".with_exact_width(3).bold().red()
     } else {
         "WA".with_exact_width(3).bold().red()
     };
@@ -149,6 +151,7 @@ pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
 ╭────────────────────────────────╮
 │           {}             │
 ├────────────────────────────────┤
+│ {:>10}/{:10}  {}     │
 │ {:>10}/{:10}  {}     │
 │ {:>10}/{:10}  {}     │
 │ {:>10}/{:10}  {}     │
@@ -170,6 +173,9 @@ pub fn show_stats(ac: u32, wa: u32, tle: u32, rte: u32) {
         rte.separated_string(),
         total.separated_string(),
         "RTE".with_exact_width(3).bold().red(),
+        mle.separated_string(),
+        total.separated_string(),
+        "MLE".with_exact_width(3).bold().red(),
         "Final Status:".bold(),
         final_status
     );
