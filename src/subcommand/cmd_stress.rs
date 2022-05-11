@@ -8,6 +8,7 @@ use std::collections::VecDeque;
 
 // std library
 use std::path::PathBuf;
+use std::process;
 use std::time::Duration;
 
 // dependencies
@@ -261,6 +262,12 @@ pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
         TARGET_BINARY_FILE,
         GEN_BINARY_FILE,
     ]);
+
+    // check if the target file has errors
+    if (tle_count + rte_count + mle_count) > 0 {
+        // exit status as error in software
+        process::exit(exitcode::SOFTWARE);
+    }
 
     Ok(())
 }

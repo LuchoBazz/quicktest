@@ -32,7 +32,7 @@ fn cmd_tle_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     execute_command_stress(&mut cmd, TARGET_FILE_CPP, GEN_FILE_CPP, cases);
 
     cmd.assert()
-        .success()
+        .failure()
         .stdout(predicate::str::contains("[RTE]").count(cases));
 
     Ok(())

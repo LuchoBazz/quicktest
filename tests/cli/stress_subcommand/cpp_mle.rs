@@ -32,7 +32,7 @@ fn cmd_tle_target_mle_cpp() -> Result<(), Box<dyn Error>> {
     execute_command_stress_with_timeout(&mut cmd, TARGET_FILE_CPP, GEN_FILE_CPP, cases, 5000usize);
 
     cmd.assert()
-        .success()
+        .failure()
         .stdout(predicate::str::contains("[MLE]").count(cases));
 
     Ok(())

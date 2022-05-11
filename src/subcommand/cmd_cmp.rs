@@ -371,7 +371,9 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         CORRECT_BINARY_FILE,
     ]);
 
+    // check if the target file has errors
     if (wa_count + tle_count + rte_count + mle_count) > 0 {
+        // exit status as error in software
         process::exit(exitcode::SOFTWARE);
     }
 
