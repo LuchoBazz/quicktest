@@ -1,12 +1,13 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 // std library
 use std::collections::VecDeque;
 use std::path::PathBuf;
+use std::process;
 use std::time::Duration;
 
 use crate::cli::structures::CheckCommand;
@@ -360,6 +361,12 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
         GEN_BINARY_FILE,
         CHECKER_BINARY_FILE,
     ]);
+
+    // check if the target file has errors
+    if (wa_count + tle_count + rte_count + mle_count) > 0 {
+        // exit status as error in software
+        process::exit(exitcode::SOFTWARE);
+    }
 
     Ok(())
 }

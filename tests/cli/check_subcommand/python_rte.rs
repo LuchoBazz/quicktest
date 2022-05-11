@@ -1,6 +1,6 @@
 /*
 *  Quick Test: CLI for stress testing in competitive programming
-*  Copyright (C) 2021 - Luis Miguel Báez
+*  Copyright (C) 2021-present / Luis Miguel Báez
 *  License: MIT (See the LICENSE file in the repository root directory)
 */
 
@@ -40,7 +40,7 @@ fn cmd_check_target_rte_py() -> Result<(), Box<dyn Error>> {
     );
 
     cmd.assert()
-        .success()
+        .failure()
         .stdout(predicate::str::contains("[RTE]").count(cases));
 
     Ok(())
