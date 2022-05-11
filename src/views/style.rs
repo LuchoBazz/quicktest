@@ -190,3 +190,11 @@ pub fn show_input_test_case<WriteType: std::io::Write>(tout: &mut WriteType, inp
         writeln!(tout, "{}", line.trim().dimmed().bold().black().on_white()).ok();
     }
 }
+
+pub fn show_config_file_path(file_name: &str) {
+    println!(
+        "\n{} Your configuration file has been written in '{}'\n",
+        "»".bold().white(),
+        file_name.bold().white()
+    );
+}
