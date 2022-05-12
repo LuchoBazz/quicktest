@@ -14,7 +14,7 @@ use std::time::Duration;
 // dependencies
 use exitfailure::ExitFailure;
 
-use crate::cli::structures::StressCommand;
+use crate::cli::model::stress_command::StressCommand;
 // local library
 use crate::error::handle_error::{throw_break_found_msg, throw_compiler_error_msg};
 use crate::file_handler::file::{

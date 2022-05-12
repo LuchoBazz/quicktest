@@ -10,20 +10,22 @@ use std::path::PathBuf;
 use std::process;
 use std::time::Duration;
 
-use crate::cli::structures::CheckCommand;
+use crate::cli::model::check_command::CheckCommand;
 // local library
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
-    can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
-    format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
+    copy_file, create_folder_or_error, format_filename_test_case, load_testcases_from_states,
     remove_files, remove_folder, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
-use crate::language::language_handler::{get_generator_handler, get_language_handler};
+use crate::language::get_language::{
+    get_executor_checker, get_executor_generator, get_executor_target,
+};
+use crate::language::language_handler::LanguageHandler;
 use crate::runner::types::{
     is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded, Language,
 };
@@ -47,89 +49,16 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 
-    // verify that the target file exists
-    file_exists_or_error(command.target_file.to_str().unwrap(), "<target-file>")?;
-
-    // verify that the checker_file file exists
-    file_exists_or_error(command.checker_file.to_str().unwrap(), "<checker-file>")?;
-
-    // verify that the generator file exists
-    file_exists_or_error(command.gen_file.to_str().unwrap(), "<gen-file>")?;
-
-    // verify that the target file extension is supported
-    is_extension_supported_or_error(command.target_file.to_str().unwrap())?;
-
-    // verify that the checker file extension is supported
-    is_extension_supported_or_error(command.checker_file.to_str().unwrap())?;
-
-    // verify that the generator file extension is supported
-    is_extension_supported_or_error(command.gen_file.to_str().unwrap())?;
-
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
-    let generator_file_lang = *get_generator_handler(
-        &command
-            .gen_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<gen-file>",
-        QTEST_INPUT_FILE,
-    )?;
-
-    // verify that the program to run the generator file is installed
-    can_run_language_or_error(&generator_file_lang)?;
+    let generator_file_lang: LanguageHandler = *get_executor_generator(&command.gen_file)?;
 
     // Get the language depending on the extension of the target_file
-    let target_file_lang = *get_language_handler(
-        &command
-            .target_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<target-file>",
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-    )?;
-
-    // verify that the program to run the target file is installed
-    can_run_language_or_error(&target_file_lang)?;
+    let target_file_lang: LanguageHandler = *get_executor_target(&command.target_file)?;
 
     // Get the language depending on the extension of the checker_file_lang
-    let checker_file_lang_lang = *get_language_handler(
-        &command
-            .checker_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<checker-file>",
-        QTEST_OUTPUT_FILE,
-        QTEST_CHECKER_FILE,
-        QTEST_ERROR_FILE,
-    )?;
-
-    // verify that the program to run the checker file is installed
-    can_run_language_or_error(&checker_file_lang_lang)?;
-
-    let can_compile_gen = generator_file_lang.build();
-    if !can_compile_gen {
-        return throw_compiler_error_msg("generator", "<gen-file>");
-    }
-
-    let can_compile_target = target_file_lang.build();
-    if !can_compile_target {
-        return throw_compiler_error_msg("target", "<target-file>");
-    }
-
-    let can_compile_checker = checker_file_lang_lang.build();
-    if !can_compile_checker {
-        return throw_compiler_error_msg("checker", "<checker-file>");
-    }
+    let checker_file_lang_lang: LanguageHandler = *get_executor_checker(&command.checker_file)?;
 
     if command.save_bad || command.save_all {
         // Remove all previous test cases

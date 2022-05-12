@@ -9,7 +9,7 @@ use std::{collections::VecDeque, path::PathBuf, time::Duration};
 use exitfailure::ExitFailure;
 
 use crate::{
-    cli::structures::OutputCommand,
+    cli::model::output_command::OutputCommand,
     constants::{
         CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
         TARGET_BINARY_FILE,

@@ -5,20 +5,21 @@
  */
 
 use crate::cli::opt::Opt;
-use cli::structures::{
-    CheckCommand, CmpCommand, ExampleCommand, OutputCommand, SetupCommand, StressCommand,
+use cli::model::{
+    check_command::CheckCommand, cmp_command::CmpCommand, example_command::ExampleCommand,
+    output_command::OutputCommand, setup_command::SetupCommand, stress_command::StressCommand,
 };
 
 pub mod cli;
 pub mod config;
 pub mod constants;
+pub mod controllers;
 pub mod diff;
 pub mod error;
 pub mod file_handler;
 pub mod generator;
 pub mod language;
 pub mod runner;
-pub mod controllers;
 pub mod util;
 pub mod views;
 

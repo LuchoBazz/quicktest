@@ -12,7 +12,7 @@ use std::time::Duration;
 // dependencies
 use exitfailure::ExitFailure;
 
-use crate::cli::structures::CmpCommand;
+use crate::cli::model::cmp_command::CmpCommand;
 // local library
 use crate::diff::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
