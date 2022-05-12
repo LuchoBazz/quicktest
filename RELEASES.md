@@ -3,6 +3,16 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0-rc.2 / 2022.05.12
+
+feat: subcommand folder was renamed to controllers [2d5f859]
+feat: prefix option to run test cases matching that prefix was added to the cmp, stress and check  subcommands [545213c]
+refactor: cli module structures was updated to model and Adapter Command  trait was added [48ee06d]
+refactor: check command was refactored using adapter pattern [b99c8e9]
+refactor: cmp command was refactored using adapter pattern [cbae9bb]
+refactor: stress command was refactored using adapter pattern [f7beebc]
+refactor: output command was refactored using adapter pattern [e4cfefc]
+
 ### 1.0.0-rc.1 / 2022.05.11
 
 - feat: documentation website using docusaurus was initialized [3c240b9]
