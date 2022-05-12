@@ -9,12 +9,12 @@ use std::path::PathBuf;
 use super::traits::AdapterCommand;
 
 pub struct OutputCommand {
-    pub target_file: PathBuf,
-    pub prefix: String,
-    pub timeout: u32,
-    pub memory_limit: u64,
-    pub break_bad: bool,
-    pub save_out: bool,
+    target_file: PathBuf,
+    prefix: String,
+    timeout: u32,
+    memory_limit: u64,
+    break_bad: bool,
+    save_out: bool,
 }
 
 impl OutputCommand {
