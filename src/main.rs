@@ -5,20 +5,21 @@
  */
 
 use crate::cli::opt::Opt;
-use cli::structures::{
-    CheckCommand, CmpCommand, ExampleCommand, OutputCommand, SetupCommand, StressCommand,
+use cli::model::{
+    check_command::CheckCommand, cmp_command::CmpCommand, example_command::ExampleCommand,
+    output_command::OutputCommand, setup_command::SetupCommand, stress_command::StressCommand,
 };
 
 pub mod cli;
 pub mod config;
 pub mod constants;
+pub mod controllers;
 pub mod diff;
 pub mod error;
 pub mod file_handler;
 pub mod generator;
 pub mod language;
 pub mod runner;
-pub mod subcommand;
 pub mod util;
 pub mod views;
 
@@ -38,6 +39,7 @@ fn main() -> Result<(), ExitFailure> {
             test_cases,
             timeout,
             memory_limit,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -47,12 +49,13 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => subcommand::cmd_stress::run(&StressCommand::new(
+        } => controllers::cmd_stress::run(&StressCommand::new(
             target_file,
             gen_file,
             test_cases,
             timeout,
             memory_limit,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -70,6 +73,7 @@ fn main() -> Result<(), ExitFailure> {
             timeout,
             memory_limit,
             test_cases,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -80,13 +84,14 @@ fn main() -> Result<(), ExitFailure> {
             run_rte,
             run_mle,
             diff,
-        } => subcommand::cmd_cmp::run(&CmpCommand::new(
+        } => controllers::cmd_cmp::run(&CmpCommand::new(
             target_file,
             correct_file,
             gen_file,
             timeout,
             memory_limit,
             test_cases,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -105,6 +110,7 @@ fn main() -> Result<(), ExitFailure> {
             test_cases,
             timeout,
             memory_limit,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -114,13 +120,14 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => subcommand::cmd_check::run(&CheckCommand::new(
+        } => controllers::cmd_check::run(&CheckCommand::new(
             target_file,
             checker_file,
             gen_file,
             timeout,
             memory_limit,
             test_cases,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -138,7 +145,7 @@ fn main() -> Result<(), ExitFailure> {
             memory_limit,
             break_bad,
             save_out,
-        } => subcommand::cmd_output::run(&OutputCommand::new(
+        } => controllers::cmd_output::run(&OutputCommand::new(
             target_file,
             prefix,
             timeout,
@@ -148,7 +155,7 @@ fn main() -> Result<(), ExitFailure> {
         )),
         Opt::Setup { subcommand } => match subcommand {
             cli::opt::SetUp::Config { label, value } => {
-                subcommand::cmd_setup::run(&SetupCommand::new(label, value))
+                controllers::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
         Opt::Example {
@@ -157,7 +164,7 @@ fn main() -> Result<(), ExitFailure> {
             check,
             output,
             setup,
-        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
+        } => controllers::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
     };
 
     if let Err(err) = status {

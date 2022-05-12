@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
-use crate::subcommand::cmd_setup::show_help_setup;
+use crate::controllers::cmd_setup::show_help_setup;
 
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
@@ -37,7 +37,7 @@ pub enum Opt {
         target_file: PathBuf,
 
         /// Generator File
-        #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
+        #[structopt(short = "g", long = "gen-file", parse(from_os_str), default_value = "")]
         gen_file: PathBuf,
 
         /// Timeout (alias --tout)
@@ -51,6 +51,10 @@ pub enum Opt {
         /// Number of test cases (alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
+
+        /// Prefix File
+        #[structopt(short = "p", long = "prefix", default_value = "")]
+        prefix: String,
 
         /// Break if TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
@@ -99,7 +103,7 @@ pub enum Opt {
         correct_file: PathBuf,
 
         /// Generator File
-        #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
+        #[structopt(short = "g", long = "gen-file", parse(from_os_str), default_value = "")]
         gen_file: PathBuf,
 
         /// Timeout (Alias --tout)
@@ -113,6 +117,10 @@ pub enum Opt {
         /// Number of test cases (Alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
+
+        /// Prefix File
+        #[structopt(short = "p", long = "prefix", default_value = "")]
+        prefix: String,
 
         /// Break if WA, TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
@@ -165,7 +173,7 @@ pub enum Opt {
         checker_file: PathBuf,
 
         /// Generator File
-        #[structopt(short = "g", long = "gen-file", parse(from_os_str))]
+        #[structopt(short = "g", long = "gen-file", parse(from_os_str), default_value = "")]
         gen_file: PathBuf,
 
         /// Timeout (Alias --tout)
@@ -179,6 +187,10 @@ pub enum Opt {
         /// Number of test cases (Alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
+
+        /// Prefix File
+        #[structopt(short = "p", long = "prefix", default_value = "")]
+        prefix: String,
 
         /// Break if WA, TLE or RTE states occurs (Alias --break)
         #[structopt(short = "b", alias = "break", long = "break_bad")]

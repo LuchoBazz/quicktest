@@ -15,6 +15,7 @@ use exitfailure::ExitFailure;
 use glob::glob;
 
 use crate::{
+    cli::model::traits::AdapterCommand,
     constants::{
         PREFIX_AC_FILES, PREFIX_MLE_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES,
         TEST_CASES_FOLDER,
@@ -142,6 +143,9 @@ pub fn load_testcases_from_prefix(
     queue: &mut VecDeque<PathBuf>,
     prefix: &str,
 ) -> Result<(), ExitFailure> {
+    if prefix.is_empty() {
+        return Ok(());
+    }
     let paths = glob(&format!("{}*", prefix))?;
     for path in paths.flatten() {
         queue.push_back(path);
@@ -222,4 +226,27 @@ pub fn get_filename_output(prefix: &str, filename: &str) -> String {
     }
 
     format!("{}/out_{}", path, filename)
+}
+
+pub fn delete_test_case_folder(command: &dyn AdapterCommand) {
+    if command.get_save_bad() || command.get_save_all() {
+        // Remove all previous test cases
+        remove_folder(TEST_CASES_FOLDER);
+    }
+}
+
+pub fn load_test_cases_from_status(
+    command: &dyn AdapterCommand,
+    cases: &mut VecDeque<PathBuf>,
+) -> Result<(), ExitFailure> {
+    load_testcases_from_states(
+        cases,
+        TEST_CASES_FOLDER,
+        command.get_run_all(),
+        command.get_run_ac(),
+        command.get_run_wa(),
+        command.get_run_tle(),
+        command.get_run_rte(),
+        command.get_run_mle(),
+    )
 }
