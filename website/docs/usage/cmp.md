@@ -32,8 +32,8 @@ qt cmp -t main.cpp --c correct.cpp -g gen.cpp
 
     **Other Options**
 
-    * `--test-cases=<value> | --cases=<value> [default: 1000]`
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--test-cases=<value> | --tc=<value> [default: 1000]`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--diff`  Show differences between the expected file and the output file
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**

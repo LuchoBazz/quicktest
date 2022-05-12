@@ -1,9 +1,15 @@
+/*
+*  Quick Test: CLI for stress testing in competitive programming
+*  Copyright (C) 2021-present / Luis Miguel Báez
+*  License: MIT (See the LICENSE file in the repository root directory)
+*/
+
 use std::{collections::VecDeque, path::PathBuf, time::Duration};
 
 use exitfailure::ExitFailure;
 
 use crate::{
-    cli::structures::RunCommand,
+    cli::structures::OutputCommand,
     constants::{
         CACHE_FOLDER, GEN_BINARY_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
         TARGET_BINARY_FILE,
@@ -15,11 +21,17 @@ use crate::{
         remove_files, save_test_case_output,
     },
     language::language_handler::get_language_handler,
-    runner::types::{is_compiled_error, is_runtime_error, is_time_limit_exceeded, Language},
-    views::style::{show_ran_successfully, show_runtime_error, show_time_limit_exceeded},
+    runner::types::{
+        is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded,
+        Language,
+    },
+    views::style::{
+        show_memory_limit_exceeded_error, show_ran_successfully, show_runtime_error,
+        show_time_limit_exceeded,
+    },
 };
 
-pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
+pub fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
 
@@ -65,7 +77,8 @@ pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
         let case = cases.pop_front().unwrap();
         copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
 
-        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
+        let response_target =
+            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_target: Duration = response_target.time;
         let mills_target = time_target.as_millis();
 
@@ -88,6 +101,22 @@ pub fn run(command: &RunCommand) -> Result<(), ExitFailure> {
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
+        } else if is_memory_limit_exceeded(&response_target.status) {
+            show_memory_limit_exceeded_error(test_number, mills_target as u32);
+            // check if the tle_breck flag is high
+            if command.break_bad {
+                // remove input, output and error files
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                ]);
+
+                return Ok(());
+            }
+            continue;
         }
 
         if time_target >= Duration::from_millis(command.timeout as u64)

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::language::{traits::BuildEnvVariables, util::replace_env_variable};
 
-use super::{library::Library, os_command::OSCommand};
+use super::os_command::OSCommand;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Languages {
@@ -23,7 +23,6 @@ pub struct LanguageScheme {
     pub compile: Option<OSCommand>,
     pub execute: OSCommand,
     pub check_installed: String,
-    pub libraries: Vec<Library>,
 }
 
 impl LanguageScheme {
@@ -37,7 +36,6 @@ impl LanguageScheme {
             compile: Some(OSCommand::new()),
             execute: OSCommand::new(),
             check_installed: String::new(),
-            libraries: Vec::new(),
         }
     }
 

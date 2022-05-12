@@ -16,7 +16,8 @@ use glob::glob;
 
 use crate::{
     constants::{
-        PREFIX_AC_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, TEST_CASES_FOLDER,
+        PREFIX_AC_FILES, PREFIX_MLE_FILES, PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES,
+        TEST_CASES_FOLDER,
     },
     error::handle_error::{
         throw_couldnt_create_folder_msg, throw_couldnt_open_file_msg,
@@ -148,6 +149,7 @@ pub fn load_testcases_from_prefix(
     Ok(())
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn load_testcases_from_states(
     queue: &mut VecDeque<PathBuf>,
     folder: &str,
@@ -156,17 +158,20 @@ pub fn load_testcases_from_states(
     run_wa: bool,
     run_tle: bool,
     run_rte: bool,
+    run_mle: bool,
 ) -> Result<(), ExitFailure> {
     let mut run_ac = run_ac;
     let mut run_wa = run_wa;
     let mut run_tle = run_tle;
     let mut run_rte = run_rte;
+    let mut run_mle = run_mle;
 
     if run_all {
         run_ac = true;
         run_wa = true;
         run_tle = true;
         run_rte = true;
+        run_mle = true;
     }
 
     if run_ac {
@@ -183,6 +188,10 @@ pub fn load_testcases_from_states(
 
     if run_rte {
         load_testcases_from_prefix_with_folder(queue, folder, PREFIX_RTE_FILES)?;
+    }
+
+    if run_mle {
+        load_testcases_from_prefix_with_folder(queue, folder, PREFIX_MLE_FILES)?;
     }
 
     Ok(())

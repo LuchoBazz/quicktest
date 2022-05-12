@@ -15,9 +15,9 @@ pub fn diff_line_by_line<WriteType: std::io::Write>(
 ) {
     let Changeset { diffs, .. } = Changeset::new(expected, output, "\n");
 
-    // writeln!(tout, "{}  {}", IDENTATION, "-Expected".bold().red()).ok();
-    // writeln!(tout, "{}  {}\n", IDENTATION, "+Output".bold().green()).ok();
-    // writeln!(tout).ok();
+    // + Expected
+    // - Output
+
     const LINE: &str = "──────────────────────";
     writeln!(tout, "\n{}  {}", IDENTATION, LINE.bold().white()).ok();
 
@@ -28,11 +28,11 @@ pub fn diff_line_by_line<WriteType: std::io::Write>(
                 writeln!(tout, "{}  {}", IDENTATION, text).ok();
             }
             Difference::Add(ref text) => {
-                let text = format!("+ {}", text.trim()).bold().bright_green();
+                let text = format!("- {}", text.trim()).bold().bright_red();
                 writeln!(tout, "{}{}", IDENTATION, text).ok();
             }
             Difference::Rem(ref text) => {
-                let text = format!("- {}", text.trim()).bold().bright_red();
+                let text = format!("+ {}", text.trim()).bold().bright_green();
                 writeln!(tout, "{}{}", IDENTATION, text).ok();
             }
         }

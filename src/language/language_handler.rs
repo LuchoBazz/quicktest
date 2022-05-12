@@ -149,13 +149,14 @@ impl Language for LanguageHandler {
         status.code() == Some(0)
     }
 
-    fn execute(&self, timeout: u32, testcase: u32) -> StatusResponse {
+    fn execute(&self, timeout: u32, memory_limit: u64, testcase: u32) -> StatusResponse {
         // println!("Execute {}", self.execute);
         let execute = self.execute.clone();
         let commands_str = execute.split(" ").collect::<Vec<_>>();
 
         execute_program(
             timeout,
+            memory_limit,
             testcase,
             commands_str,
             self.stdin.clone(),

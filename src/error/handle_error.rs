@@ -31,6 +31,14 @@ pub fn throw_time_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(),
     Ok(error.context("QTEST_TIME_LIMIT_EXCEEDED")?)
 }
 
+pub fn throw_memory_limit_exceeded_msg(file_name: &str, label: &str) -> Result<(), ExitFailure> {
+    let error = Err(failure::err_msg(format!(
+        "{} file give memory limit exceeded / label {}",
+        file_name, label
+    )));
+    Ok(error.context("QTEST_MEMORY_LIMIT_EXCEEDED")?)
+}
+
 pub fn throw_couldnt_create_folder_msg(file_name: &str) -> Result<(), ExitFailure> {
     let error = Err(failure::err_msg(format!(
         "Could not create folder {}",

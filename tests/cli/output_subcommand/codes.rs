@@ -1,11 +1,11 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 // CODES
-pub const TARGET_CPP_RUN: &str = r#"
+pub const TARGET_CPP_OUTPUT_CMD: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
 int n;
@@ -22,7 +22,7 @@ int main() {
 }
 "#;
 
-pub const TARGET_PY_RUN: &str = r#"
+pub const TARGET_PY_OUTPUT_CMD: &str = r#"
 n = int(input())
 A = list(map(int, input().split()))
 A.sort()

@@ -3,8 +3,30 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0-rc.1 / 2022.05.11
+
 - feat: documentation website using docusaurus was initialized [3c240b9]
+- feat: report table was added using ascii style [4923d80]
+- feat: short code examples were added for cmp, stress and check subcommands [08f4cff]
+- feat: examples were added for run and setup subcommands #55 [062c3f7]
+- feat: Alias of timeout and test-cases options were updated [4d2b6a8, 3559c54]
+- feat: show test case input was added in diff [bd366a2, 561590e]
+- feat: mle support was added to the cmp subcommand [2854cc1]
+- feat: mle support was added to the stress subcommand [c7ccecd]
+- feat: mle support was added to the check subcommand [3c74a6c]
+- feat: mle support was added to the run subcommand [84bd676]
+- feat: mle status added to report table [2c9065a]
+- feat: flag memory_limit was added to cmp, stress, check and run subcommands [0553b9f]
+- feat: label reporting the location of the configuration file was added [878302f]
+- feat: library attribute was removed from configuration json [d2954b3]
+- feat: status code for cmp subcommand were added [696e7c5]
+- feat: status code for stress subcommand were added [c765f9c]
+- feat: status code for check subcommand were added [ecf8b79]
+- feat: `run` subcommand was renamed to `output` [a73b75e]
+- fix: text view was fixed [eba2bcb]
+- fix: issue about run_mle was fixed in cmp subcommand [79582c8]
 - docs: initial documentation was added [61dc8e5]
+- docs: cmp examples were updated [1bf9f0f]
 
 ### 0.10.0 / 2022.04.27
 

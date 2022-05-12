@@ -1,15 +1,15 @@
-use std::path::PathBuf;
-
 /*
- *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021-present / Luis Miguel Báez
- *  License: MIT (See the LICENSE file in the repository root directory)
- */
+*  Quick Test: CLI for stress testing in competitive programming
+*  Copyright (C) 2021-present / Luis Miguel Báez
+*  License: MIT (See the LICENSE file in the repository root directory)
+*/
 
+use std::path::PathBuf;
 pub struct StressCommand {
     pub target_file: PathBuf,
     pub gen_file: PathBuf,
     pub timeout: u32,
+    pub memory_limit: u64,
     pub test_cases: u32,
     pub break_bad: bool,
     pub save_bad: bool,
@@ -19,6 +19,7 @@ pub struct StressCommand {
     pub run_wa: bool,
     pub run_tle: bool,
     pub run_rte: bool,
+    pub run_mle: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -28,6 +29,7 @@ impl StressCommand {
         gen_file: PathBuf,
         test_cases: u32,
         timeout: u32,
+        memory_limit: u64,
         break_bad: bool,
         save_bad: bool,
         save_all: bool,
@@ -36,11 +38,13 @@ impl StressCommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
+        run_mle: bool,
     ) -> StressCommand {
         StressCommand {
             target_file,
             gen_file,
             timeout,
+            memory_limit,
             test_cases,
             break_bad,
             save_bad,
@@ -50,6 +54,7 @@ impl StressCommand {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         }
     }
 }
@@ -59,6 +64,7 @@ pub struct CmpCommand {
     pub correct_file: PathBuf,
     pub gen_file: PathBuf,
     pub timeout: u32,
+    pub memory_limit: u64,
     pub test_cases: u32,
     pub break_bad: bool,
     pub save_bad: bool,
@@ -68,6 +74,7 @@ pub struct CmpCommand {
     pub run_wa: bool,
     pub run_tle: bool,
     pub run_rte: bool,
+    pub run_mle: bool,
     pub diff: bool,
 }
 
@@ -78,6 +85,7 @@ impl CmpCommand {
         correct_file: PathBuf,
         gen_file: PathBuf,
         timeout: u32,
+        memory_limit: u64,
         test_cases: u32,
         break_bad: bool,
         save_bad: bool,
@@ -87,6 +95,7 @@ impl CmpCommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
+        run_mle: bool,
         diff: bool,
     ) -> CmpCommand {
         CmpCommand {
@@ -94,6 +103,7 @@ impl CmpCommand {
             correct_file,
             gen_file,
             timeout,
+            memory_limit,
             test_cases,
             break_bad,
             save_bad,
@@ -103,6 +113,7 @@ impl CmpCommand {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         }
     }
@@ -113,6 +124,7 @@ pub struct CheckCommand {
     pub checker_file: PathBuf,
     pub gen_file: PathBuf,
     pub timeout: u32,
+    pub memory_limit: u64,
     pub test_cases: u32,
     pub break_bad: bool,
     pub save_bad: bool,
@@ -122,6 +134,7 @@ pub struct CheckCommand {
     pub run_wa: bool,
     pub run_tle: bool,
     pub run_rte: bool,
+    pub run_mle: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -131,6 +144,7 @@ impl CheckCommand {
         checker_file: PathBuf,
         gen_file: PathBuf,
         timeout: u32,
+        memory_limit: u64,
         test_cases: u32,
         break_bad: bool,
         save_bad: bool,
@@ -140,6 +154,7 @@ impl CheckCommand {
         run_wa: bool,
         run_tle: bool,
         run_rte: bool,
+        run_mle: bool,
     ) -> CheckCommand {
         CheckCommand {
             target_file,
@@ -147,6 +162,7 @@ impl CheckCommand {
             gen_file,
             test_cases,
             timeout,
+            memory_limit,
             break_bad,
             save_bad,
             save_all,
@@ -155,30 +171,34 @@ impl CheckCommand {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         }
     }
 }
 
-pub struct RunCommand {
+pub struct OutputCommand {
     pub target_file: PathBuf,
     pub prefix: String,
     pub timeout: u32,
+    pub memory_limit: u64,
     pub break_bad: bool,
     pub save_out: bool,
 }
 
-impl RunCommand {
+impl OutputCommand {
     pub fn new(
         target_file: PathBuf,
         prefix: String,
         timeout: u32,
+        memory_limit: u64,
         break_bad: bool,
         save_out: bool,
-    ) -> RunCommand {
-        RunCommand {
+    ) -> OutputCommand {
+        OutputCommand {
             target_file,
             prefix,
             timeout,
+            memory_limit,
             break_bad,
             save_out,
         }
@@ -189,11 +209,19 @@ pub struct ExampleCommand {
     pub stress: bool,
     pub cmp: bool,
     pub check: bool,
+    pub output: bool,
+    pub setup: bool,
 }
 
 impl ExampleCommand {
-    pub fn new(stress: bool, cmp: bool, check: bool) -> ExampleCommand {
-        ExampleCommand { stress, cmp, check }
+    pub fn new(cmp: bool, stress: bool, check: bool, output: bool, setup: bool) -> ExampleCommand {
+        ExampleCommand {
+            stress,
+            cmp,
+            check,
+            output,
+            setup,
+        }
     }
 }
 

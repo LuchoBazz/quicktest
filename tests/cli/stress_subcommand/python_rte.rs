@@ -32,7 +32,7 @@ fn cmd_tle_target_rte_py() -> Result<(), Box<dyn Error>> {
     execute_command_stress(&mut cmd, TARGET_FILE_PY, GEN_FILE_PY, cases);
 
     cmd.assert()
-        .success()
+        .failure()
         .stdout(predicate::str::contains("[RTE]").count(cases));
 
     Ok(())

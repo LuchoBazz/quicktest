@@ -6,7 +6,7 @@
 
 use crate::cli::opt::Opt;
 use cli::structures::{
-    CheckCommand, CmpCommand, ExampleCommand, RunCommand, SetupCommand, StressCommand,
+    CheckCommand, CmpCommand, ExampleCommand, OutputCommand, SetupCommand, StressCommand,
 };
 
 pub mod cli;
@@ -31,12 +31,13 @@ fn main() -> Result<(), ExitFailure> {
     #[cfg(windows)]
     let _ = colored::control::set_virtual_terminal(true);
 
-    match opt {
+    let status = match opt {
         Opt::Stress {
             target_file,
             gen_file,
             test_cases,
             timeout,
+            memory_limit,
             break_bad,
             save_bad,
             save_all,
@@ -45,11 +46,13 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         } => subcommand::cmd_stress::run(&StressCommand::new(
             target_file,
             gen_file,
             test_cases,
             timeout,
+            memory_limit,
             break_bad,
             save_bad,
             save_all,
@@ -58,12 +61,14 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         )),
         Opt::Cmp {
             target_file,
             correct_file,
             gen_file,
             timeout,
+            memory_limit,
             test_cases,
             break_bad,
             save_bad,
@@ -73,12 +78,14 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         } => subcommand::cmd_cmp::run(&CmpCommand::new(
             target_file,
             correct_file,
             gen_file,
             timeout,
+            memory_limit,
             test_cases,
             break_bad,
             save_bad,
@@ -88,6 +95,7 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
             diff,
         )),
         Opt::Check {
@@ -96,6 +104,7 @@ fn main() -> Result<(), ExitFailure> {
             gen_file,
             test_cases,
             timeout,
+            memory_limit,
             break_bad,
             save_bad,
             save_all,
@@ -104,11 +113,13 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         } => subcommand::cmd_check::run(&CheckCommand::new(
             target_file,
             checker_file,
             gen_file,
             timeout,
+            memory_limit,
             test_cases,
             break_bad,
             save_bad,
@@ -118,17 +129,20 @@ fn main() -> Result<(), ExitFailure> {
             run_wa,
             run_tle,
             run_rte,
+            run_mle,
         )),
-        Opt::Run {
+        Opt::Output {
             target_file,
             prefix,
             timeout,
+            memory_limit,
             break_bad,
             save_out,
-        } => subcommand::cmd_run::run(&RunCommand::new(
+        } => subcommand::cmd_output::run(&OutputCommand::new(
             target_file,
             prefix,
             timeout,
+            memory_limit,
             break_bad,
             save_out,
         )),
@@ -137,8 +151,17 @@ fn main() -> Result<(), ExitFailure> {
                 subcommand::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
-        Opt::Example { cmp, stress, check } => {
-            subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check))
-        }
+        Opt::Example {
+            cmp,
+            stress,
+            check,
+            output,
+            setup,
+        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
+    };
+
+    if let Err(err) = status {
+        return Err(err);
     }
+    std::process::exit(exitcode::OK);
 }
