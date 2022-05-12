@@ -7,7 +7,7 @@
 use exitfailure::ExitFailure;
 
 use crate::{
-    cli::structures::SetupCommand,
+    cli::model::setup_command::SetupCommand,
     config::load_config::{read_language_configuration, write_language_configuration},
     error::handle_error::throw_setup_label_is_not_correct_msg,
     language::json::language_scheme::Languages,

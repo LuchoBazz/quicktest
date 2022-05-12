@@ -10,20 +10,23 @@ use std::path::PathBuf;
 use std::process;
 use std::time::Duration;
 
-use crate::cli::structures::CheckCommand;
+use crate::cli::model::check_command::CheckCommand;
+use crate::cli::model::traits::AdapterCommand;
 // local library
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
-    can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
-    format_filename_test_case, is_extension_supported_or_error, load_testcases_from_states,
-    remove_files, remove_folder, save_test_case,
+    create_folder_or_error, delete_test_case_folder, format_filename_test_case,
+    load_test_cases_from_status, load_testcases_from_prefix, remove_files, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
-use crate::language::language_handler::{get_generator_handler, get_language_handler};
+use crate::language::get_language::{
+    get_executor_checker, get_executor_generator, get_executor_target,
+};
+use crate::language::language_handler::LanguageHandler;
 use crate::runner::types::{
     is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded, Language,
 };
@@ -47,106 +50,23 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 
-    // verify that the target file exists
-    file_exists_or_error(command.target_file.to_str().unwrap(), "<target-file>")?;
-
-    // verify that the checker_file file exists
-    file_exists_or_error(command.checker_file.to_str().unwrap(), "<checker-file>")?;
-
-    // verify that the generator file exists
-    file_exists_or_error(command.gen_file.to_str().unwrap(), "<gen-file>")?;
-
-    // verify that the target file extension is supported
-    is_extension_supported_or_error(command.target_file.to_str().unwrap())?;
-
-    // verify that the checker file extension is supported
-    is_extension_supported_or_error(command.checker_file.to_str().unwrap())?;
-
-    // verify that the generator file extension is supported
-    is_extension_supported_or_error(command.gen_file.to_str().unwrap())?;
-
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
-    let generator_file_lang = *get_generator_handler(
-        &command
-            .gen_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<gen-file>",
-        QTEST_INPUT_FILE,
-    )?;
-
-    // verify that the program to run the generator file is installed
-    can_run_language_or_error(&generator_file_lang)?;
+    let generator_file_lang: LanguageHandler = *get_executor_generator(command)?;
 
     // Get the language depending on the extension of the target_file
-    let target_file_lang = *get_language_handler(
-        &command
-            .target_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<target-file>",
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-    )?;
-
-    // verify that the program to run the target file is installed
-    can_run_language_or_error(&target_file_lang)?;
+    let target_file_lang: LanguageHandler = *get_executor_target(command)?;
 
     // Get the language depending on the extension of the checker_file_lang
-    let checker_file_lang_lang = *get_language_handler(
-        &command
-            .checker_file
-            .clone()
-            .into_os_string()
-            .into_string()
-            .unwrap()[..],
-        "<checker-file>",
-        QTEST_OUTPUT_FILE,
-        QTEST_CHECKER_FILE,
-        QTEST_ERROR_FILE,
-    )?;
+    let checker_file_lang_lang: LanguageHandler = *get_executor_checker(command)?;
 
-    // verify that the program to run the checker file is installed
-    can_run_language_or_error(&checker_file_lang_lang)?;
-
-    let can_compile_gen = generator_file_lang.build();
-    if !can_compile_gen {
-        return throw_compiler_error_msg("generator", "<gen-file>");
-    }
-
-    let can_compile_target = target_file_lang.build();
-    if !can_compile_target {
-        return throw_compiler_error_msg("target", "<target-file>");
-    }
-
-    let can_compile_checker = checker_file_lang_lang.build();
-    if !can_compile_checker {
-        return throw_compiler_error_msg("checker", "<checker-file>");
-    }
-
-    if command.save_bad || command.save_all {
-        // Remove all previous test cases
-        remove_folder(TEST_CASES_FOLDER);
-    }
+    // deletes the test cases folder, if and only if it is explicitly told to do so from the cli
+    delete_test_case_folder(command);
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
-    load_testcases_from_states(
-        &mut cases,
-        TEST_CASES_FOLDER,
-        command.run_all,
-        command.run_ac,
-        command.run_wa,
-        command.run_tle,
-        command.run_rte,
-        command.run_mle,
-    )?;
+    load_test_cases_from_status(command, &mut cases)?;
+    load_testcases_from_prefix(&mut cases, &command.get_prefix()[..])?;
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
@@ -154,53 +74,46 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     let mut ac_count: u32 = 0;
     let mut mle_count: u32 = 0;
 
-    let load_case: bool = command.run_all
-        || command.run_ac
-        || command.run_wa
-        || command.run_tle
-        || command.run_rte
-        || command.run_mle;
-
     let mut test_number: u32 = 0;
 
-    while test_number < command.test_cases || load_case {
+    while command.has_test_cases(test_number) {
         test_number += 1;
 
-        if load_case {
-            if !cases.is_empty() {
-                // Load test case in stdin
-                let case = cases.pop_front().unwrap();
-                copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
-            } else {
-                break;
-            }
-        } else {
-            // run generator
-            execute_generator(
-                &generator_file_lang,
-                command.timeout,
-                command.memory_limit,
-                test_number,
-            )?;
+        let mut can_continue = false;
+
+        // run generator or load testcases using prefix
+        execute_generator(
+            &generator_file_lang,
+            command,
+            &mut cases,
+            test_number,
+            &mut can_continue,
+        )?;
+
+        if !can_continue {
+            break;
         }
 
-        let response_target =
-            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
+        let response_target = target_file_lang.execute(
+            command.get_timeout() as u32,
+            command.get_memory_limit(),
+            test_number,
+        );
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
             rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_rte_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
-            // check if the command.break_bad flag is high
-            if command.break_bad {
+            // check if the command.get_break_bad() flag is high
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -220,7 +133,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             mle_count += 1;
             show_memory_limit_exceeded_error(test_number, mills_target as u32);
 
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_mle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_MLE_FILES, mle_count)[..];
@@ -228,7 +141,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
 
-            if command.break_bad {
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -240,14 +153,18 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                     CHECKER_BINARY_FILE,
                 ]);
 
-                return throw_break_found_msg("Memory Limit Exceeded", "MLE", command.test_cases);
+                return throw_break_found_msg(
+                    "Memory Limit Exceeded",
+                    "MLE",
+                    command.get_test_cases(),
+                );
             }
             continue;
         }
 
         let response_checker = checker_file_lang_lang.execute(
-            command.timeout as u32,
-            command.memory_limit,
+            command.get_timeout() as u32,
+            command.get_memory_limit(),
             test_number,
         );
         let time_checker: Duration = response_checker.time;
@@ -260,20 +177,20 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             return throw_memory_limit_exceeded_msg("checker", "<checker-file>");
         }
 
-        if time_checker >= Duration::from_millis(command.timeout as u64) {
+        if time_checker >= Duration::from_millis(command.get_timeout() as u64) {
             // TLE checker file
-            show_time_limit_exceeded_checker(test_number, command.timeout);
+            show_time_limit_exceeded_checker(test_number, command.get_timeout());
             return throw_time_limit_exceeded_msg("checker", "<checker-file>");
         }
 
-        if time_target >= Duration::from_millis(command.timeout as u64)
+        if time_target >= Duration::from_millis(command.get_timeout() as u64)
             || is_time_limit_exceeded(&response_target.status)
         {
             // TLE Target file
             tle_count += 1;
-            show_time_limit_exceeded(test_number, command.timeout);
+            show_time_limit_exceeded(test_number, command.get_timeout());
 
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_tle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
@@ -281,8 +198,8 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
 
-            // check if the command.break_bad flag is high
-            if command.break_bad {
+            // check if the command.get_break_bad() flag is high
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -304,7 +221,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 // is OK
                 ac_count += 1;
                 show_accepted(test_number, mills_target as u32);
-                if command.save_all {
+                if command.get_save_all() {
                     // Example: test_cases/testcase_ac_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -320,7 +237,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
 
                 show_wrong_answer(test_number, mills_target as u32);
 
-                if command.save_bad || command.save_all {
+                if command.get_save_bad() || command.get_save_all() {
                     // Example: test_cases/testcase_wa_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -331,7 +248,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                     save_test_case(file_name, QTEST_INPUT_FILE);
                 }
 
-                if command.break_bad {
+                if command.get_break_bad() {
                     // remove input, output and error files
                     remove_files(vec![
                         QTEST_INPUT_FILE,
@@ -343,7 +260,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                         CHECKER_BINARY_FILE,
                     ]);
 
-                    return throw_break_found_msg("Wrong Answer", "WA", command.test_cases);
+                    return throw_break_found_msg("Wrong Answer", "WA", command.get_test_cases());
                 }
             }
         }

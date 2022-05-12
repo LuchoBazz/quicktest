@@ -37,6 +37,20 @@ pub struct LanguageHandler {
     stdout: Option<PathBuf>,
 }
 
+impl Default for LanguageHandler {
+    fn default() -> Self {
+        Self {
+            check_installed: String::default(),
+            compile: None,
+            execute: String::default(),
+            name: String::default(),
+            stderr: None,
+            stdin: None,
+            stdout: None,
+        }
+    }
+}
+
 impl LanguageHandler {
     pub fn get_language(
         lang: LanguageScheme,
