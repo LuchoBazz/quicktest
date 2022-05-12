@@ -8,7 +8,10 @@ use exitfailure::ExitFailure;
 
 use crate::{
     cli::model::traits::AdapterCommand,
-    constants::{QTEST_CHECKER_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, QTEST_EXPECTED_FILE},
+    constants::{
+        QTEST_CHECKER_FILE, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE, QTEST_INPUT_FILE,
+        QTEST_OUTPUT_FILE,
+    },
     error::handle_error::throw_compiler_error_msg,
     file_handler::file::{
         can_run_language_or_error, file_exists_or_error, is_extension_supported_or_error,
