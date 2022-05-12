@@ -4,11 +4,10 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-use std::path::Path;
-
 use exitfailure::ExitFailure;
 
 use crate::{
+    cli::model::traits::AdapterCommand,
     constants::{QTEST_CHECKER_FILE, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE},
     error::handle_error::throw_compiler_error_msg,
     file_handler::file::{
@@ -19,16 +18,18 @@ use crate::{
 
 use super::language_handler::{get_generator_handler, get_language_handler, LanguageHandler};
 
-pub fn get_executor_generator(gen_file: &Path) -> Result<Box<LanguageHandler>, ExitFailure> {
+pub fn get_executor_generator(
+    command: &dyn AdapterCommand,
+) -> Result<Box<LanguageHandler>, ExitFailure> {
     // verify that the generator file exists
-    file_exists_or_error(gen_file.to_str().unwrap(), "<gen-file>")?;
+    file_exists_or_error(command.get_generator_file().to_str().unwrap(), "<gen-file>")?;
 
     // verify that the generator file extension is supported
-    is_extension_supported_or_error(gen_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.get_generator_file().to_str().unwrap())?;
 
     let generator_file_lang = *get_generator_handler(
-        &gen_file
-            .to_path_buf()
+        &command
+            .get_generator_file()
             .into_os_string()
             .into_string()
             .unwrap()[..],
@@ -47,17 +48,19 @@ pub fn get_executor_generator(gen_file: &Path) -> Result<Box<LanguageHandler>, E
     Ok(Box::new(generator_file_lang))
 }
 
-pub fn get_executor_target(target_file: &Path) -> Result<Box<LanguageHandler>, ExitFailure> {
+pub fn get_executor_target(
+    command: &dyn AdapterCommand,
+) -> Result<Box<LanguageHandler>, ExitFailure> {
     // verify that the target file exists
-    file_exists_or_error(target_file.to_str().unwrap(), "<target-file>")?;
+    file_exists_or_error(command.get_target_file().to_str().unwrap(), "<target-file>")?;
 
     // verify that the target file extension is supported
-    is_extension_supported_or_error(target_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.get_target_file().to_str().unwrap())?;
 
     // Get the language depending on the extension of the target_file
     let target_file_lang = *get_language_handler(
-        &target_file
-            .to_path_buf()
+        &command
+            .get_target_file()
             .into_os_string()
             .into_string()
             .unwrap()[..],
@@ -78,17 +81,22 @@ pub fn get_executor_target(target_file: &Path) -> Result<Box<LanguageHandler>, E
     Ok(Box::new(target_file_lang))
 }
 
-pub fn get_executor_checker(checker_file: &Path) -> Result<Box<LanguageHandler>, ExitFailure> {
+pub fn get_executor_checker(
+    command: &dyn AdapterCommand,
+) -> Result<Box<LanguageHandler>, ExitFailure> {
     // verify that the checker_file file exists
-    file_exists_or_error(checker_file.to_str().unwrap(), "<checker-file>")?;
+    file_exists_or_error(
+        command.get_checker_file().to_str().unwrap(),
+        "<checker-file>",
+    )?;
 
     // verify that the checker file extension is supported
-    is_extension_supported_or_error(checker_file.to_str().unwrap())?;
+    is_extension_supported_or_error(command.get_checker_file().to_str().unwrap())?;
 
     // Get the language depending on the extension of the checker_file_lang
     let checker_file_lang_lang = *get_language_handler(
-        &checker_file
-            .to_path_buf()
+        &command
+            .get_checker_file()
             .into_os_string()
             .into_string()
             .unwrap()[..],

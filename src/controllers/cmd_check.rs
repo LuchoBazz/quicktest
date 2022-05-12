@@ -10,15 +10,15 @@ use std::path::PathBuf;
 use std::process;
 use std::time::Duration;
 
-use crate::cli::model::check_command::CheckCommand;
+use crate::cli::model::traits::AdapterCommand;
 // local library
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
-    copy_file, create_folder_or_error, format_filename_test_case, load_testcases_from_states,
-    remove_files, remove_folder, save_test_case,
+    copy_file, create_folder_or_error, delete_test_case_folder, format_filename_test_case,
+    load_test_cases_from_status, remove_files, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
@@ -45,37 +45,26 @@ use crate::constants::{
 };
 
 #[allow(clippy::too_many_arguments)]
-pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
+pub fn run(command: &dyn AdapterCommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 
     let root = &get_root_path()[..];
 
     // Get the language depending on the extension of the gen_file
-    let generator_file_lang: LanguageHandler = *get_executor_generator(&command.gen_file)?;
+    let generator_file_lang: LanguageHandler = *get_executor_generator(command)?;
 
     // Get the language depending on the extension of the target_file
-    let target_file_lang: LanguageHandler = *get_executor_target(&command.target_file)?;
+    let target_file_lang: LanguageHandler = *get_executor_target(command)?;
 
     // Get the language depending on the extension of the checker_file_lang
-    let checker_file_lang_lang: LanguageHandler = *get_executor_checker(&command.checker_file)?;
+    let checker_file_lang_lang: LanguageHandler = *get_executor_checker(command)?;
 
-    if command.save_bad || command.save_all {
-        // Remove all previous test cases
-        remove_folder(TEST_CASES_FOLDER);
-    }
+    // deletes the test cases folder, if and only if it is explicitly told to do so from the cli
+    delete_test_case_folder(command);
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
-    load_testcases_from_states(
-        &mut cases,
-        TEST_CASES_FOLDER,
-        command.run_all,
-        command.run_ac,
-        command.run_wa,
-        command.run_tle,
-        command.run_rte,
-        command.run_mle,
-    )?;
+    load_test_cases_from_status(command, &mut cases)?;
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
@@ -83,19 +72,12 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     let mut ac_count: u32 = 0;
     let mut mle_count: u32 = 0;
 
-    let load_case: bool = command.run_all
-        || command.run_ac
-        || command.run_wa
-        || command.run_tle
-        || command.run_rte
-        || command.run_mle;
-
     let mut test_number: u32 = 0;
 
-    while test_number < command.test_cases || load_case {
+    while command.has_test_cases(test_number) {
         test_number += 1;
 
-        if load_case {
+        if command.can_run_cases() {
             if !cases.is_empty() {
                 // Load test case in stdin
                 let case = cases.pop_front().unwrap();
@@ -107,29 +89,32 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             // run generator
             execute_generator(
                 &generator_file_lang,
-                command.timeout,
-                command.memory_limit,
+                command.get_timeout(),
+                command.get_memory_limit(),
                 test_number,
             )?;
         }
 
-        let response_target =
-            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
+        let response_target = target_file_lang.execute(
+            command.get_timeout() as u32,
+            command.get_memory_limit(),
+            test_number,
+        );
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
         if is_runtime_error(&response_target.status) {
             rte_count += 1;
             show_runtime_error(test_number, mills_target as u32);
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_rte_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_RTE_FILES, rte_count)[..];
                 // save testcase
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
-            // check if the command.break_bad flag is high
-            if command.break_bad {
+            // check if the command.get_break_bad() flag is high
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -149,7 +134,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             mle_count += 1;
             show_memory_limit_exceeded_error(test_number, mills_target as u32);
 
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_mle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_MLE_FILES, mle_count)[..];
@@ -157,7 +142,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
 
-            if command.break_bad {
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -169,14 +154,18 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                     CHECKER_BINARY_FILE,
                 ]);
 
-                return throw_break_found_msg("Memory Limit Exceeded", "MLE", command.test_cases);
+                return throw_break_found_msg(
+                    "Memory Limit Exceeded",
+                    "MLE",
+                    command.get_test_cases(),
+                );
             }
             continue;
         }
 
         let response_checker = checker_file_lang_lang.execute(
-            command.timeout as u32,
-            command.memory_limit,
+            command.get_timeout() as u32,
+            command.get_memory_limit(),
             test_number,
         );
         let time_checker: Duration = response_checker.time;
@@ -189,20 +178,20 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
             return throw_memory_limit_exceeded_msg("checker", "<checker-file>");
         }
 
-        if time_checker >= Duration::from_millis(command.timeout as u64) {
+        if time_checker >= Duration::from_millis(command.get_timeout() as u64) {
             // TLE checker file
-            show_time_limit_exceeded_checker(test_number, command.timeout);
+            show_time_limit_exceeded_checker(test_number, command.get_timeout());
             return throw_time_limit_exceeded_msg("checker", "<checker-file>");
         }
 
-        if time_target >= Duration::from_millis(command.timeout as u64)
+        if time_target >= Duration::from_millis(command.get_timeout() as u64)
             || is_time_limit_exceeded(&response_target.status)
         {
             // TLE Target file
             tle_count += 1;
-            show_time_limit_exceeded(test_number, command.timeout);
+            show_time_limit_exceeded(test_number, command.get_timeout());
 
-            if command.save_bad || command.save_all {
+            if command.get_save_bad() || command.get_save_all() {
                 // Example: test_cases/testcase_tle_01.txt
                 let file_name: &str =
                     &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
@@ -210,8 +199,8 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 save_test_case(file_name, QTEST_INPUT_FILE);
             }
 
-            // check if the command.break_bad flag is high
-            if command.break_bad {
+            // check if the command.get_break_bad() flag is high
+            if command.get_break_bad() {
                 // remove input, output and error files
                 remove_files(vec![
                     QTEST_INPUT_FILE,
@@ -233,7 +222,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                 // is OK
                 ac_count += 1;
                 show_accepted(test_number, mills_target as u32);
-                if command.save_all {
+                if command.get_save_all() {
                     // Example: test_cases/testcase_ac_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -249,7 +238,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
 
                 show_wrong_answer(test_number, mills_target as u32);
 
-                if command.save_bad || command.save_all {
+                if command.get_save_bad() || command.get_save_all() {
                     // Example: test_cases/testcase_wa_01.txt
                     let file_name: &str = &format_filename_test_case(
                         TEST_CASES_FOLDER,
@@ -260,7 +249,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                     save_test_case(file_name, QTEST_INPUT_FILE);
                 }
 
-                if command.break_bad {
+                if command.get_break_bad() {
                     // remove input, output and error files
                     remove_files(vec![
                         QTEST_INPUT_FILE,
@@ -272,7 +261,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
                         CHECKER_BINARY_FILE,
                     ]);
 
-                    return throw_break_found_msg("Wrong Answer", "WA", command.test_cases);
+                    return throw_break_found_msg("Wrong Answer", "WA", command.get_test_cases());
                 }
             }
         }

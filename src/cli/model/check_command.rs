@@ -111,4 +111,15 @@ impl AdapterCommand for CheckCommand {
     fn get_run_mle(&self) -> bool {
         self.run_mle
     }
+    fn can_run_cases(&self) -> bool {
+        self.get_run_all()
+            || self.get_run_ac()
+            || self.get_run_wa()
+            || self.get_run_tle()
+            || self.get_run_rte()
+            || self.get_run_mle()
+    }
+    fn has_test_cases(&self, test_number: u32) -> bool {
+        test_number < self.get_test_cases() || self.can_run_cases()
+    }
 }

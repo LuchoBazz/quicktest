@@ -57,10 +57,16 @@ pub trait AdapterCommand {
     fn get_run_mle(&self) -> bool {
         unreachable!("get_run_mle method not implemented")
     }
+    fn can_run_cases(&self) -> bool {
+        unreachable!("can_run_cases method not implemented")
+    }
     fn get_diff(&self) -> bool {
         unreachable!("get_diff method not implemented")
     }
     fn get_prefix(&self) -> String {
         unreachable!("get_prefix method not implemented")
+    }
+    fn has_test_cases(&self, _test_number: u32) -> bool {
+        unreachable!("has_test_cases method not implemented")
     }
 }
