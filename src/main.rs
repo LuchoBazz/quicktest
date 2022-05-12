@@ -18,7 +18,7 @@ pub mod file_handler;
 pub mod generator;
 pub mod language;
 pub mod runner;
-pub mod subcommand;
+pub mod controllers;
 pub mod util;
 pub mod views;
 
@@ -47,7 +47,7 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => subcommand::cmd_stress::run(&StressCommand::new(
+        } => controllers::cmd_stress::run(&StressCommand::new(
             target_file,
             gen_file,
             test_cases,
@@ -80,7 +80,7 @@ fn main() -> Result<(), ExitFailure> {
             run_rte,
             run_mle,
             diff,
-        } => subcommand::cmd_cmp::run(&CmpCommand::new(
+        } => controllers::cmd_cmp::run(&CmpCommand::new(
             target_file,
             correct_file,
             gen_file,
@@ -114,7 +114,7 @@ fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => subcommand::cmd_check::run(&CheckCommand::new(
+        } => controllers::cmd_check::run(&CheckCommand::new(
             target_file,
             checker_file,
             gen_file,
@@ -138,7 +138,7 @@ fn main() -> Result<(), ExitFailure> {
             memory_limit,
             break_bad,
             save_out,
-        } => subcommand::cmd_output::run(&OutputCommand::new(
+        } => controllers::cmd_output::run(&OutputCommand::new(
             target_file,
             prefix,
             timeout,
@@ -148,7 +148,7 @@ fn main() -> Result<(), ExitFailure> {
         )),
         Opt::Setup { subcommand } => match subcommand {
             cli::opt::SetUp::Config { label, value } => {
-                subcommand::cmd_setup::run(&SetupCommand::new(label, value))
+                controllers::cmd_setup::run(&SetupCommand::new(label, value))
             }
         },
         Opt::Example {
@@ -157,7 +157,7 @@ fn main() -> Result<(), ExitFailure> {
             check,
             output,
             setup,
-        } => subcommand::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
+        } => controllers::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
     };
 
     if let Err(err) = status {

@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
-use crate::subcommand::cmd_setup::show_help_setup;
+use crate::controllers::cmd_setup::show_help_setup;
 
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
