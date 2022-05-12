@@ -8,6 +8,7 @@ use crate::config::languages_config::LANGUAGES_CONFIG_JSON;
 use crate::constants::{CONFIG_FOLDER, LANGUAGE_CONFIG_FILE};
 use crate::file_handler::file::{read_file, write_file};
 use crate::language::json::language_scheme::Languages;
+use crate::views::style::show_config_file_path;
 use std::fs;
 
 pub fn write_config_data(json: &str) {
@@ -18,6 +19,7 @@ pub fn write_config_data(json: &str) {
     // with the default settings
     if fs::create_dir_all(config_folder).is_ok() && write_file(config_file, json.as_bytes()).is_ok()
     {
+        show_config_file_path(config_file);
     }
 }
 

@@ -1,11 +1,12 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021-present - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
 use std::collections::VecDeque;
 use std::path::PathBuf;
+use std::process;
 use std::time::Duration;
 
 // dependencies
@@ -15,8 +16,8 @@ use crate::cli::structures::CmpCommand;
 // local library
 use crate::diff::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
-    throw_break_found_msg, throw_compiler_error_msg, throw_runtime_error_msg,
-    throw_time_limit_exceeded_msg,
+    throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
+    throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
     can_run_language_or_error, copy_file, create_folder_or_error, file_exists_or_error,
@@ -26,17 +27,19 @@ use crate::file_handler::file::{
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
 use crate::language::language_handler::{get_generator_handler, get_language_handler};
-use crate::runner::types::{is_compiled_error, is_runtime_error, Language};
+use crate::runner::types::{
+    is_compiled_error, is_memory_limit_exceeded, is_runtime_error, Language,
+};
 use crate::views::style::{
-    show_accepted, show_runtime_error, show_stats, show_time_limit_exceeded,
-    show_time_limit_exceeded_correct, show_wrong_answer,
+    show_accepted, show_input_test_case, show_memory_limit_exceeded_error, show_runtime_error,
+    show_stats, show_time_limit_exceeded, show_time_limit_exceeded_correct, show_wrong_answer,
 };
 
 // Constants
 use crate::constants::{
-    CACHE_FOLDER, CORRECT_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_RTE_FILES,
-    PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE, QTEST_INPUT_FILE,
-    QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
+    CACHE_FOLDER, CORRECT_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_MLE_FILES,
+    PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+    QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
 };
 
 #[allow(clippy::too_many_arguments)]
@@ -142,15 +145,21 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         command.run_wa,
         command.run_tle,
         command.run_rte,
+        command.run_mle,
     )?;
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
     let mut rte_count: u32 = 0;
     let mut ac_count: u32 = 0;
+    let mut mle_count: u32 = 0;
 
-    let load_case: bool =
-        command.run_all || command.run_ac || command.run_wa || command.run_tle || command.run_rte;
+    let load_case: bool = command.run_all
+        || command.run_ac
+        || command.run_wa
+        || command.run_tle
+        || command.run_rte
+        || command.run_mle;
 
     let mut test_number: u32 = 0;
 
@@ -167,16 +176,24 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             }
         } else {
             // run generator
-            execute_generator(&generator_file_lang, command.timeout, test_number)?;
+            execute_generator(
+                &generator_file_lang,
+                command.timeout,
+                command.memory_limit,
+                test_number,
+            )?;
         }
 
-        let response_correct = correct_file_lang.execute(command.timeout as u32, test_number);
+        let response_correct =
+            correct_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_correct: Duration = response_correct.time;
 
         if is_runtime_error(&response_correct.status) {
             return throw_runtime_error_msg("correct", "<correct-file>");
         } else if is_compiled_error(&response_correct.status) {
             return throw_compiler_error_msg("correct", "<correct-file>");
+        } else if is_memory_limit_exceeded(&response_correct.status) {
+            return throw_memory_limit_exceeded_msg("correct", "<correct-file>");
         }
 
         if time_correct >= Duration::from_millis(command.timeout as u64) {
@@ -185,7 +202,8 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             return throw_time_limit_exceeded_msg("correct", "<correct-file>");
         }
 
-        let response_target = target_file_lang.execute(command.timeout as u32, test_number);
+        let response_target =
+            target_file_lang.execute(command.timeout as u32, command.memory_limit, test_number);
         let time_target: Duration = response_target.time;
         let mills_target: u128 = time_target.as_millis();
 
@@ -216,6 +234,33 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             continue;
         } else if is_compiled_error(&response_target.status) {
             return throw_compiler_error_msg("target", "<target-file>");
+        } else if is_memory_limit_exceeded(&response_target.status) {
+            mle_count += 1;
+            show_memory_limit_exceeded_error(test_number, mills_target as u32);
+
+            if command.save_bad || command.save_all {
+                // Example: test_cases/testcase_mle_01.txt
+                let file_name: &str =
+                    &format_filename_test_case(TEST_CASES_FOLDER, PREFIX_MLE_FILES, mle_count)[..];
+                // save testcase
+                save_test_case(file_name, QTEST_INPUT_FILE);
+            }
+
+            if command.break_bad {
+                // remove input, output and error files
+                remove_files(vec![
+                    QTEST_INPUT_FILE,
+                    QTEST_OUTPUT_FILE,
+                    QTEST_ERROR_FILE,
+                    QTEST_EXPECTED_FILE,
+                    TARGET_BINARY_FILE,
+                    GEN_BINARY_FILE,
+                    CORRECT_BINARY_FILE,
+                ]);
+
+                return throw_break_found_msg("Memory Limit Exceeded", "MLE", command.test_cases);
+            }
+            continue;
         }
 
         if time_target >= Duration::from_millis(command.timeout as u64) {
@@ -249,6 +294,7 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
             }
         } else {
             // The time is in the allowed range
+            let file_in = format!("{}/{}", root, QTEST_INPUT_FILE);
             let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
             let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
 
@@ -276,8 +322,10 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
 
                 if command.diff {
                     let mut tout = std::io::stdout();
+                    let input = read_file(&file_in[..]).unwrap();
                     let expected = read_file(&file_expected[..]).unwrap();
                     let output = read_file(&file_out[..]).unwrap();
+                    show_input_test_case(&mut tout, &input[..]);
                     diff_line_by_line(&mut tout, &expected[..], &output[..]);
                 }
 
@@ -310,7 +358,7 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         }
     }
 
-    show_stats(ac_count, wa_count, tle_count, rte_count);
+    show_stats(ac_count, wa_count, tle_count, rte_count, mle_count);
 
     // remove input, output, error and binary files
     remove_files(vec![
@@ -322,6 +370,12 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         GEN_BINARY_FILE,
         CORRECT_BINARY_FILE,
     ]);
+
+    // check if the target file has errors
+    if (wa_count + tle_count + rte_count + mle_count) > 0 {
+        // exit status as error in software
+        process::exit(exitcode::SOFTWARE);
+    }
 
     Ok(())
 }

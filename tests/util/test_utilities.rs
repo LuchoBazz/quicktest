@@ -1,3 +1,9 @@
+/*
+ *  Quick Test: CLI for stress testing in competitive programming
+ *  Copyright (C) 2021-present / Luis Miguel Báez
+ *  License: MIT (See the LICENSE file in the repository root directory)
+ */
+
 use std::{
     io::Write,
     path::{Path, PathBuf},
@@ -101,7 +107,10 @@ pub fn create_files_check(
     Ok(())
 }
 
-pub fn create_files_run(files: Vec<(&str, &str)>, new_folder: &str) -> Result<(), std::io::Error> {
+pub fn create_files_output_cmd(
+    files: Vec<(&str, &str)>,
+    new_folder: &str,
+) -> Result<(), std::io::Error> {
     if !Path::new(FOLDER).exists() {
         std::fs::create_dir(FOLDER).expect(&format!("Unable to create {}", FOLDER));
     }

@@ -10,9 +10,9 @@ use assert_cmd::assert::OutputAssertExt;
 use predicates::prelude::predicate;
 
 use crate::util::{
-    test_command_handler::execute_command_check,
+    test_command_handler::execute_command_check_with_timeout,
     test_constants::{
-        BINARY, CHECKER_FILE_CPP, FOLDER_CHECK, GEN_FILE_CPP, RTE_CPP, TARGET_FILE_CPP,
+        BINARY, CHECKER_FILE_CPP, FOLDER_CHECK, GEN_FILE_CPP, MLE_CPP, TARGET_FILE_CPP,
     },
     test_utilities::create_files_check,
 };
@@ -20,87 +20,90 @@ use crate::util::{
 use super::codes::{CHECKER_CPP_CHECK, GEN_CPP_CHECK, TARGET_CPP_CHECK};
 
 #[test]
-fn cmd_check_target_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_check_target_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
-        RTE_CPP,
+        MLE_CPP,
         CHECKER_CPP_CHECK,
         GEN_CPP_CHECK,
         FOLDER_CHECK,
     )?;
-    let cases: usize = 10;
+    let cases: usize = 3;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_check(
+    execute_command_check_with_timeout(
         &mut cmd,
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         cases,
+        5000usize,
     );
 
     cmd.assert()
         .failure()
-        .stdout(predicate::str::contains("[RTE]").count(cases));
+        .stdout(predicate::str::contains("[MLE]").count(cases));
 
     Ok(())
 }
 
 #[test]
-fn cmd_check_checker_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_check_checker_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         TARGET_CPP_CHECK,
-        RTE_CPP,
+        MLE_CPP,
         GEN_CPP_CHECK,
         FOLDER_CHECK,
     )?;
-    let cases: usize = 10;
+    let cases: usize = 3;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_check(
+    execute_command_check_with_timeout(
         &mut cmd,
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         cases,
+        5000usize,
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by checker file exited by Runtime Error / label <checker-file>\n",
+        "Error: QTEST_MEMORY_LIMIT_EXCEEDED\nInfo: caused by checker file give memory limit exceeded / label <checker-file>\n",
     ));
 
     Ok(())
 }
 
 #[test]
-fn cmd_check_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_check_gen_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         TARGET_CPP_CHECK,
         CHECKER_CPP_CHECK,
-        RTE_CPP,
+        MLE_CPP,
         FOLDER_CHECK,
     )?;
-    let cases: usize = 10;
+    let cases: usize = 3;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_check(
+    execute_command_check_with_timeout(
         &mut cmd,
         TARGET_FILE_CPP,
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         cases,
+        5000usize,
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
-        "Error: QTEST_RUNTIME_ERROR\nInfo: caused by generator file exited by Runtime Error / label <gen-file>\n",
+        "Error: QTEST_MEMORY_LIMIT_EXCEEDED\nInfo: caused by generator file give memory limit exceeded / label <gen-file>\n",
     ));
 
     Ok(())

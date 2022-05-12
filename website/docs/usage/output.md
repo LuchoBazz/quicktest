@@ -1,26 +1,26 @@
 ---
 sidebar_position: 4
-title: Run subcommand
-sidebar_label: Run
+title: Output subcommand
+sidebar_label: Output
 ---
 
-### `quicktest run | qt run`
+### `quicktest output | qt output`
 
 **Run a target file with test case files matching a prefix:**
 
 ```shell
-quicktest run --target-file=main.cpp --prefix=testcase_ac
+quicktest output --target-file=main.cpp --prefix=testcase_ac
 ```
 
 or shorter
 
 ```shell
-qt run -t main.cpp -p testcase_ac
+qt output -t main.cpp -p testcase_ac
 ```
 
 ### Subcommand Structure
 
-* `quicktest run | qt run`
+* `quicktest output | qt output`
     
     **Required Options**
 
@@ -29,6 +29,6 @@ qt run -t main.cpp -p testcase_ac
 
     **Other Options**
 
-    * `--timeout=<value>  [default: 2000]` Unit of time: `ms`
+    * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--save-out`   Save the output of the target file for each test case
