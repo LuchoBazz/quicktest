@@ -10,6 +10,7 @@ use std::path::PathBuf;
 use std::process;
 use std::time::Duration;
 
+use crate::cli::model::check_command::CheckCommand;
 use crate::cli::model::traits::AdapterCommand;
 // local library
 use crate::error::handle_error::{
@@ -45,7 +46,7 @@ use crate::constants::{
 };
 
 #[allow(clippy::too_many_arguments)]
-pub fn run(command: &dyn AdapterCommand) -> Result<(), ExitFailure> {
+pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     // create cache folder
     create_folder_or_error(CACHE_FOLDER)?;
 

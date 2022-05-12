@@ -9,21 +9,21 @@ use std::path::PathBuf;
 use super::traits::AdapterCommand;
 
 pub struct CheckCommand {
-    pub target_file: PathBuf,
-    pub checker_file: PathBuf,
-    pub gen_file: PathBuf,
-    pub timeout: u32,
-    pub memory_limit: u64,
-    pub test_cases: u32,
-    pub break_bad: bool,
-    pub save_bad: bool,
-    pub save_all: bool,
-    pub run_all: bool,
-    pub run_ac: bool,
-    pub run_wa: bool,
-    pub run_tle: bool,
-    pub run_rte: bool,
-    pub run_mle: bool,
+    target_file: PathBuf,
+    checker_file: PathBuf,
+    gen_file: PathBuf,
+    timeout: u32,
+    memory_limit: u64,
+    test_cases: u32,
+    break_bad: bool,
+    save_bad: bool,
+    save_all: bool,
+    run_all: bool,
+    run_ac: bool,
+    run_wa: bool,
+    run_tle: bool,
+    run_rte: bool,
+    run_mle: bool,
 }
 
 #[allow(clippy::too_many_arguments)]

@@ -7,23 +7,25 @@
 use std::path::PathBuf;
 
 use super::traits::AdapterCommand;
+
+#[derive(Debug)]
 pub struct CmpCommand {
-    pub target_file: PathBuf,
-    pub correct_file: PathBuf,
-    pub gen_file: PathBuf,
-    pub timeout: u32,
-    pub memory_limit: u64,
-    pub test_cases: u32,
-    pub break_bad: bool,
-    pub save_bad: bool,
-    pub save_all: bool,
-    pub run_all: bool,
-    pub run_ac: bool,
-    pub run_wa: bool,
-    pub run_tle: bool,
-    pub run_rte: bool,
-    pub run_mle: bool,
-    pub diff: bool,
+    target_file: PathBuf,
+    correct_file: PathBuf,
+    gen_file: PathBuf,
+    timeout: u32,
+    memory_limit: u64,
+    test_cases: u32,
+    break_bad: bool,
+    save_bad: bool,
+    save_all: bool,
+    run_all: bool,
+    run_ac: bool,
+    run_wa: bool,
+    run_tle: bool,
+    run_rte: bool,
+    run_mle: bool,
+    diff: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -115,5 +117,16 @@ impl AdapterCommand for CmpCommand {
     }
     fn get_diff(&self) -> bool {
         self.diff
+    }
+    fn can_run_cases(&self) -> bool {
+        self.get_run_all()
+            || self.get_run_ac()
+            || self.get_run_wa()
+            || self.get_run_tle()
+            || self.get_run_rte()
+            || self.get_run_mle()
+    }
+    fn has_test_cases(&self, test_number: u32) -> bool {
+        test_number < self.get_test_cases() || self.can_run_cases()
     }
 }
