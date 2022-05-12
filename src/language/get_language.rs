@@ -24,6 +24,11 @@ use super::language_handler::{get_generator_handler, get_language_handler, Langu
 pub fn get_executor_generator(
     command: &dyn AdapterCommand,
 ) -> Result<Box<LanguageHandler>, ExitFailure> {
+    // if --prefix was set, the generator will not be executed
+    if !command.get_prefix().is_empty() {
+        return Ok(Box::new(LanguageHandler::default()));
+    }
+
     // verify that the generator file exists
     file_exists_or_error(command.get_generator_file().to_str().unwrap(), "<gen-file>")?;
 

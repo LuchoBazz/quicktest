@@ -143,6 +143,9 @@ pub fn load_testcases_from_prefix(
     queue: &mut VecDeque<PathBuf>,
     prefix: &str,
 ) -> Result<(), ExitFailure> {
+    if prefix.is_empty() {
+        return Ok(());
+    }
     let paths = glob(&format!("{}*", prefix))?;
     for path in paths.flatten() {
         queue.push_back(path);

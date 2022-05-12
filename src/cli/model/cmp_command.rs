@@ -16,6 +16,7 @@ pub struct CmpCommand {
     timeout: u32,
     memory_limit: u64,
     test_cases: u32,
+    prefix: String,
     break_bad: bool,
     save_bad: bool,
     save_all: bool,
@@ -37,6 +38,7 @@ impl CmpCommand {
         timeout: u32,
         memory_limit: u64,
         test_cases: u32,
+        prefix: String,
         break_bad: bool,
         save_bad: bool,
         save_all: bool,
@@ -55,6 +57,7 @@ impl CmpCommand {
             timeout,
             memory_limit,
             test_cases,
+            prefix,
             break_bad,
             save_bad,
             save_all,
@@ -118,6 +121,9 @@ impl AdapterCommand for CmpCommand {
     fn get_diff(&self) -> bool {
         self.diff
     }
+    fn get_prefix(&self) -> String {
+        self.prefix.clone()
+    }
     fn can_run_cases(&self) -> bool {
         self.get_run_all()
             || self.get_run_ac()
@@ -125,6 +131,7 @@ impl AdapterCommand for CmpCommand {
             || self.get_run_tle()
             || self.get_run_rte()
             || self.get_run_mle()
+            || !self.get_prefix().is_empty()
     }
     fn has_test_cases(&self, test_number: u32) -> bool {
         test_number < self.get_test_cases() || self.can_run_cases()

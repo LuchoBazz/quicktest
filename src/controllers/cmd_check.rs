@@ -18,8 +18,8 @@ use crate::error::handle_error::{
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
 };
 use crate::file_handler::file::{
-    copy_file, create_folder_or_error, delete_test_case_folder, format_filename_test_case,
-    load_test_cases_from_status, remove_files, save_test_case,
+    create_folder_or_error, delete_test_case_folder, format_filename_test_case,
+    load_test_cases_from_status, load_testcases_from_prefix, remove_files, save_test_case,
 };
 use crate::file_handler::path::get_root_path;
 use crate::generator::generator::execute_generator;
@@ -66,6 +66,7 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
 
     let mut cases: VecDeque<PathBuf> = VecDeque::new();
     load_test_cases_from_status(command, &mut cases)?;
+    load_testcases_from_prefix(&mut cases, &command.get_prefix()[..])?;
 
     let mut tle_count: u32 = 0;
     let mut wa_count: u32 = 0;
@@ -78,22 +79,19 @@ pub fn run(command: &CheckCommand) -> Result<(), ExitFailure> {
     while command.has_test_cases(test_number) {
         test_number += 1;
 
-        if command.can_run_cases() {
-            if !cases.is_empty() {
-                // Load test case in stdin
-                let case = cases.pop_front().unwrap();
-                copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
-            } else {
-                break;
-            }
-        } else {
-            // run generator
-            execute_generator(
-                &generator_file_lang,
-                command.get_timeout(),
-                command.get_memory_limit(),
-                test_number,
-            )?;
+        let mut can_continue = false;
+
+        // run generator or load testcases using prefix
+        execute_generator(
+            &generator_file_lang,
+            command,
+            &mut cases,
+            test_number,
+            &mut can_continue,
+        )?;
+
+        if !can_continue {
+            break;
         }
 
         let response_target = target_file_lang.execute(
