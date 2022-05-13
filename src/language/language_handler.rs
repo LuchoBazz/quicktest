@@ -2,11 +2,13 @@
 
 use std::{
     path::{Path, PathBuf},
+    process::Stdio,
     time::Duration,
 };
 
 use exitfailure::ExitFailure;
 use std::process::Command;
+use structopt::lazy_static::initialize;
 
 use crate::{
     file_handler::path::get_root_path,
@@ -16,13 +18,24 @@ use crate::{
         types::{CPStatus, Language, StatusResponse},
     },
     util::file::get_extension,
+    views::style::show_installing_dependencies,
 };
 
-use super::{json::language_scheme::LanguageScheme, traits::BuildEnvVariables};
+use super::{
+    json::{
+        config_files::{self, ConfigFile},
+        language_scheme::LanguageScheme,
+    },
+    traits::BuildEnvVariables,
+};
 
 #[derive(Debug, Clone)]
 pub struct LanguageHandler {
     check_installed: String,
+
+    config_files: Option<Vec<ConfigFile>>,
+
+    initialize: Option<String>,
 
     compile: Option<String>,
 
@@ -41,6 +54,8 @@ impl Default for LanguageHandler {
     fn default() -> Self {
         Self {
             check_installed: String::default(),
+            initialize: None,
+            config_files: None,
             compile: None,
             execute: String::default(),
             name: String::default(),
@@ -73,6 +88,25 @@ impl LanguageHandler {
         lang.build_env_variables(&env);
 
         #[cfg(unix)]
+        let mut initialize = if lang.initialize.is_some() {
+            Some(lang.initialize.clone().unwrap().unix)
+        } else {
+            None
+        };
+        #[cfg(windows)]
+        let initialize = if lang.initialize.is_some() {
+            Some(lang.initialize.clone().unwrap().windows)
+        } else {
+            None
+        };
+
+        let mut config_files = if lang.config_files.is_some() {
+            Some(lang.config_files.clone().unwrap())
+        } else {
+            None
+        };
+
+        #[cfg(unix)]
         let execute = lang.execute.unix.clone();
         #[cfg(windows)]
         let execute = lang.execute.windows.clone();
@@ -91,6 +125,8 @@ impl LanguageHandler {
         };
 
         LanguageHandler {
+            initialize: initialize,
+            config_files: config_files,
             compile: compile,
             execute: execute,
             check_installed: lang.check_installed.clone(),
@@ -113,6 +149,25 @@ impl LanguageHandler {
         lang.build_env_variables(&env);
 
         #[cfg(unix)]
+        let mut initialize = if lang.initialize.is_some() {
+            Some(lang.initialize.clone().unwrap().unix)
+        } else {
+            None
+        };
+        #[cfg(windows)]
+        let initialize = if lang.initialize.is_some() {
+            Some(lang.initialize.clone().unwrap().windows)
+        } else {
+            None
+        };
+
+        let mut config_files = if lang.config_files.is_some() {
+            Some(lang.config_files.clone().unwrap())
+        } else {
+            None
+        };
+
+        #[cfg(unix)]
         let execute = lang.execute.unix.clone();
         #[cfg(windows)]
         let execute = lang.execute.windows.clone();
@@ -130,6 +185,8 @@ impl LanguageHandler {
             None
         };
         LanguageHandler {
+            initialize: initialize,
+            config_files: config_files,
             compile: compile,
             execute: execute,
             check_installed: lang.check_installed.clone(),
@@ -142,29 +199,97 @@ impl LanguageHandler {
 }
 
 impl Language for LanguageHandler {
-    fn build(&self) -> bool {
-        // println!("Compile {:#?}", self.compile);
+    fn init(&self) -> bool {
+        if self.initialize.is_none() {
+            return true;
+        }
 
+        show_installing_dependencies(&self.name[..]);
+
+        // execute initialization command
+        let initialize = self.initialize.clone().unwrap();
+        let commands = initialize.split("&&").collect::<Vec<_>>();
+        for &cmd in commands.iter() {
+            let mut commands_str = cmd.split(" ").collect::<Vec<_>>();
+
+            // remove whitespace from commands and expand ~ characters by $HOME
+            let commands_str = commands_str
+                .iter()
+                .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .collect::<Vec<_>>();
+
+            // convert from Vec<String> to Vec<&str>
+            let commands_str: Vec<&str> = commands_str.iter().map(|s| s as &str).collect();
+
+            // add main command
+            let mut process_cmd = Command::new(&commands_str[0]);
+
+            // Disable stdout and stderr
+            process_cmd.stderr(Stdio::piped());
+            process_cmd.stdout(Stdio::piped());
+
+            // add the arguments
+            if commands_str.len() > 1 {
+                process_cmd.args(&commands_str[1..]);
+            }
+            let status = process_cmd.status().expect("Initialization Command");
+            // check status
+            if status.code() != Some(0) {
+                return false;
+            }
+        }
+
+        if self.config_files.is_some() {
+            // create the configuration files
+            let iter = self.config_files.clone().unwrap();
+            for file in iter.iter() {
+                file.create();
+            }
+        }
+
+        true
+    }
+
+    fn build(&self) -> bool {
         if self.compile.is_none() {
             return true;
         }
 
         let compile = self.compile.clone().unwrap();
-        let commands_str = compile.split(" ").collect::<Vec<_>>();
+        let commands = compile.split("&&").collect::<Vec<_>>();
 
-        let mut cmd = Command::new(&commands_str[0]);
+        for &cmd in commands.iter() {
+            let mut commands_str = cmd.trim().split(" ").collect::<Vec<_>>();
 
-        if commands_str.len() > 1 {
-            cmd.args(&commands_str[1..]);
+            // remove whitespace from commands and expand ~ characters by $HOME
+            let commands_str = commands_str
+                .iter()
+                .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .collect::<Vec<_>>();
+
+            // convert from Vec<String> to Vec<&str>
+            let commands_str: Vec<&str> = commands_str.iter().map(|s| s as &str).collect();
+
+            // add main command
+            let mut process_cmd = Command::new(&commands_str[0]);
+
+            // add the arguments
+            if commands_str.len() > 1 {
+                process_cmd.args(&commands_str[1..]);
+            }
+
+            let status = process_cmd.status().expect("Compiling Command");
+
+            // check status
+            if status.code() != Some(0) {
+                return false;
+            }
         }
 
-        let status = cmd.status().expect("Compiling C++ error");
-
-        status.code() == Some(0)
+        true
     }
 
     fn execute(&self, timeout: u32, memory_limit: u64, testcase: u32) -> StatusResponse {
-        // println!("Execute {}", self.execute);
         let execute = self.execute.clone();
         let commands_str = execute.split(" ").collect::<Vec<_>>();
 
@@ -184,8 +309,6 @@ impl Language for LanguageHandler {
     }
 
     fn is_installed(&self) -> bool {
-        // println!("Is Installed {}", self.check_installed);
-
         let check_installed = self.check_installed.clone();
         let commands_str = check_installed.split(" ").collect::<Vec<_>>();
 
@@ -200,7 +323,6 @@ impl Language for LanguageHandler {
     }
 
     fn get_name(&self) -> String {
-        // println!("Name {}", self.name);
         self.name.clone()
     }
 }
