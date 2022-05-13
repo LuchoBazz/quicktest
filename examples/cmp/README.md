@@ -16,6 +16,12 @@
     quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000
     ```
 
+    or shorter
+
+    ```shell
+    qt cmp -t main.cpp -c correct.cpp -g gen.cpp -tc 500 --tout 1000
+    ```
+
 * ### python examples
     ```shell
     git clone https://github.com/LuisMBaezCo/quicktest.git
@@ -26,6 +32,13 @@
     ```shell
     quicktest cmp --target-file=main.py --correct-file=correct.py --gen-file=gen.py --test-cases=200 --timeout=1000
     ```
+
+    or shorter
+
+    ```shell
+    qt cmp -t main.py -c correct.py -g gen.py --tc 200 --tc 1000
+    ```
+
 ## Save Test Cases
 
 you can use the following flags
@@ -36,6 +49,12 @@ for example
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --save-bad
+```
+
+or shorter
+
+```shell
+quicktest cmp -t main.cpp -c correct.cpp -g gen.cpp --tc 500 --tout 1000 --save-bad
 ```
 
 ## Run Saved Test Cases
@@ -52,4 +71,10 @@ for example
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --run-wa
+```
+
+or shorter
+
+```shell
+quicktest cmp -t main.cpp -c correct.cpp -g gen.cpp --tc 500 --tout 1000 --run-wa
 ```

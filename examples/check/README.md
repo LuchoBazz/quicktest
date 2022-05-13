@@ -16,6 +16,12 @@
     quicktest check --target-file=main.cpp --checker-file=checker.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000
     ```
 
+    or shorter
+
+    ```shell
+    qt check -t main.cpp -c checker.cpp -g gen.cpp --tc 500 --tout 1000
+    ```
+
 ## Save Test Cases
 
 you can use the following flags
@@ -26,6 +32,12 @@ for example
 
 ```shell
 quicktest check --target-file=main.cpp --checker-file=checker.cpp --gen-file=gen.cpp --test-cases=50 --timeout=1000 --save-bad
+```
+
+or shorter
+
+```shell
+qt check -t main.cpp -c checker.cpp -g gen.cpp --tc 50 --tout 1000 --save-bad
 ```
 
 ## Run Saved Test Cases
@@ -43,4 +55,8 @@ for example
 ```shell
 quicktest check --target-file=main.cpp --checker-file=checker.cpp --gen-file=gen.cpp --test-cases=50 --timeout=1000 --run-wa
 ```
+or shorter
 
+```shell
+qt check -t main.cpp -c checker.cpp -g gen.cpp --tc 50 --tout 1000 --run-wa
+```

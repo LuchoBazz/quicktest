@@ -16,6 +16,13 @@
     quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000
     ```
 
+    or shorter
+
+    ```shell
+    quicktest stress -t main.cpp -g gen.cpp --tc 15 --tout 1000
+    ```
+
+
 * ### python examples
     ```shell
     git clone https://github.com/LuisMBaezCo/quicktest.git
@@ -27,6 +34,13 @@
     quicktest stress --target-file=main.py --gen-file=gen.py --test-cases=15 --timeout=1000
     ```
 
+    or shorter
+
+    ```shell
+    quicktest stress -t main.py -t gen.py --tc 15 --tout 1000
+    ```
+
+
 ## Save Test Cases
 
 you can use the following flags
@@ -37,6 +51,12 @@ for example
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --save-bad
+```
+
+or shorter
+
+```shell
+quicktest stress --t main.cpp -g gen.cpp --tc 15 --tout 1000 --save-bad
 ```
 
 ## Run Saved Test Cases
@@ -53,4 +73,10 @@ for example
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --run-tle
+```
+
+or shorter
+
+```shell
+quicktest stress -t main.cpp -g gen.cpp --tc 15 --tout 1000 --run-tle
 ```

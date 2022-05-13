@@ -19,12 +19,24 @@ cd quicktest/examples/output
     quicktest output --target-file=cpp/main.cpp --prefix=test_cases/testcase_ac --save-out
     ```
 
+    or shorter
+
+    ```shell
+    quicktest output -t cpp/main.cpp -p test_cases/testcase_ac --save-out
+    ```
+
 * ### python examples
     
     ```shell
     quicktest output --target-file=python/main.py --prefix=test_cases/testcase_ac
     ```
     Or which saves the output to a file
-     ```shell
+    ```shell
     quicktest output --target-file=python/main.py --prefix=test_cases/testcase_ac --save-out
+    ```
+
+    or shorter
+
+    ```shell
+    quicktest output -t python/main.py -p test_cases/testcase_ac --save-out
     ```
