@@ -87,6 +87,8 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
+    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
     * `--diff`  Show differences between the expected file and the output file
 
 ---
@@ -102,6 +104,9 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
+    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+
 ---
 
 * `quicktest check | qt check`
@@ -116,6 +121,9 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
+    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+
 ---
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
@@ -140,6 +148,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     **Other Options**
 
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--save-out`   Save the output of the target file for each test case
 
@@ -174,13 +183,15 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 |--------------------|
 | C++                |
 | Python             |
+| Rust Lang          |
 
 ## Compilation and Execution Commands
 
-| Language     | Compile / Interpreter                                      | Execution Command          |
-|:------------:|------------------------------------------------------------|----------------------------|
-| C++17        | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`   | `./main seed testcase`     |
-| Python3      |                                                            | `python3 main.py seed testcase`|
+| Language | Compile / Interpreter                                                                                                                                                     | Execution Command               |
+|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| C++17    | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main seed testcase`          |
+| Python3  |                                                                                                                                                                           | `python3 main.py seed testcase` |
+| Rust     | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main seed testcase`          |
 
 ## License
 Licensed under either of these:

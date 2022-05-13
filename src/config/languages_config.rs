@@ -59,16 +59,16 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "rs"
             ],
             "description":"Rust Programming Language",
-            "config_files": [
+            "config_files":[
                 {
                     "path":"~/.quicktest/rust/Cargo.toml",
-                    "content": "[package]\nname = \"rust\"\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\nproconio = \"0.4.3\"\nnum = \"0.4.0\""
+                    "content":"[package]\nname = \"rust\"\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\nproconio = \"0.4.3\"\nnum = \"0.4.0\""
                 }
             ],
             "env":{
                 "PROGRAM":"cargo"
             },
-            "initialize": {
+            "initialize":{
                 "unix":"${PROGRAM} init ~/.quicktest/rust",
                 "windows":"${PROGRAM} init ~/.quicktest/rust"
             },

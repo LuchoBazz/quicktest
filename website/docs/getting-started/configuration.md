@@ -4,7 +4,9 @@ title: Configuration
 sidebar_label: Configuration
 ---
 
-`~/.quicktest/config.yaml`
+### Configuration File Example
+
+_Path:_ `~/.quicktest/languages.config.json`
 
 ```json
 {
@@ -36,14 +38,7 @@ sidebar_label: Configuration
                 "unix":".qtest/${FILE_NAME_BINARY}.o",
                 "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
-            "check_installed":"${PROGRAM} --help",
-            "libraries":[
-                {
-                    "name":"ac-library",
-                    "version":"1.4",
-                    "source":"https://github.com/atcoder/ac-library"
-                }
-            ]
+            "check_installed":"${PROGRAM} --help"
         },
         {
             "id":"Language::Python",
@@ -51,7 +46,7 @@ sidebar_label: Configuration
             "extensions":[
                 "py"
             ],
-            "description":"Interprete del Lenguaje Python 3",
+            "description":"Python Language Interpreter",
             "env":{
                 "PROGRAM":"python3"
             },
@@ -59,13 +54,37 @@ sidebar_label: Configuration
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
                 "windows":"${PROGRAM} ${FILE_NAME}.py"
             },
-            "check_installed":"${PROGRAM} --help",
-            "libraries":[
+            "check_installed":"${PROGRAM} --help"
+        },
+        {
+            "id":"Language::Rust",
+            "name":"Rust Lang",
+            "extensions":[
+                "rs"
+            ],
+            "description":"Rust Programming Language",
+            "config_files":[
                 {
-                    "name":"numba",
-                    "version":"*"
+                    "path":"~/.quicktest/rust/Cargo.toml",
+                    "content":"[package]\nname = \"rust\"\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\nproconio = \"0.4.3\"\nnum = \"0.4.0\""
                 }
-            ]
+            ],
+            "env":{
+                "PROGRAM":"cargo"
+            },
+            "initialize":{
+                "unix":"${PROGRAM} init ~/.quicktest/rust",
+                "windows":"${PROGRAM} init ~/.quicktest/rust"
+            },
+            "compile":{
+                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qtest/${FILE_NAME_BINARY}.o",
+                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qtest/${FILE_NAME_BINARY}.exe"
+            },
+            "execute":{
+                "unix":".qtest/${FILE_NAME_BINARY}.o",
+                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+            },
+            "check_installed":"${PROGRAM} --help"
         }
     ]
 }
