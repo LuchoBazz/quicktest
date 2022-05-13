@@ -20,7 +20,7 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "cxx",
                 "c++"
             ],
-            "description":"Compilador GNU C++ version 17",
+            "description":"GNU C++ compiler",
             "env":{
                 "PROGRAM":"g++",
                 "STANDARD":"-std=c++17"
