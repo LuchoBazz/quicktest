@@ -98,18 +98,18 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "PROGRAM":"go"
             },
             "initialize":{
-                "unix":"mkdir ~/.quicktest/go_mod && GO111MODULE=off go get github.com/emirpasic/gods && GO111MODULE=off go get https://github.com/gonum/gonum",
-                "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off go get github.com/emirpasic/gods && GO111MODULE=off go get https://github.com/gonum/gonum"
+                "unix":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum",
+                "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
-                "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
+                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
+                "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
             },
             "execute":{
                 "unix":".qtest/${FILE_NAME_BINARY}.o",
                 "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
-            "check_installed":"${PROGRAM}"
+            "check_installed":"${PROGRAM} --version"
         }
     ]
 }
