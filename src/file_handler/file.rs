@@ -43,7 +43,6 @@ pub fn remove_file(file: &str) -> bool {
     false
 }
 
-
 pub fn remove_files_with_prefix(prefix: &str) {
     if let Ok(paths) = glob(prefix) {
         for path in paths.flatten() {
