@@ -153,6 +153,27 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --version"
+        },
+        {
+            "id":"Language::Kotlin",
+            "name":"Kotlin",
+            "extensions":[
+                "kt"
+            ],
+            "description":"Kotlin Programming Language",
+            "env":{
+                "PROGRAM":"java",
+                "COMPILER":"kotlinc"
+            },
+            "compile":{
+                "unix":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qtest/${FILE_NAME_BINARY}.jar",
+                "windows":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qtest/${FILE_NAME_BINARY}.jar"
+            },
+            "execute":{
+                "unix":"${PROGRAM} -jar .qtest/${FILE_NAME_BINARY}.jar",
+                "windows":"${PROGRAM} -jar .qtest/${FILE_NAME_BINARY}.jar"
+            },
+            "check_installed":"${PROGRAM}"
         }
     ]
 }
