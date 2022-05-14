@@ -8,8 +8,8 @@ int main(int argc, char* argv[]) {
     int seed = stoi(string(argv[1]));
     srand(seed);
 
-    const int N = int(1e3);
-    const int Ai = int(1e2);
+    const int N = int(1e5);
+    const int Ai = int(1e5);
 
     int n = rand() % N + 1;
     cout << n << "\n";

@@ -52,6 +52,27 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
             "check_installed":"${PROGRAM} --help"
         },
         {
+            "id":"Language::Java",
+            "name":"Java",
+            "extensions":[
+                "java"
+            ],
+            "description":"Java Programming Language",
+            "env":{
+                "PROGRAM":"java",
+                "COMPILER":"javac"
+            },
+            "compile":{
+                "unix":"${COMPILER} -d .qtest/ ${FILE_NAME}.java",
+                "windows":"${COMPILER} -d .qtest/ ${FILE_NAME}.java"
+            },
+            "execute":{
+                "unix":"${PROGRAM} -cp .qtest/ ${FILE_NAME_BINARY}",
+                "windows":"${PROGRAM} -cp .qtest/ ${FILE_NAME_BINARY}"
+            },
+            "check_installed":"${PROGRAM}"
+        },
+        {
             "id":"Language::Rust",
             "name":"Rust Lang",
             "extensions":[
