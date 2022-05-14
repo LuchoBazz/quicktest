@@ -36,6 +36,14 @@ pub fn remove_files(files: Vec<&str>) {
     }
 }
 
+pub fn remove_file(file: &str) -> bool {
+    if file_exists(file).is_ok() && fs::remove_file(&file).is_ok() {
+        return true;
+    }
+    false
+}
+
+
 pub fn remove_files_with_prefix(prefix: &str) {
     if let Ok(paths) = glob(prefix) {
         for path in paths.flatten() {

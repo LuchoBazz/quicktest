@@ -199,6 +199,14 @@ pub fn show_config_file_path(file_name: &str) {
     );
 }
 
+pub fn show_config_file_deleted_path(file_name: &str) {
+    println!(
+        "\n{} Your configuration file '{}' has been deleted\n",
+        "»".bold().white(),
+        file_name.bold().white()
+    );
+}
+
 pub fn show_installing_dependencies(name_lang: &str) {
     println!("Installing {} dependencies ...\n", name_lang.bold().white());
 }

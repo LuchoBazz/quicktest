@@ -24,6 +24,8 @@ pub enum SetUp {
         #[structopt(short = "v", long = "value")]
         value: String,
     },
+    /// Subcommand that allows to reset settings
+    Reset {},
 }
 
 /// CLI for stress testing in competitive programming contest

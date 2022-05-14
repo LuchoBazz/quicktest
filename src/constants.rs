@@ -12,8 +12,6 @@ pub const OUTPUT_FOLDER: &str = "output";
 
 pub const CONFIG_FOLDER: &str = "~/.quicktest";
 
-pub const CONFIG_FILE: &str = "~/.quicktest/config.yaml";
-
 pub const LANGUAGE_CONFIG_FILE: &str = "~/.quicktest/languages.config.json";
 
 #[cfg(unix)]
