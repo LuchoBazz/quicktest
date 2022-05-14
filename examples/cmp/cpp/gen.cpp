@@ -4,11 +4,11 @@ using namespace std;
 int main(int argc, char* argv[]) {
     // Generator for Maximum Subarray Problem
 
-    // quicktest passes a seed as an argument: $ ./main seed testcase
+    // quicktest passes a seed as an argument: $ ./gen seed testcase
     int seed = stoi(string(argv[1]));
     srand(seed);
 
-    const int N = int(1e5);
+    const int N = int(1e3);
     const int Ai = int(1e5);
 
     int n = rand() % N + 1;

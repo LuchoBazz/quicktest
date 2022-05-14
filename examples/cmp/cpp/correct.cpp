@@ -2,21 +2,21 @@
 using namespace std;
 
 int main() {
-    // Maximum Subarray Problem
-
+    // Maximum Subarray Problem - slow version
+    
     int n; cin >> n;
     vector<int> values(n);
     for(int &a: values)
         cin >> a;
     
-    int best = 0, sum = 0;
-    
-    // i+1 was added intensively to generate an error
+    int best = 0;
     for (int i = 0; i < n; i++) {
-        sum = max(values[i], sum + values[i]);
-        best = max(best, sum);
+        int sum = 0;
+        for (int j = i; j < n; j++) {
+            sum += values[j];
+            best = max(best, sum);
+        }
     }
     cout << best << "\n";
-    
     return 0;
 }

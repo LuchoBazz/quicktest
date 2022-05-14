@@ -10,7 +10,7 @@ import (
 var r = bufio.NewReader(os.Stdin)
 var w = bufio.NewWriter(os.Stdout)
 
-func slove() {
+func solveOne() {
     var n int
 	fmt.Fscan(r, &n)
 	values := make([]int, n)
@@ -32,7 +32,7 @@ func max(a, b int) int {if a > b {return a} else {return b}}
 
 func main() {
 	defer w.Flush()
-	slove()
+	solveOne()
 }
 
 

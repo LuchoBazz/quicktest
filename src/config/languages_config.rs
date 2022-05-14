@@ -73,6 +73,28 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
             "check_installed":"${PROGRAM}"
         },
         {
+            "id":"Language::C",
+            "name":"GNU GCC C11",
+            "extensions":[
+                "h",
+                "c"
+            ],
+            "description":"GNU C compiler",
+            "env":{
+                "PROGRAM":"gcc",
+                "STANDARD":"-std=gnu11"
+            },
+            "compile":{
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qtest/${FILE_NAME_BINARY}.o",
+                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qtest/${FILE_NAME_BINARY}.exe"
+            },
+            "execute":{
+                "unix":".qtest/${FILE_NAME_BINARY}.o",
+                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+            },
+            "check_installed":"${PROGRAM} --help"
+        },
+        {
             "id":"Language::Rust",
             "name":"Rust Lang",
             "extensions":[
