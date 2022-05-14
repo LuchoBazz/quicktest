@@ -20,6 +20,10 @@ or shorter
 qt cmp -t main.cpp --c correct.cpp -g gen.cpp
 ```
 
+### Demo
+
+![cmp gif](/gif/cmp.gif)
+
 ### Subcommand Structure
 
 * `quicktest cmp | qt cmp`
