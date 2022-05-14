@@ -20,6 +20,10 @@ or shorter
 qt stress -t main.cpp -g gen.cpp
 ```
 
+### Demo
+
+![stress gif](/gif/stress.gif)
+
 ### Subcommand Structure
 
 * `quicktest stress | qt stress`
