@@ -95,7 +95,7 @@ pub fn execute_program(
                     if let Some(3) = output.status.code() {
                         res_status = CPStatus::MLE;
                     } else {
-                        es_status = CPStatus::RTE;
+                        res_status = CPStatus::RTE;
                     }
                 }
             } else {
