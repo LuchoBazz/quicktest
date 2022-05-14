@@ -18,7 +18,7 @@ use crate::util::{
 use super::codes::{GEN_CPP_STRESS, TARGET_CPP_STRESS};
 
 #[test]
-fn cmd_tle_target_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
         GEN_FILE_CPP,
@@ -39,7 +39,7 @@ fn cmd_tle_target_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn cmd_tle_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
         GEN_FILE_CPP,

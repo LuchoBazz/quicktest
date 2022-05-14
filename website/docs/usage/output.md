@@ -30,5 +30,6 @@ qt output -t main.cpp -p testcase_ac
     **Other Options**
 
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
     * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
     * `--save-out`   Save the output of the target file for each test case

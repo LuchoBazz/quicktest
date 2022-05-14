@@ -1,7 +1,8 @@
-`quicktest cmp | qt cmp`
-============
-
-**Check the correctness of the code compared to a slower version:** Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
+---
+sidebar_position: 2
+title: Cmp Examples
+sidebar_label: Cmp
+---
 
 ## Run Examples
 

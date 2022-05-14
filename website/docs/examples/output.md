@@ -1,5 +1,8 @@
-`quicktest output | qt output`
-============
+---
+sidebar_position: 4
+title: Output Examples
+sidebar_label: Output
+---
 
 ## Run Examples
 

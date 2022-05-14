@@ -20,7 +20,7 @@ use crate::util::{
 use super::codes::{GEN_CPP_STRESS, GEN_PY_STRESS, TARGET_CPP_STRESS, TARGET_PY_STRESS};
 
 #[test]
-fn cmd_tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
         GEN_FILE_CPP,
@@ -41,7 +41,7 @@ fn cmd_tle_gen_cpp_target_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn cmd_tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_gen_py_target_py() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_PY,
         GEN_FILE_PY,
@@ -62,7 +62,7 @@ fn cmd_tle_gen_py_target_py() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn cmd_tle_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
         GEN_FILE_PY,
@@ -83,7 +83,7 @@ fn cmd_tle_gen_cpp_target_py() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn cmd_tle_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
+fn cmd_stress_gen_py_target_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_PY,
         GEN_FILE_CPP,

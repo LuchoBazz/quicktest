@@ -30,6 +30,12 @@ pub fn execute_program(
 
     let mut cmd = Command::new(commands[0]);
 
+    let mut memory_factor_needed = 1usize;
+
+    if commands[0] == "java" {
+        memory_factor_needed *= 10usize;
+    }
+
     if commands.len() > 1 {
         cmd.args(&commands[1..]);
     }
@@ -57,7 +63,7 @@ pub fn execute_program(
     if let Ok(child_output) = child {
         let response = child_output
             .controlled_with_output()
-            .memory_limit(memory_limit as usize) // bytes
+            .memory_limit(memory_limit as usize * memory_factor_needed) // bytes
             .time_limit(Duration::from_millis(timeout as u64))
             .terminate_for_timeout()
             .wait();
@@ -109,5 +115,7 @@ pub fn execute_program(
 pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
     let mut cmd = Command::new(&program);
     cmd.args(args);
-    cmd.stdout(Stdio::piped()).status().is_ok()
+    cmd.stdout(Stdio::piped());
+    cmd.stderr(Stdio::piped());
+    cmd.status().is_ok()
 }
