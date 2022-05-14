@@ -80,6 +80,36 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":".qtest/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
+        },
+        {
+            "id":"Language::Go",
+            "name":"Go Lang",
+            "extensions":[
+                "go"
+            ],
+            "description":"Go Programming Language",
+            "config_files":[
+                {
+                    "path":"~/.quicktest/go_mod/go.mod",
+                    "content":"module go_mod\n\ngo 1.17\n\ngithub.com/emirpasic/gods v1.18.1 // indirect\n\n"
+                }
+            ],
+            "env":{
+                "PROGRAM":"go"
+            },
+            "initialize":{
+                "unix":"mkdir ~/.quicktest/go_mod && GO111MODULE=off go get github.com/emirpasic/gods && GO111MODULE=off go get https://github.com/gonum/gonum",
+                "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off go get github.com/emirpasic/gods && GO111MODULE=off go get https://github.com/gonum/gonum"
+            },
+            "compile":{
+                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
+                "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
+            },
+            "execute":{
+                "unix":".qtest/${FILE_NAME_BINARY}.o",
+                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+            },
+            "check_installed":"${PROGRAM}"
         }
     ]
 }

@@ -184,14 +184,16 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 | C++                |
 | Python             |
 | Rust Lang          |
+| Go Lang            |
 
 ## Compilation and Execution Commands
 
-| Language | Compile / Interpreter                                                                                                                                                     | Execution Command               |
-|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| C++17    | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main seed testcase`          |
-| Python3  |                                                                                                                                                                           | `python3 main.py seed testcase` |
-| Rust     | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main seed testcase`          |
+| Language  | Compile / Interpreter                                                                                                                                                     | Execution Command               |
+|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| C++17     | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main seed testcase`          |
+| Python3   |                                                                                                                                                                           | `python3 main.py seed testcase` |
+| Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main seed testcase`          |
+| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/main ~/.quicktest/go_mod/main.go`                                                          | `./main seed testcase`          |
 
 ## License
 Licensed under either of these:
@@ -199,6 +201,6 @@ Licensed under either of these:
 
 ---
 
-- <sub>Logo image based on the one made by <a href="https://www.flaticon.com/authors/freepik" id-flaticon="owl_2369306;hexagonal_73861" title="Freepik">Freepik</a> for <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+<sub>Logo image based on the one made by <a href="https://www.flaticon.com/authors/freepik" id-flaticon="owl_2369306;hexagonal_73861" title="Freepik">Freepik</a> for <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 
-- <sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="Flaticon">cpbooster</a>
+<sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="Flaticon">cpbooster</a>
