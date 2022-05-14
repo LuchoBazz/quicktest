@@ -48,6 +48,9 @@ pub fn get_executor_generator(
     // verify that the program to run the generator file is installed
     can_run_language_or_error(&generator_file_lang)?;
 
+    // TODO: Verify Error
+    generator_file_lang.init();
+
     let can_compile_gen = generator_file_lang.build();
     if !can_compile_gen {
         return Err(throw_compiler_error_msg("generator", "<gen-file>").unwrap_err());
@@ -80,6 +83,9 @@ pub fn get_executor_target(
 
     // verify that the program to run the generator file is installed
     can_run_language_or_error(&target_file_lang)?;
+
+    // TODO: Verify Error
+    target_file_lang.init();
 
     let can_compile_target = target_file_lang.build();
     if !can_compile_target {
@@ -117,6 +123,9 @@ pub fn get_executor_checker(
     // verify that the program to run the checker file is installed
     can_run_language_or_error(&checker_file_lang)?;
 
+    // TODO: Verify Error
+    checker_file_lang.init();
+
     let can_compile_checker = checker_file_lang.build();
     if !can_compile_checker {
         return Err(throw_compiler_error_msg("checker", "<checker-file>").unwrap_err());
@@ -151,6 +160,9 @@ pub fn get_executor_correct(
 
     // verify that the program to run the checker file is installed
     can_run_language_or_error(&correct_file_lang)?;
+
+    // TODO: Verify Error
+    correct_file_lang.init();
 
     let can_compile_correct = correct_file_lang.build();
     if !can_compile_correct {

@@ -9,9 +9,11 @@ use exitfailure::ExitFailure;
 use crate::{
     cli::model::setup_command::SetupCommand,
     config::load_config::{read_language_configuration, write_language_configuration},
+    constants::LANGUAGE_CONFIG_FILE,
     error::handle_error::throw_setup_label_is_not_correct_msg,
+    file_handler::file::remove_file,
     language::json::language_scheme::Languages,
-    views::setup::show_argument_was_updated_success,
+    views::{setup::show_argument_was_updated_success, style::show_config_file_deleted_path},
 };
 
 pub fn run(command: &SetupCommand) -> Result<(), ExitFailure> {
@@ -74,4 +76,12 @@ pub fn show_help_setup() -> &'static str {
     }
     let labels: String = labels.join("\n");
     Box::leak(labels.into_boxed_str())
+}
+
+pub fn reset() -> Result<(), ExitFailure> {
+    let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
+    if remove_file(config_file) {
+        show_config_file_deleted_path(config_file);
+    }
+    Ok(())
 }

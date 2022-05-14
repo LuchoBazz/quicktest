@@ -1,7 +1,8 @@
-`quicktest check | qt check`
-============
-
-**Verify the correctness of the code using a verifier script:** Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
+---
+sidebar_position: 3
+title: Check Examples
+sidebar_label: Check
+---
 
 ## Run Examples
 

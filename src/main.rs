@@ -157,6 +157,7 @@ fn main() -> Result<(), ExitFailure> {
             cli::opt::SetUp::Config { label, value } => {
                 controllers::cmd_setup::run(&SetupCommand::new(label, value))
             }
+            cli::opt::SetUp::Reset {} => controllers::cmd_setup::reset(),
         },
         Opt::Example {
             cmp,

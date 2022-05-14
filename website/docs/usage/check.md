@@ -34,6 +34,8 @@ qt check --t main.cpp -c correct.cpp -g gen.cpp
 
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
+    * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
+    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)1
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
 

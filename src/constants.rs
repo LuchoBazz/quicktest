@@ -12,8 +12,6 @@ pub const OUTPUT_FOLDER: &str = "output";
 
 pub const CONFIG_FOLDER: &str = "~/.quicktest";
 
-pub const CONFIG_FILE: &str = "~/.quicktest/config.yaml";
-
 pub const LANGUAGE_CONFIG_FILE: &str = "~/.quicktest/languages.config.json";
 
 #[cfg(unix)]
@@ -36,12 +34,12 @@ pub const GEN_BINARY_FILE: &str = ".qtest/gen.o";
 #[cfg(windows)]
 pub const GEN_BINARY_FILE: &str = ".qtest/gen.exe";
 
-pub const QTEST_INPUT_FILE: &str = ".qtest/quicktest_input.txt";
-pub const QTEST_OUTPUT_FILE: &str = ".qtest/quicktest_output.txt";
-pub const QTEST_ERROR_FILE: &str = ".qtest/quicktest_error.txt";
+pub const QTEST_INPUT_FILE: &str = ".qtest/input.txt";
+pub const QTEST_OUTPUT_FILE: &str = ".qtest/output.txt";
+pub const QTEST_ERROR_FILE: &str = ".qtest/error.txt";
 
-pub const QTEST_EXPECTED_FILE: &str = ".qtest/expected_testcase.txt";
-pub const QTEST_CHECKER_FILE: &str = ".qtest/checker_testcase.txt";
+pub const QTEST_EXPECTED_FILE: &str = ".qtest/expected.txt";
+pub const QTEST_CHECKER_FILE: &str = ".qtest/checker.txt";
 
 pub const PREFIX_AC_FILES: &str = "testcase_ac";
 pub const PREFIX_TLE_FILES: &str = "testcase_tle";

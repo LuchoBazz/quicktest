@@ -1,7 +1,8 @@
-`quicktest stress | qt stress`
-============
-
-**Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+---
+sidebar_position: 1
+title: Stress Examples
+sidebar_label: Stress
+---
 
 ## Run Examples
 
