@@ -21,6 +21,10 @@ qt setup config -l "Language::Cpp.STANDARD" -v="-std=c++17"
 qt setup config -l "Language::Python.PROGRAM" -v="python"
 ```
 
+### Demo
+
+![setup gif](/gif/setup.gif)
+
 ### Subcommand Structure
 
 * `quicktest setup | qt setup`

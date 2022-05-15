@@ -20,6 +20,10 @@ or shorter
 qt check --t main.cpp -c correct.cpp -g gen.cpp
 ```
 
+### Demo
+
+![check gif](/gif/check.gif)
+
 ### Subcommand Structure
 
 * `quicktest check | qt check`

@@ -18,6 +18,10 @@ or shorter
 qt output -t main.cpp -p testcase_ac
 ```
 
+### Demo
+
+![output gif](/gif/output.gif)
+
 ### Subcommand Structure
 
 * `quicktest output | qt output`
