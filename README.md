@@ -193,6 +193,10 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     
     **Nota:** can only use one flag at a time
 
+## How to Contribute
+
+If you are interested in contributing to the Quick Test CLI project, please take a look at the [Contribute](./CONTRIBUTING.md) guide
+
 ## Supported Languages
 
 | Language           |
