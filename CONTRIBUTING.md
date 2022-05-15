@@ -2,9 +2,8 @@
 
 1. Fork this repository and clone it locally: `git clone https://github.com/{yourUsername}/quicktest`
 2. `cd` (change directory) to `quicktest` repo directory
-3. Install dependencies: run npm install
-4. Install `quicktest` from source: `cargo build`
-5. Make code changes
+3. Install dependencies: run `cargo build`
+4. Make code changes
 
 ### Before making a Pull Request
 
