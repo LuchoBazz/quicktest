@@ -22,6 +22,24 @@ cargo test output_subcommand -- --test-threads 1
 cargo test setup_subcommand -- --test-threads 1
 ```
 
-### Bug reports
+### How can you contribute?
 
-You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
+- Improve documentation, since it was written by a non-native English speaker and may contain grammatical errors
+
+- Add new documentation
+
+- add unit tests
+
+- add support for new languages
+
+- add new examples in the [`/examples`](https://github.com/LuisMBaezCo/quicktest/tree/main/examples) folder in the different supported languages
+
+- reporting undetected errors
+
+- suggest new features to implement
+
+### Future Updates (work not started yet, you can contribute by coding any of these features)
+
+- add `inter` subcommand to support testing for interactive problems
+- use [tokyo](https://crates.io/crates/tokio) y [futures](https://crates.io/crates/futures) crates to use async functions
+- Solve TODOs in code.

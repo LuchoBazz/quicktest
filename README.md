@@ -197,6 +197,10 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
 If you are interested in contributing to the Quick Test CLI project, please take a look at the [Contribute](./CONTRIBUTING.md) guide
 
+### Bug reports
+
+You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
+
 ## Supported Languages
 
 | Language           |
