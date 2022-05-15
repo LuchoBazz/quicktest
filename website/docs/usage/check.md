@@ -6,9 +6,7 @@ sidebar_label: Check
 
 ### `quicktest check | qt check`
 
-**Verify the correctness of the code using a verifier script:**
-
-Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
+In some problems more than one answer is accepted, so the `quicktest cmp` command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.
 
 ```shell
 quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp

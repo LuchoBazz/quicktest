@@ -10,9 +10,6 @@
 
 ## Documentation
 
-**⚠️ Note:** _Quick Test CLI_ is currently below version `v1.0.0`, so it may contain bugs, you can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
-
-
 **Table of Contents**
 
 - [Getting Started](#getting-started)
@@ -46,28 +43,46 @@ Quick Test CLI is a project to perform stress testing in competitive programming
 
 Currently, Quick Test CLI supports three types of tests which are listed below:
 
-* **Check the correctness of the code compared to a slower version:** Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
+| qt cmp                                   | qt stress                                      | qt check                                     |
+|------------------------------------------|------------------------------------------------|----------------------------------------------|
+| ![cmp gif](./website/static/gif/cmp.gif) | ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
+
+
+* `quicktest cmp | qt cmp`: It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
     * **Sample:**
+
         ```shell
         quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp
+        # Or shorter:
+        qt cmp -t main.cpp -c correct.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-* **Detect cases with TLE:** Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+* `quicktest stress | qt stress`: Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+
+    **Note:** In this scenario there is no slower solution with which to compare the correction.
+
     * **Sample:**
         ```shell
         quicktest stress --target-file=main.cpp --gen-file=gen.cpp
+        # Or shorter:
+        qt stress -t main.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-* **Verify the correctness of the code using a verifier script:** Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
+*  `quicktest check | qt check`: In some problems more than one answer is accepted, so the `quicktest cmp` command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.
+
     * **Sample:**
         ```shell
         quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp
+        # Or shorter:
+        qt check -t main.cpp -c check.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-* **Run a target file with test case files matching a prefix:**
+* `quicktest output | qt output`: run all test cases that match a prefix and save the response to an output file
     * **Sample:**
         ```shell
         quicktest output --target-file=main.cpp --prefix=testcase_ac
+        # Or shorter:
+        qt output -t main.cpp -p test_cases/testcase_ac --tout 1000
         ```
 
 ## Commands
@@ -181,18 +196,25 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 | Language           |
 |--------------------|
 | C++                |
+| Java               |
 | Python             |
 | Rust Lang          |
 | Go Lang            |
+| GNU C              |
+| Kotlin             |
 
 ## Compilation and Execution Commands
 
-| Language  | Compile / Interpreter                                                                                                                                                     | Execution Command               |
-|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| C++17     | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main seed testcase`          |
-| Python3   |                                                                                                                                                                           | `python3 main.py seed testcase` |
-| Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main seed testcase`          |
-| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/main ~/.quicktest/go_mod/main.go`                                                          | `./main seed testcase`          |
+| Language  | Compile / Interpreter                                                                                                                                                     | Execution Command           |
+|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
+| C++17     | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main`                    |
+| Java      | `javac -d .qtest/ Main.java`                                                                                                                                              | `java -cp .qtest/ Main`     |
+| Python3   |                                                                                                                                                                           | `python3 main.py`           |
+| Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main`                    |
+| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qtest/main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
+| GNU C     | `gcc -std=gnu11 main.c -o .qtest/main`                                                                                                                                    | `./main`                    |
+| Kotlin    | `kotlinc main.kt -include-runtime -d .qtest/main.jar`                                                                                                                     | `java -jar .qtest/main.jar` |
+
 
 ## License
 Licensed under either of these:

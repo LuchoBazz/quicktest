@@ -6,9 +6,7 @@ sidebar_label: Cmp
 
 ### `quicktest cmp | qt cmp`
 
-**Check the correctness of the code compared to a slower version:** 
-
-Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
+It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp
