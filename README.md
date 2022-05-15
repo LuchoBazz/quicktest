@@ -8,6 +8,14 @@
 
 [![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
 
+### quicktest cmp - demo
+![cmp gif](./website/static/gif/cmp.gif)
+
+
+| quicktest stress                               | quicktest check                              |
+|------------------------------------------------|----------------------------------------------|
+| ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
+
 ## Documentation
 
 **Table of Contents**
@@ -42,11 +50,6 @@ curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
 Quick Test CLI is a project to perform stress testing in competitive programming contests in an easy and fast way, focusing only on the contest.
 
 Currently, Quick Test CLI supports three types of tests which are listed below:
-
-| qt cmp                                   | qt stress                                      | qt check                                     |
-|------------------------------------------|------------------------------------------------|----------------------------------------------|
-| ![cmp gif](./website/static/gif/cmp.gif) | ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
-
 
 * `quicktest cmp | qt cmp`: It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
     * **Sample:**
