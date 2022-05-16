@@ -6,7 +6,7 @@ int main() {
     // Problem: given n, give 2 numbers that multiplied give n
 
     // read n from input
-    ifstream in (".qtest/input.txt");
+    ifstream in (".qt/input.txt");
     int n; in >> n;
 
     // read answer

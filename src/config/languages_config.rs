@@ -1,6 +1,6 @@
 /*
  *  Quick Test: CLI for stress testing in competitive programming
- *  Copyright (C) 2021 - Luis Miguel Báez
+ *  Copyright (C) 2021-present / Luis Miguel Báez
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
@@ -26,12 +26,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=c++17"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.o",
-                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qtest/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.o",
+                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qtest/${FILE_NAME_BINARY}.o",
-                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
         },
@@ -63,12 +63,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "COMPILER":"javac"
             },
             "compile":{
-                "unix":"${COMPILER} -d .qtest/ ${FILE_NAME}.java",
-                "windows":"${COMPILER} -d .qtest/ ${FILE_NAME}.java"
+                "unix":"${COMPILER} -d .qt/ ${FILE_NAME}.java",
+                "windows":"${COMPILER} -d .qt/ ${FILE_NAME}.java"
             },
             "execute":{
-                "unix":"${PROGRAM} -cp .qtest/ ${FILE_NAME_BINARY}",
-                "windows":"${PROGRAM} -cp .qtest/ ${FILE_NAME_BINARY}"
+                "unix":"${PROGRAM} -cp .qt/ ${FILE_NAME_BINARY}",
+                "windows":"${PROGRAM} -cp .qt/ ${FILE_NAME_BINARY}"
             },
             "check_installed":"${PROGRAM}"
         },
@@ -85,12 +85,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=gnu11"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qtest/${FILE_NAME_BINARY}.o",
-                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qtest/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.o",
+                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qtest/${FILE_NAME_BINARY}.o",
-                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
         },
@@ -115,12 +115,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"${PROGRAM} init ~/.quicktest/rust"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qtest/${FILE_NAME_BINARY}.o",
-                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qtest/${FILE_NAME_BINARY}.exe"
+                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.o",
+                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qtest/${FILE_NAME_BINARY}.o",
-                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
         },
@@ -145,12 +145,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
-                "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qtest/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
+                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
+                "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
             },
             "execute":{
-                "unix":".qtest/${FILE_NAME_BINARY}.o",
-                "windows":".qtest/${FILE_NAME_BINARY}.exe"
+                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --version"
         },
@@ -166,12 +166,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "COMPILER":"kotlinc"
             },
             "compile":{
-                "unix":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qtest/${FILE_NAME_BINARY}.jar",
-                "windows":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qtest/${FILE_NAME_BINARY}.jar"
+                "unix":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qt/${FILE_NAME_BINARY}.jar",
+                "windows":"${COMPILER} ${FILE_NAME}.kt -include-runtime -d .qt/${FILE_NAME_BINARY}.jar"
             },
             "execute":{
-                "unix":"${PROGRAM} -jar .qtest/${FILE_NAME_BINARY}.jar",
-                "windows":"${PROGRAM} -jar .qtest/${FILE_NAME_BINARY}.jar"
+                "unix":"${PROGRAM} -jar .qt/${FILE_NAME_BINARY}.jar",
+                "windows":"${PROGRAM} -jar .qt/${FILE_NAME_BINARY}.jar"
             },
             "check_installed":"${PROGRAM}"
         }
