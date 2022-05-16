@@ -13,11 +13,7 @@ int main() {
     int x, y;
     cin >> x >> y;
 
-    if(x*y == n) {
-        cout << "YES" << endl;
-    } else {
-        cout << "NO" << endl;
-    }
+    cout << (x*y == n?"YES":"NO") << endl;
     
     return 0;
 }
