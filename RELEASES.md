@@ -3,6 +3,27 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0-rc.4 / 2022.05.16
+
+- docs: demo of the cmp subcommand was added to the website [e148fb1]
+- docs: demo of the stress subcommand was added to the website [89d06c5]
+- docs: demo of check, eample, output and setup subcommands were added to the website [585def3]
+- docs: Quick Test CLI Error Mapping was added [6d61bb2]
+- docs: command documentation was updated [e9cfa72]
+- docs: gif of qt cmp was placed at the beginning of the documentation [e18bd19]
+- docs: gifs were updated [43b6196]
+- docs: contribution guide was added [61cc8c7]
+- docs: How can you contribute? section and future updates were added [138c82a]
+- docs: main and check subcommand demo was added [33f9e70]
+- docs: README.md was updated with gif [8132666]
+- docs: header info was added to the missing files [b60d185]
+- refactor: hidden cache folder .qtest was renamed to .qt [f64881f]
+- fix: issue about es_status undefined variable in windows was fixed [0bc1a95]
+- fix: issue in the contribution docs was fixed [6066b2a]
+- fix: code smell were fixed [d5f9c76]
+- fix: command docs was fixed [8445068]
+- feat: ~/.quicktest/languages.config.json file was updated in website [a6734dd]
+
 ### 1.0.0-rc.3 / 2022.05.14
 
 feat: Support for rust lang was added [e2be5c9]

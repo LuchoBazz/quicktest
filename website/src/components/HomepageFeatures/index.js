@@ -1,46 +1,84 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'quicktest cmp',
+    imageUrl: '/gif/cmp.gif',
+    redirect: '/docs/usage/cmp#demo',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Verify that the code does not have incorrect answers for some test cases, using a random generator and a slower version which is sure what is correct with which the answers will be compared.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'quicktest stress',
+    imageUrl: '/gif/stress.gif',
+    redirect: '/docs/usage/stress#demo',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'quicktest check',
+    imageUrl: '/gif/check.gif',
+    redirect: '/docs/usage/check#demo',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Similar to the previous one, this test verifies that the code does not have an incorrect answer for some test cases using a verifier script because there may be many correct answers.
+      </>
+    ),
+  },
+  {
+    title: 'quicktest output',
+    imageUrl: '/gif/output.gif',
+    redirect: '/docs/usage/output#demo',
+    description: (
+      <>
+        Run a target file with test case files matching a prefix
+      </>
+    ),
+  },
+  {
+    title: 'quicktest setup',
+    imageUrl: '/gif/setup.gif',
+    redirect: '/docs/usage/setup#demo',
+    description: (
+      <>
+        Subcommand that allows to change settings
+      </>
+    ),
+  },
+  {
+    title: 'quicktest example',
+    imageUrl: '/gif/example.gif',
+    redirect: '/docs/usage/example#demo',
+    description: (
+      <>
+        Shows examples of the selected subcommand
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({imageUrl, redirect, title, description}) {
+  const imgUrl = useBaseUrl(imageUrl);
+  const to = useBaseUrl(redirect);
+
   return (
     <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
+      {imgUrl && (
+        <div className={clsx("text--center")}>
+          <a href={to}>
+            <img className={styles.gif} src={imgUrl} alt={title} />
+          </a>
+        </div>
+      )}
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
         <p>{description}</p>

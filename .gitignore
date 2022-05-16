@@ -20,7 +20,7 @@ Cargo.lock
 /stress_cases/
 /test_cases/
 /output/
-.qtest/
+.qt/
 
 # VsCode
 .vscode

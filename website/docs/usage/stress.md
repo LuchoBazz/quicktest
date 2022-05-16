@@ -6,9 +6,9 @@ sidebar_label: Stress
 
 ### `quicktest stress | qt stress`
 
-**Detect cases with TLE:**
-
 Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+
+**Note:** In this scenario there is no slower solution with which to compare the correction.
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp
@@ -19,6 +19,10 @@ or shorter
 ```shell
 qt stress -t main.cpp -g gen.cpp
 ```
+
+### Demo
+
+![stress gif](/gif/stress.gif)
 
 ### Subcommand Structure
 

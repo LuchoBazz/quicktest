@@ -32,7 +32,7 @@ pub enum SetUp {
 #[derive(StructOpt, Debug)]
 #[structopt(name = "quicktest")]
 pub enum Opt {
-    /// Check TLE
+    /// Verify that the code execution time does not exceed what is allowed
     Stress {
         /// Target File
         #[structopt(short = "t", long = "target-file", parse(from_os_str))]
@@ -108,7 +108,7 @@ pub enum Opt {
         #[structopt(short = "g", long = "gen-file", parse(from_os_str), default_value = "")]
         gen_file: PathBuf,
 
-        /// Timeout (Alias --tout)
+        /// Timeout (alias --tout)
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
@@ -116,7 +116,7 @@ pub enum Opt {
         #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
         memory_limit: u64,
 
-        /// Number of test cases (Alias --tc)
+        /// Number of test cases (alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
 
@@ -124,7 +124,7 @@ pub enum Opt {
         #[structopt(short = "p", long = "prefix", default_value = "")]
         prefix: String,
 
-        /// Break if WA, TLE or RTE states occurs (Alias --break)
+        /// Break if WA, TLE or RTE states occurs (alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 
@@ -178,7 +178,7 @@ pub enum Opt {
         #[structopt(short = "g", long = "gen-file", parse(from_os_str), default_value = "")]
         gen_file: PathBuf,
 
-        /// Timeout (Alias --tout)
+        /// Timeout (alias --tout)
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
@@ -186,7 +186,7 @@ pub enum Opt {
         #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
         memory_limit: u64,
 
-        /// Number of test cases (Alias --tc)
+        /// Number of test cases (alias --tc)
         #[structopt(long = "test-cases", alias = "tc", default_value = "1000")]
         test_cases: u32,
 
@@ -194,7 +194,7 @@ pub enum Opt {
         #[structopt(short = "p", long = "prefix", default_value = "")]
         prefix: String,
 
-        /// Break if WA, TLE or RTE states occurs (Alias --break)
+        /// Break if WA, TLE or RTE states occurs (alias --break)
         #[structopt(short = "b", alias = "break", long = "break_bad")]
         break_bad: bool,
 
@@ -240,7 +240,7 @@ pub enum Opt {
         #[structopt(short = "p", long = "prefix")]
         prefix: String,
 
-        /// Timeout (Alias --tout)
+        /// Timeout (alias --tout)
         #[structopt(long = "timeout", alias = "tout", default_value = "2000")]
         timeout: u32,
 
@@ -248,7 +248,7 @@ pub enum Opt {
         #[structopt(long = "memory-limit", alias = "ml", default_value = "1000000000")]
         memory_limit: u64,
 
-        /// Break if TLE or RTE states occurs (Alias --break)
+        /// Break if TLE or RTE states occurs (alias --break)
         #[structopt(short = "b", alias = "break", long = "break-bad")]
         break_bad: bool,
 

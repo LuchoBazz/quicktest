@@ -24,6 +24,10 @@ qt example --run
 qt example --setup
 ```
 
+### Demo
+
+![example gif](/gif/example.gif)
+
 ### Subcommand Structure
 
 * `quicktest example | qt example`

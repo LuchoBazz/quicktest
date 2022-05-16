@@ -24,7 +24,7 @@ pub const CHECKER_CPP_CHECK: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
 int main() {
-    ifstream in (".qtest/input.txt");
+    ifstream in (".qt/input.txt");
     int n; in >> n;
     vector<int> A(n);
     for(auto &a: A) cin >> a;

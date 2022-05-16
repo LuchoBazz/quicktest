@@ -6,7 +6,7 @@ sidebar_label: Output
 
 ### `quicktest output | qt output`
 
-**Run a target file with test case files matching a prefix:**
+Run all test cases that match a prefix and save the response to an output file
 
 ```shell
 quicktest output --target-file=main.cpp --prefix=testcase_ac
@@ -17,6 +17,10 @@ or shorter
 ```shell
 qt output -t main.cpp -p testcase_ac
 ```
+
+### Demo
+
+![output gif](/gif/output.gif)
 
 ### Subcommand Structure
 
