@@ -7,29 +7,24 @@
 use std::{
     path::{Path, PathBuf},
     process::Stdio,
-    time::Duration,
 };
 
 use exitfailure::ExitFailure;
 use std::process::Command;
-use structopt::lazy_static::initialize;
 
 use crate::{
     file_handler::path::get_root_path,
     language::extension,
     runner::{
         cmd::{execute_program, has_installed_controller},
-        types::{CPStatus, Language, StatusResponse},
+        types::{Language, StatusResponse},
     },
     util::file::get_extension,
     views::style::show_installing_dependencies,
 };
 
 use super::{
-    json::{
-        config_files::{self, ConfigFile},
-        language_scheme::LanguageScheme,
-    },
+    json::{config_files::ConfigFile, language_scheme::LanguageScheme},
     traits::BuildEnvVariables,
 };
 
@@ -54,15 +49,16 @@ pub struct LanguageHandler {
     stdout: Option<PathBuf>,
 }
 
+#[allow(clippy::derivable_impls)]
 impl Default for LanguageHandler {
     fn default() -> Self {
         Self {
-            check_installed: String::default(),
+            check_installed: String::new(),
             initialize: None,
             config_files: None,
             compile: None,
-            execute: String::default(),
-            name: String::default(),
+            execute: String::new(),
+            name: String::new(),
             stderr: None,
             stdin: None,
             stdout: None,
@@ -85,14 +81,14 @@ impl LanguageHandler {
         let stdout = Some(PathBuf::from(format!("{}/{}", root, stdout)));
         let stderr = Some(PathBuf::from(format!("{}/{}", root, stderr)));
 
-        let mut lang = lang.clone();
+        let mut lang = lang;
 
-        let mut env = lang.env.clone();
+        let env = lang.env.clone();
 
         lang.build_env_variables(&env);
 
         #[cfg(unix)]
-        let mut initialize = if lang.initialize.is_some() {
+        let initialize = if lang.initialize.is_some() {
             Some(lang.initialize.clone().unwrap().unix)
         } else {
             None
@@ -104,7 +100,7 @@ impl LanguageHandler {
             None
         };
 
-        let mut config_files = if lang.config_files.is_some() {
+        let config_files = if lang.config_files.is_some() {
             Some(lang.config_files.clone().unwrap())
         } else {
             None
@@ -116,7 +112,7 @@ impl LanguageHandler {
         let execute = lang.execute.windows.clone();
 
         #[cfg(unix)]
-        let mut compile = if lang.compile.is_some() {
+        let compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().unix)
         } else {
             None
@@ -129,10 +125,10 @@ impl LanguageHandler {
         };
 
         LanguageHandler {
-            initialize: initialize,
-            config_files: config_files,
-            compile: compile,
-            execute: execute,
+            initialize,
+            config_files,
+            compile,
+            execute,
             check_installed: lang.check_installed.clone(),
             name: lang.name.clone(),
             stdin,
@@ -146,14 +142,14 @@ impl LanguageHandler {
 
         let stdout = Some(PathBuf::from(format!("{}/{}", root, stdout)));
 
-        let mut lang = lang.clone();
+        let mut lang = lang;
 
-        let mut env = lang.env.clone();
+        let env = lang.env.clone();
 
         lang.build_env_variables(&env);
 
         #[cfg(unix)]
-        let mut initialize = if lang.initialize.is_some() {
+        let initialize = if lang.initialize.is_some() {
             Some(lang.initialize.clone().unwrap().unix)
         } else {
             None
@@ -165,7 +161,7 @@ impl LanguageHandler {
             None
         };
 
-        let mut config_files = if lang.config_files.is_some() {
+        let config_files = if lang.config_files.is_some() {
             Some(lang.config_files.clone().unwrap())
         } else {
             None
@@ -177,7 +173,7 @@ impl LanguageHandler {
         let execute = lang.execute.windows.clone();
 
         #[cfg(unix)]
-        let mut compile = if lang.compile.is_some() {
+        let compile = if lang.compile.is_some() {
             Some(lang.compile.clone().unwrap().unix)
         } else {
             None
@@ -189,10 +185,10 @@ impl LanguageHandler {
             None
         };
         LanguageHandler {
-            initialize: initialize,
-            config_files: config_files,
-            compile: compile,
-            execute: execute,
+            initialize,
+            config_files,
+            compile,
+            execute,
             check_installed: lang.check_installed.clone(),
             name: lang.name.clone(),
             stdin: None,
@@ -214,7 +210,7 @@ impl Language for LanguageHandler {
         let initialize = self.initialize.clone().unwrap();
         let commands = initialize.split("&&").collect::<Vec<_>>();
         for &cmd in commands.iter() {
-            let mut commands_str = cmd.split(" ").collect::<Vec<_>>();
+            let commands_str = cmd.split(' ').collect::<Vec<_>>();
 
             // remove whitespace from commands and expand ~ characters by $HOME
             let commands_str = commands_str
@@ -263,7 +259,7 @@ impl Language for LanguageHandler {
         let commands = compile.split("&&").collect::<Vec<_>>();
 
         for &cmd in commands.iter() {
-            let mut commands_str = cmd.trim().split(" ").collect::<Vec<_>>();
+            let commands_str = cmd.trim().split(' ').collect::<Vec<_>>();
 
             // remove whitespace from commands and expand ~ characters by $HOME
             let commands_str = commands_str
@@ -295,7 +291,7 @@ impl Language for LanguageHandler {
 
     fn execute(&self, timeout: u32, memory_limit: u64, testcase: u32) -> StatusResponse {
         let execute = self.execute.clone();
-        let commands_str = execute.split(" ").collect::<Vec<_>>();
+        let commands_str = execute.split(' ').collect::<Vec<_>>();
 
         execute_program(
             timeout,
@@ -314,10 +310,10 @@ impl Language for LanguageHandler {
 
     fn is_installed(&self) -> bool {
         let check_installed = self.check_installed.clone();
-        let commands_str = check_installed.split(" ").collect::<Vec<_>>();
+        let commands_str = check_installed.split(' ').collect::<Vec<_>>();
 
         has_installed_controller(
-            &commands_str[0],
+            commands_str[0],
             if commands_str.len() > 1 {
                 (&commands_str[1..]).to_vec()
             } else {
@@ -342,20 +338,18 @@ pub fn get_language_handler(
 
     let path = Path::new(&file_name);
 
-    let ext: &str = get_extension(&path).unwrap();
+    let ext: &str = get_extension(path).unwrap();
 
     if let Err(err) = extension::map_extension(file_label, ext, &mut lang_out) {
         return Err(err);
     }
 
-    let name = path.file_stem().unwrap().to_str().unwrap();
-
-    let mut file_name = file_name.split(".").collect::<Vec<_>>();
+    let mut file_name = file_name.split('.').collect::<Vec<_>>();
     file_name.pop();
     let file_name = file_name.join(".");
 
     lang_out.add_env_variable(&String::from("FILE_NAME"), &file_name);
-    let mut file_name = file_name.split("/").collect::<Vec<_>>();
+    let mut file_name = file_name.split('/').collect::<Vec<_>>();
     file_name.reverse();
     while file_name.len() > 1 {
         file_name.pop();
@@ -378,20 +372,18 @@ pub fn get_generator_handler(
 
     let path = Path::new(&file_name);
 
-    let ext: &str = get_extension(&path).unwrap();
+    let ext: &str = get_extension(path).unwrap();
 
     if let Err(err) = extension::map_extension(file_label, ext, &mut lang_out) {
         return Err(err);
     }
 
-    let name = path.file_stem().unwrap().to_str().unwrap();
-
-    let mut file_name = file_name.split(".").collect::<Vec<_>>();
+    let mut file_name = file_name.split('.').collect::<Vec<_>>();
     file_name.pop();
     let file_name = file_name.join(".");
 
     lang_out.add_env_variable(&String::from("FILE_NAME"), &file_name);
-    let mut file_name = file_name.split("/").collect::<Vec<_>>();
+    let mut file_name = file_name.split('/').collect::<Vec<_>>();
     file_name.reverse();
     while file_name.len() > 1 {
         file_name.pop();
