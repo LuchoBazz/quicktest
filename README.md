@@ -46,9 +46,9 @@ Quick Test CLI is a project to perform stress testing in competitive programming
 
 Currently, Quick Test CLI supports three types of tests which are listed below:
 
-| quicktest stress                               | quicktest check                              |
-|------------------------------------------------|----------------------------------------------|
-| ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
+| [quicktest cmp](https://luismbaezco.github.io/quicktest/docs/usage/cmp)                               | [quicktest stress](https://luismbaezco.github.io/quicktest/docs/usage/stress)                               | [quicktest check](https://luismbaezco.github.io/quicktest/docs/usage/check)                              |
+|------------------------------------------------|------------------------------------------------|----------------------------------------------|
+| ![cmp gif](./website/static/gif/cmp.gif) | ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
 
 * `quicktest cmp | qt cmp`: It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
     * **Sample:**
