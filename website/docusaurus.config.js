@@ -9,7 +9,7 @@ const config = {
   title: 'Quick Test CLI',
   tagline: 'CLI for stress testing in competitive programming contest',
   url: 'https://LuisMBaezCo.github.io',
-  baseUrl: '/',
+  baseUrl: '/quicktest/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
