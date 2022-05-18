@@ -17,7 +17,7 @@ $QT_Install = $env:QUICK_TEST_INSTALL
 $BinDir = if ($QT_Install) {
     "$QT_Install\bin"
 } else {
-    "$Home\.cargo\bin"
+    "$Home\.quicktest\bin"
 }
 
 $QT_Zip = "$BinDir\quicktest.zip"
