@@ -212,8 +212,8 @@ You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
 | Java      | `javac -d .qt/ Main.java`                                                                                                                                              | `java -cp .qt/ Main`     |
 | Python3   |                                                                                                                                                                           | `python3 main.py`           |
 | Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main`                    |
-| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qt/main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
-| GNU C     | `gcc -std=gnu11 main.c -o .qt/main`                                                                                                                                    | `./main`                    |
+| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
+| GNU C     | `gcc -std=gnu11 main.c -o main`                                                                                                                                    | `./main`                    |
 | Kotlin    | `kotlinc main.kt -include-runtime -d .qt/main.jar`                                                                                                                     | `java -jar .qt/main.jar` |
 
 

@@ -40,5 +40,5 @@ cargo test setup_subcommand -- --test-threads 1
 ### Future Updates (work not started yet, you can contribute by coding any of these features)
 
 - add `inter` subcommand to support testing for interactive problems
-- use [tokyo](https://crates.io/crates/tokio) y [futures](https://crates.io/crates/futures) crates to use async functions
+- use [tokio](https://crates.io/crates/tokio) y [futures](https://crates.io/crates/futures) crates to use async functions
 - Solve TODOs in code.
