@@ -19,6 +19,8 @@
   - [Installation](#installation)
 - [Introduction](#introduction)
 - [Commands](#commands)
+- [How to Contribute](#how-to-contribute)
+- [Bug reports](#bug-reports)
 - [Supported Languages](#supported-languages)
 - [Compilation and Execution Commands](#compilation-and-execution-commands)
 - [License](#license)
@@ -27,18 +29,7 @@
 
 ### Installation
 
-If you already have Rust on your system:
-
-```sh
-cargo install quicktest
-```
-
-If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
-
-Shell (Linux, Mac):
-```sh
-curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
-```
+Installation tutorial for Linux, Windows and macOS can be found [here](https://luismbaezco.github.io/quicktest/docs/getting-started/installation) on the docs website
 
 ## Introduction
 
