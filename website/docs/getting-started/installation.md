@@ -4,6 +4,29 @@ title: Installation
 sidebar_label: Installation
 ---
 
+Quick Test CLI works on Linux, Windows, and macOS. Quick Test CLI is a single binary executable. It has no external dependencies.
+
+[quicktest_install](https://github.com/LuisMBaezCo/quicktest/tree/main/website/static/install) provides convenience scripts to download and install the binary.
+
+### Linux
+
+Using Shell:
+
+```shell
+curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | sh
+```
+
+then execute `source ~/.bashrc` or `source ~/.zshrc` as appropriate
+
+### Windows
+
+Using PowerShell:
+
+```powershell
+iwr https://luismbaezco.github.io/quicktest/install/install.ps1 -useb | iex
+```
+
+### macOS, Linux or Windows
 If you already have Rust on your system:
 
 ```sh
@@ -12,7 +35,10 @@ cargo install quicktest
 
 If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
 
-Shell (Linux, Mac):
+### macOS or Linux
+
+Shell:
+
 ```sh
 curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
 ```
