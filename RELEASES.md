@@ -3,7 +3,7 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
-### 1.0.0-rc.5 /
+### 1.0.0-rc.5 /  2022.05.18
 
 - feat: installation script via powershell for windows was added [1f7bbde]
 - feat: installation script via shell for linux was added [7220318]
