@@ -3,6 +3,14 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0-rc.5 /  2022.05.18
+
+- feat: installation script via powershell for windows was added [1f7bbde]
+- feat: installation script via shell for linux was added [7220318]
+- feat: installation script via powershell for windows was updated [c604407]
+- docs: installation commands on Linux, Windows and macOS were added [d7a6cb0]
+- docs: installation guide was updated in the README.md [6832582]
+
 ### 1.0.0-rc.4 / 2022.05.16
 
 - docs: demo of the cmp subcommand was added to the website [e148fb1]
@@ -26,33 +34,33 @@ https://github.com/LuisMBaezCo/quicktest/releases
 
 ### 1.0.0-rc.3 / 2022.05.14
 
-feat: Support for rust lang was added [e2be5c9]
-feat: Go lang support was added [4191367]
-feat: java support was added [496f70e]
-feat: C support was added [8f8f22d]
-feat: katlin support was added [16605df]
-docs: documentation of the examples was added in /examples folder [58427eb]
-feat: configuration file was updated [292630a]
-feat: qt setup reset which removes the config file was added [e5eba42]
-feat: I/O files were renamed to a shorter name [bc76ac7]
-fix: issue about text that appears when executing the check installed command was fixed [eda4369]
-docs: documentation of examples was added to the web page [cf45782]
-docs: documentation about the subcommands was updated on the web page [968a68a]
-docs: config file documentation was added [4868fbf]
-assets: favicon.ico and logo were added to website [decaa0d]
-examples: rust examples were added [7ef38e3]
-test: test names were changed from tle to stress [703cb87]
+- feat: Support for rust lang was added [e2be5c9]
+- feat: Go lang support was added [4191367]
+- feat: java support was added [496f70e]
+- feat: C support was added [8f8f22d]
+- feat: katlin support was added [16605df]
+- feat: configuration file was updated [292630a]
+- feat: qt setup reset which removes the config file was added [e5eba42]
+- feat: I/O files were renamed to a shorter name [bc76ac7]
+- fix: issue about text that appears when executing the check installed command was fixed [eda4369]
+- docs: documentation of the examples was added in /examples folder [58427eb]
+- docs: documentation of examples was added to the web page [cf45782]
+- docs: documentation about the subcommands was updated on the web page [968a68a]
+- docs: config file documentation was added [4868fbf]
+- assets: favicon.ico and logo were added to website [decaa0d]
+- examples: rust examples were added [7ef38e3]
+- test: test names were changed from tle to stress [703cb87]
 
 
 ### 1.0.0-rc.2 / 2022.05.12
 
-feat: subcommand folder was renamed to controllers [2d5f859]
-feat: prefix option to run test cases matching that prefix was added to the cmp, stress and check  subcommands [545213c]
-refactor: cli module structures was updated to model and Adapter Command  trait was added [48ee06d]
-refactor: check command was refactored using adapter pattern [b99c8e9]
-refactor: cmp command was refactored using adapter pattern [cbae9bb]
-refactor: stress command was refactored using adapter pattern [f7beebc]
-refactor: output command was refactored using adapter pattern [e4cfefc]
+- feat: subcommand folder was renamed to controllers [2d5f859]
+- feat: prefix option to run test cases matching that prefix was added to the cmp, stress and check  subcommands [545213c]
+- refactor: cli module structures was updated to model and Adapter Command  trait was added [48ee06d]
+- refactor: check command was refactored using adapter pattern [b99c8e9]
+- refactor: cmp command was refactored using adapter pattern [cbae9bb]
+- refactor: stress command was refactored using adapter pattern [f7beebc]
+- refactor: output command was refactored using adapter pattern [e4cfefc]
 
 ### 1.0.0-rc.1 / 2022.05.11
 
