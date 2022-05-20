@@ -15,22 +15,22 @@ pub const CONFIG_FOLDER: &str = "~/.quicktest";
 pub const LANGUAGE_CONFIG_FILE: &str = "~/.quicktest/languages.config.json";
 
 #[cfg(unix)]
-pub const TARGET_BINARY_FILE: &str = ".qt/main.o";
+pub const TARGET_BINARY_FILE: &str = ".qt/main";
 #[cfg(windows)]
 pub const TARGET_BINARY_FILE: &str = ".qt/main.exe";
 
 #[cfg(unix)]
-pub const CORRECT_BINARY_FILE: &str = ".qt/correct.o";
+pub const CORRECT_BINARY_FILE: &str = ".qt/correct";
 #[cfg(windows)]
 pub const CORRECT_BINARY_FILE: &str = ".qt/correct.exe";
 
 #[cfg(unix)]
-pub const CHECKER_BINARY_FILE: &str = ".qt/checker.o";
+pub const CHECKER_BINARY_FILE: &str = ".qt/checker";
 #[cfg(windows)]
 pub const CHECKER_BINARY_FILE: &str = ".qt/checker.exe";
 
 #[cfg(unix)]
-pub const GEN_BINARY_FILE: &str = ".qt/gen.o";
+pub const GEN_BINARY_FILE: &str = ".qt/gen";
 #[cfg(windows)]
 pub const GEN_BINARY_FILE: &str = ".qt/gen.exe";
 

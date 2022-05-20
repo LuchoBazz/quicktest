@@ -26,11 +26,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=c++17"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.o",
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}",
                 "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -85,11 +85,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=gnu11"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.o",
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}",
                 "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -115,11 +115,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"${PROGRAM} init ~/.quicktest/rust"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.o",
+                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}",
                 "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -145,11 +145,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
+                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY} ~/.quicktest/go_mod/main.go",
                 "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --version"
