@@ -6,7 +6,11 @@
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
+<h2 align="center">📖 <a href="https://luismbaezco.github.io/quicktest/docs/intro">Docs</a></h2>
+
 [![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
+
+📖 [Docs](https://luismbaezco.github.io/quicktest/docs/intro)
 
 ## Demo
 ![cmp gif](./website/static/gif/main.gif)
