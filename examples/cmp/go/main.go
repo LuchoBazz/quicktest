@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-    _ "github.com/emirpasic/gods/lists/arraylist"
 )
 
 var r = bufio.NewReader(os.Stdin)

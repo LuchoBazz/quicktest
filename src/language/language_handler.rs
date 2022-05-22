@@ -216,6 +216,7 @@ impl Language for LanguageHandler {
             let commands_str = commands_str
                 .iter()
                 .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .filter(|val| !val.trim().is_empty())
                 .collect::<Vec<_>>();
 
             // convert from Vec<String> to Vec<&str>
@@ -265,6 +266,7 @@ impl Language for LanguageHandler {
             let commands_str = commands_str
                 .iter()
                 .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .filter(|val| !val.trim().is_empty())
                 .collect::<Vec<_>>();
 
             // convert from Vec<String> to Vec<&str>

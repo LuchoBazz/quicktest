@@ -131,18 +131,12 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "go"
             ],
             "description":"Go Programming Language",
-            "config_files":[
-                {
-                    "path":"~/.quicktest/go_mod/go.mod",
-                    "content":"module go_mod\n\ngo 1.17\n\ngithub.com/emirpasic/gods v1.18.1 // indirect\n\n"
-                }
-            ],
             "env":{
                 "PROGRAM":"go"
             },
             "initialize":{
-                "unix":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum",
-                "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum"
+                "unix":"mkdir ~/.quicktest/go_mod",
+                "windows":"mkdir ~/.quicktest/go_mod"
             },
             "compile":{
                 "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY} ~/.quicktest/go_mod/main.go",
