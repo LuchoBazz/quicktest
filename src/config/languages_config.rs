@@ -43,13 +43,13 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
             ],
             "description":"Python Language Interpreter",
             "env":{
-                "PROGRAM":"python3"
+                "PROGRAM":"python"
             },
             "execute":{
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
                 "windows":"${PROGRAM} ${FILE_NAME}.py"
             },
-            "check_installed":"${PROGRAM} --help"
+            "check_installed":"${PROGRAM} -c \"print('check installed')\""
         },
         {
             "id":"Language::Java",
@@ -116,7 +116,7 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
             },
             "compile":{
                 "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}",
-                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.exe"
+                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust.exe .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
                 "unix":".qt/${FILE_NAME_BINARY}",
