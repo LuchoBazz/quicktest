@@ -115,7 +115,17 @@ pub fn execute_program(
 pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
     let mut cmd = Command::new(&program);
     cmd.args(args);
-    cmd.stdout(Stdio::piped());
-    cmd.stderr(Stdio::piped());
-    cmd.status().is_ok()
+
+    let child: Result<std::process::Child, std::io::Error> =
+        cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
+    
+    if let Ok(child_output) = child {
+        let x = child_output
+            .controlled_with_output()
+            .time_limit(Duration::from_millis(1000 as u64))
+            .terminate_for_timeout()
+            .wait();
+        return x.is_ok();
+    }
+    false
 }

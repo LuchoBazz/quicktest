@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class Correct {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
@@ -8,11 +8,13 @@ public class Main {
         for(int i = 0; i < n; ++i) {
             values[i] = sc.nextInt();
         }
-        int best = 0, sum = 0;
-        // i+1 was added intensively to generate an error
-        for (int i = 0; i+1 < n; i++) {
-            sum = Math.max(values[i], sum + values[i]);
-            best = Math.max(best, sum);
+        int best = 0;
+        for (int i = 0; i < n; i++) {
+            int sum = 0;
+            for (int j = i; j < n; j++) {
+                sum += values[j];
+                best = Math.max(best, sum);
+            }
         }
         System.out.println(best);
     }
