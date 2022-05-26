@@ -115,8 +115,8 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"${PROGRAM} init ~/.quicktest/rust"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}",
-                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust.exe .qt/${FILE_NAME_BINARY}.exe"
+                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY} && rm ~/.quicktest/rust/target/release/rust && rm ~/.quicktest/rust/target/release/deps/rust",
+                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust.exe .qt/${FILE_NAME_BINARY}.exe && rm ~/.quicktest/rust/target/release/rust.exe && rm ~/.quicktest/rust/target/release/deps/rust.exe"
             },
             "execute":{
                 "unix":".qt/${FILE_NAME_BINARY}",
