@@ -10,6 +10,7 @@ jobs:
       - run: sudo apt update
       - run: sudo apt upgrade
       - run: sudo apt install snapd
+      - run: systemctl restart snapd
       - run: sudo snap install go --classic
       - run: go
       # - run: cargo build
