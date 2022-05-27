@@ -7,10 +7,10 @@ jobs:
 
     steps:
       - checkout
-      - run: apt update
-      - run: apt upgrade
-      - run: apt install snapd
-      - run: snap install go --classic
+      - run: sudo apt update
+      - run: sudo apt upgrade
+      - run: sudo apt install snapd
+      - run: sudo snap install go --classic
       - run: go
       # - run: cargo build
       # - run: cargo clippy -- -D warnings
