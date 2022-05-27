@@ -99,3 +99,27 @@ func main() {
     
 	defer w.Flush()
 }"#;
+
+pub const TARGET_JAVA_OUTPUT_CMD: &str = r#"
+import java.util.*;
+import java.io.PrintWriter;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(System.out);
+        int n = sc.nextInt();
+        int[] values = new int[n];
+        for(int i = 0; i < n; ++i) {
+            values[i] = sc.nextInt();
+        }
+        Arrays.sort(values);
+        out.println(n);
+        for(int i = 0; i < n; ++i) {
+            if(i > 0)
+                out.print(" ");
+            out.print(values[i]);
+        }
+        out.flush();
+    }
+}"#;

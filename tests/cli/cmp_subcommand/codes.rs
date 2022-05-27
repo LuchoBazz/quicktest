@@ -313,3 +313,89 @@ func main() {
     }
     defer w.Flush()
 }"#;
+
+// JAVA
+pub const TARGET_JAVA_CMP: &str = r#"
+import java.util.*;
+import java.io.PrintWriter;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(System.out);
+        int n = sc.nextInt();
+        int[] values = new int[n];
+        for(int i = 0; i < n; ++i) {
+            values[i] = sc.nextInt();
+        }
+        Arrays.sort(values);
+        out.println(n);
+        for(int i = 0; i < n; ++i) {
+            if(i > 0)
+                out.print(" ");
+            out.print(values[i]);
+        }
+        out.flush();
+    }
+}"#;
+
+pub const CORRECT_JAVA_CMP: &str = r#"
+import java.util.*;
+import java.io.PrintWriter;
+public class Correct {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(System.out);
+        int n = sc.nextInt();
+        int[] values = new int[n];
+        for(int i = 0; i < n; ++i) {
+            values[i] = sc.nextInt();
+        }
+        for (int i = 0; i < n-1; i++) {
+            for (int j = 0; j < n-i-1; j++) {
+                if (values[j] > values[j+1]) {
+                    Correct.swap(values, j, j+1);
+                }
+            }
+        }
+        out.println(n);
+        for(int i = 0; i < n; ++i) {
+            if(i > 0)
+                out.print(" ");
+            out.print(values[i]);
+        }
+        out.flush();
+    }
+    public static void swap(int[] a, int i, int j) {
+        int t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
+}"#;
+
+pub const GEN_JAVA_CMP: &str = r#"
+import java.util.Random;
+import java.io.PrintWriter;
+
+public class Gen {
+    public static void main(String[] args) {
+        Random rand = new Random();
+        PrintWriter out = new PrintWriter(System.out);
+        
+        final int N  = 1000;
+        final int mn = -100000;
+        final int mx = 100000;
+
+        int n = rand.nextInt(N);
+
+        out.println(n);
+
+        for(int i = 0; i < n; i++) {
+            if(i > 0)
+                out.print(" ");
+            int ai = (int)Math.floor(Math.random()*(mx-mn+1)+mn);
+            out.print(ai);
+        }
+        out.flush();
+    }
+}"#;

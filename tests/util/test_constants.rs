@@ -41,6 +41,11 @@ pub const CORRECT_FILE_GO: &str = "correct.go";
 pub const CHECKER_FILE_GO: &str = "checker.go";
 pub const GEN_FILE_GO: &str = "gen.go";
 
+pub const TARGET_FILE_JAVA: &str = "Main.java";
+pub const CORRECT_FILE_JAVA: &str = "Correct.java";
+pub const CHECKER_FILE_JAVA: &str = "Checker.java";
+pub const GEN_FILE_JAVA: &str = "Gen.java";
+
 // CPP
 pub const RTE_CPP: &str = r#"
 #include <bits/stdc++.h>
@@ -165,5 +170,33 @@ func main() {
     a := []int{1, 2, 3}
     for {
         a = append(a, 1 << 60);
+    }
+}"#;
+
+// JAVA
+pub const RTE_JAVA: &str = r#"
+public class Main {
+    public static void main(String[] args) {
+        for(int i = -20; i <= 20; i++) {
+            System.out.println(100 / i);
+        }
+    }
+}"#;
+
+pub const CE_JAVA: &str = r#"
+public class Main {
+    public static void main(String[] args) {
+        Generate Compiler Error
+    }
+}"#;
+
+pub const MLE_JAVA: &str = r#"
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        while(true) {
+            arr.add(1 << 60);
+        }
     }
 }"#;
