@@ -2,17 +2,21 @@ jobs:
   build:
     docker:
       - image: cimg/rust:1.58.0
-      - image: cimg/go:1.18
     
     working_directory: ~/quicktest_folder
 
     steps:
       - checkout
-      - run: cargo build
-      - run: cargo clippy -- -D warnings
-      - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
-      - run: cargo test cmp_subcommand -- --test-threads 1
-      - run: cargo test stress_subcommand -- --test-threads 1
-      - run: cargo test check_subcommand -- --test-threads 1
-      - run: cargo test output_subcommand -- --test-threads 1
-      - run: cargo test setup_subcommand -- --test-threads 1
+      - run: apt update
+      - run: apt upgrade
+      - run: apt install snapd
+      - run: snap install go --classic
+      - run: go
+      # - run: cargo build
+      # - run: cargo clippy -- -D warnings
+      # - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      # - run: cargo test cmp_subcommand -- --test-threads 1
+      # - run: cargo test stress_subcommand -- --test-threads 1
+      # - run: cargo test check_subcommand -- --test-threads 1
+      # - run: cargo test output_subcommand -- --test-threads 1
+      # - run: cargo test setup_subcommand -- --test-threads 1
