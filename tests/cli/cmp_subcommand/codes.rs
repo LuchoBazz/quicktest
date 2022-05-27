@@ -4,6 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+// RUST
 pub const TARGET_CPP_CMP: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
@@ -61,6 +62,7 @@ int main() {
     return 0;
 }"#;
 
+// PYTHON
 pub const TARGET_PY_CMP: &str = r#"
 n = int(input())
 A = list(map(int, input().split()))
@@ -87,6 +89,7 @@ print(n)
 A = [int(uniform(1, int(1e9))) for _ in range(n)]
 print(*A)"#;
 
+// C
 pub const TARGET_C_CMP: &str = r#"
 #include <stdio.h>
 #include <stdlib.h>
@@ -142,4 +145,78 @@ int main(int argc, char *argv[]) {
     }
     fflush(stdout);
     return 0;
+}"#;
+
+// RUST
+pub const TARGET_RUST_CMP: &str = r#"
+#![allow(warnings, unused)]
+use proconio::input;
+use std::io::{BufWriter, StdoutLock, Write};
+
+fn main() {
+    let stdout = std::io::stdout();
+    let mut out = std::io::BufWriter::new(stdout.lock());
+    input! {
+        n: usize,
+        mut a: [i64; n]
+    }
+    a.sort();
+    writeln!(out, "{}", n).ok();
+    for i in 0..n {
+        if i > 0 {
+            write!(out, " ").ok();
+        }
+        write!(out, "{}", n).ok();
+    }
+    out.flush();
+}"#;
+
+pub const CORRECT_RUST_CMP: &str = r#"
+#![allow(warnings, unused)]
+use proconio::input;
+use std::io::{BufWriter, StdoutLock, Write};
+
+fn main() {
+    let stdout = std::io::stdout();
+    let mut out = std::io::BufWriter::new(stdout.lock());
+    input! {
+        n: usize,
+        mut a: [i64; n]
+    }
+    for i in 0..n-1 {
+        for j in 0..n-i-1 {
+            if a[j] > a[j+1] {
+                a.swap(j, j+1);
+            }
+        }
+    }
+    writeln!(out, "{}", n).ok();
+    for i in 0..n {
+        if i > 0 {
+            write!(out, " ").ok();
+        }
+        write!(out, "{}", n).ok();
+    }
+    out.flush();
+}"#;
+
+pub const GEN_RUST_CMP: &str = r#"
+#![allow(warnings, unused)]
+use std::io::{BufWriter, StdoutLock, Write};
+use rand::Rng;
+fn main() {
+    let stdout = std::io::stdout();
+    let mut out = std::io::BufWriter::new(stdout.lock());
+    let mut rng = rand::thread_rng();
+    let N: i32 = 1_000;
+    let Ai: i32 = 100_000;
+    let n: i32 = rng.gen_range(1..=N);
+    writeln!(out, "{}", n).ok();
+    for i in 0..n {
+        if i > 0 {
+            write!(out, " ").ok();
+        }
+        write!(out, "{}", rng.gen_range(-Ai..=Ai)).ok();
+    }
+    out.flush();
 }"#;

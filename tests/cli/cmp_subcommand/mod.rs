@@ -16,3 +16,4 @@ pub mod python;
 pub mod python_rte;
 // python throws an RTE (MemoryError) when it exceeds memory
 // pub mod python_mle;
+pub mod rust;
