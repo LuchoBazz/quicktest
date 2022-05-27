@@ -11,6 +11,8 @@ jobs:
       - run: sudo apt install default-jdk
       - run: java -version
       - run: curl -s https://get.sdkman.io | bash # Install Kotlin
+      - run: source "$HOME/.sdkman/bin/sdkman-init.sh"
+      - run: sdk version
       - run: sdk install kotlin
       - run: kotlinc -help
       # - run: cargo build
