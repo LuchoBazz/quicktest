@@ -108,3 +108,26 @@ data = []
 while True:
     data.append(1 << 128)
 "#;
+
+// RUST
+pub const RTE_RUST: &str = r#"
+fn main() {
+   for i in -10..10 {
+       println!("{}", 100 / i);
+   }
+}
+"#;
+
+pub const CE_RUST: &str = r#"
+fn main() {
+    Generate Compiler Error
+}
+"#;
+
+pub const MLE_RUST: &str = r#"
+fn main() {
+    let mut vec = Vec::new();
+    loop {
+        vec.push(1_i64 << 60_i64);
+    }
+}"#;
