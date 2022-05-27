@@ -35,7 +35,7 @@ impl BuildEnvVariables for OSCommand {
         if cfg!(windows) {
             self.windows = replace_env_variable(&self.windows, env);
         } else {
-            self.unix = replace_env_variable(&self.windows, env);
+            self.unix = replace_env_variable(&self.unix, env);
         }
     }
 }
