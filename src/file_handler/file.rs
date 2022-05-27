@@ -266,6 +266,9 @@ pub fn configuration_commands(cmd: &[&str]) -> bool {
     } else if cmd[0] == "mkdir" {
         return Path::new(cmd[1]).exists() || fs::create_dir(cmd[1]).is_ok();
     } else if cmd[0] == "rm" {
+        if !Path::new(cmd[1]).exists() {
+            return true;
+        }
         return fs::remove_file(cmd[1]).is_ok();
     }
     false
