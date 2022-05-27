@@ -122,7 +122,7 @@ pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
     if let Ok(child_output) = child {
         let x = child_output
             .controlled_with_output()
-            .time_limit(Duration::from_millis(1000 as u64))
+            .time_limit(Duration::from_millis(1000_u64))
             .terminate_for_timeout()
             .wait();
         return x.is_ok();
