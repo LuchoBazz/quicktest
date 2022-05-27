@@ -8,11 +8,11 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update
-      - run: sudo apt upgrade
-      - run: sudo apt install snapd
-      - run: systemctl restart snapd
-      - run: sudo snap install go --classic
-      - run: go
+      - run: sudo apt install default-jdk
+      - run: java -version
+      - run: curl -s https://get.sdkman.io | bash # Install Kotlin
+      - run: sdk install kotlin
+      - run: kotlinc -help
       # - run: cargo build
       # - run: cargo clippy -- -D warnings
       # - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
