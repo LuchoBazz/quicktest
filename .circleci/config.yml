@@ -8,19 +8,17 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update
-      - run: sudo apt install default-jdk
-      - run: java -version
-      - run: wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz 
+      - run: sudo apt install default-jdk # Install java
+      - run: wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz # Install Go
       - run: sudo tar -xvf go1.18.linux-amd64.tar.gz
       - run: sudo mv go /usr/local
       - run: sudo ln -s /usr/local/go/bin/* /usr/bin
       - run: rm go1.18.linux-amd64.tar.gz
-      - run: go --version
-      # - run: cargo build
-      # - run: cargo clippy -- -D warnings
-      # - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
-      # - run: cargo test cmp_subcommand -- --test-threads 1
-      # - run: cargo test stress_subcommand -- --test-threads 1
-      # - run: cargo test check_subcommand -- --test-threads 1
-      # - run: cargo test output_subcommand -- --test-threads 1
-      # - run: cargo test setup_subcommand -- --test-threads 1
+      - run: cargo build
+      - run: cargo clippy -- -D warnings
+      - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      - run: cargo test cmp_subcommand -- --test-threads 1
+      - run: cargo test stress_subcommand -- --test-threads 1
+      - run: cargo test check_subcommand -- --test-threads 1
+      - run: cargo test output_subcommand -- --test-threads 1
+      - run: cargo test setup_subcommand -- --test-threads 1
