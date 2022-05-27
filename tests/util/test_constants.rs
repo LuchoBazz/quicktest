@@ -31,6 +31,11 @@ pub const CORRECT_FILE_C: &str = "correct.c";
 pub const CHECKER_FILE_C: &str = "checker.c";
 pub const GEN_FILE_C: &str = "gen.c";
 
+pub const TARGET_FILE_RUST: &str = "main.rs";
+pub const CORRECT_FILE_RUST: &str = "correct.rs";
+pub const CHECKER_FILE_RUST: &str = "checker.rs";
+pub const GEN_FILE_RUST: &str = "gen.rs";
+
 // CPP
 pub const RTE_CPP: &str = r#"
 #include <bits/stdc++.h>

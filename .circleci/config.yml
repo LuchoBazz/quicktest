@@ -7,9 +7,9 @@ jobs:
 
     steps:
       - checkout
-      - run: cargo build --release
+      - run: cargo build
       - run: cargo clippy -- -D warnings
-      - run: ./target/release/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       - run: cargo test stress_subcommand -- --test-threads 1
       - run: cargo test cmp_subcommand -- --test-threads 1
       - run: cargo test check_subcommand -- --test-threads 1

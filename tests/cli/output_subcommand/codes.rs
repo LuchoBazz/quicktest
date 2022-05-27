@@ -47,3 +47,26 @@ int main() {
     }
     return 0;
 }"#;
+
+pub const TARGET_RUST_OUTPUT_CMD: &str = r#"
+#![allow(warnings, unused)]
+use proconio::input;
+use std::io::{BufWriter, StdoutLock, Write};
+
+fn main() {
+    let stdout = std::io::stdout();
+    let mut out = std::io::BufWriter::new(stdout.lock());
+    input! {
+        n: usize,
+        mut a: [i64; n]
+    }
+    a.sort();
+    writeln!(out, "{}", n).ok();
+    for i in 0..n {
+        if i > 0 {
+            write!(out, " ").ok();
+        }
+        write!(out, "{}", n).ok();
+    }
+    out.flush();
+}"#;
