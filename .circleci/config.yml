@@ -17,6 +17,7 @@ jobs:
       - run: curl -s https://get.sdkman.io | bash # install Kotlin
       - run: source "$HOME/.sdkman/bin/sdkman-init.sh"
       - run: ls ~/ -al
+      - run: sudo -s
       - run: source ~/.bashrc
       - run: source ~/.zshrc
       - run: sdk version
