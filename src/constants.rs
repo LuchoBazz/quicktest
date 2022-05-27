@@ -48,3 +48,5 @@ pub const PREFIX_RTE_FILES: &str = "testcase_rte";
 pub const PREFIX_MLE_FILES: &str = "testcase_mle";
 
 pub const IDENTATION: &str = "  ";
+
+pub const GENERATOR_TIMEOUT: u32 = 5000;

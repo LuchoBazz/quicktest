@@ -118,7 +118,7 @@ pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
 
     let child: Result<std::process::Child, std::io::Error> =
         cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
-    
+
     if let Ok(child_output) = child {
         let status = child_output
             .controlled_with_output()

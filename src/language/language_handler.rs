@@ -276,7 +276,6 @@ impl Language for LanguageHandler {
             // convert from Vec<String> to Vec<&str>
             let commands_str: Vec<&str> = commands_str.iter().map(|s| s as &str).collect();
 
-
             if configuration_commands(&commands_str) {
                 continue;
             }
