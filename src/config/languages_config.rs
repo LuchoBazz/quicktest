@@ -85,8 +85,8 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=gnu11"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}",
-                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} -lm ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}",
+                "windows":"${PROGRAM} ${STANDARD} -lm ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
                 "unix":".qt/${FILE_NAME_BINARY}",

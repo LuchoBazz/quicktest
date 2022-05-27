@@ -86,3 +86,60 @@ n = int(uniform(int(1e2), int(2e2)))
 print(n)
 A = [int(uniform(1, int(1e9))) for _ in range(n)]
 print(*A)"#;
+
+pub const TARGET_C_CMP: &str = r#"
+#include <stdio.h>
+#include <stdlib.h>
+int a[100001];
+int cmp (const void * a, const void * b) { return ( *(int*)a - *(int*)b ); }
+int main() {
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i) scanf("%d", &a[i]);
+    qsort(a, n, sizeof(int), cmp);
+    printf("%d\n", n);
+    for(int i = 0; i < n; ++i) {
+        if(i > 0) printf(" ");
+        printf("%d", a[i]);
+    }
+    return 0;
+}"#;
+
+pub const CORRECT_C_CMP: &str = r#"
+#include <stdio.h>
+int a[100001];
+void swap(int *xp, int *yp) { int temp = *xp; *xp = *yp; *yp = temp; }
+int main() {
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i) scanf("%d", &a[i]);
+    for (int i = 0; i < n-1; i++)
+        for (int j = 0; j < n-i-1; j++)
+            if (a[j] > a[j+1])
+                swap(&a[j], &a[j+1]);
+    printf("%d\n", n);
+    for(int i = 0; i < n; ++i) {
+        if(i > 0) printf(" ");
+        printf("%d", a[i]);
+    }
+    return 0;
+}
+"#;
+
+pub const GEN_C_CMP: &str = r#"
+#include <stdio.h>
+int main(int argc, char *argv[]) {
+    int seed;
+    sscanf(argv[1], "%d", &seed);
+    srand(seed); 
+    int r = rand();
+    int n = 100 + rand() % (200 - 100 + 1 );
+    printf("%d\n", n);
+
+    for(int i = 0; i < n; i++) {
+        if(i > 0) printf(" ");
+        printf("%d",  1 + rand() % ( 1000000000 - 1 + 1 ));
+    }
+    fflush(stdout);
+    return 0;
+}"#;

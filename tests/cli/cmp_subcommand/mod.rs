@@ -4,6 +4,9 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+pub mod c;
+pub mod c_ce;
+pub mod c_rte;
 pub mod codes;
 pub mod cpp;
 pub mod cpp_ce;
