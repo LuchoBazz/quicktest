@@ -10,11 +10,12 @@ jobs:
       - run: sudo apt update
       - run: sudo apt install default-jdk
       - run: java -version
-      - run: curl -s https://get.sdkman.io | bash # Install Kotlin
-      - run: source "$HOME/.sdkman/bin/sdkman-init.sh"
-      - run: sdk version
-      - run: sdk install kotlin
-      - run: kotlinc -help
+      - run: wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz 
+      - run: sudo tar -xvf go1.18.linux-amd64.tar.gz
+      - run: sudo mv go /usr/local
+      - run: sudo ln -s /usr/local/go/bin/* /usr/bin
+      - run: rm go1.18.linux-amd64.tar.gz
+      - run: go --version
       # - run: cargo build
       # - run: cargo clippy -- -D warnings
       # - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
