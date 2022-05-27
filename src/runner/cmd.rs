@@ -120,12 +120,12 @@ pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
         cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
     
     if let Ok(child_output) = child {
-        let x = child_output
+        let status = child_output
             .controlled_with_output()
             .time_limit(Duration::from_millis(1000_u64))
             .terminate_for_timeout()
             .wait();
-        return x.is_ok();
+        return status.is_ok();
     }
     false
 }
