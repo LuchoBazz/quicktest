@@ -70,3 +70,32 @@ fn main() {
     }
     out.flush();
 }"#;
+
+pub const TARGET_GO_OUTPUT_CMD: &str = r#"
+package main
+import (
+	"bufio"
+	"fmt"
+	"os"
+    "sort"
+)
+var r = bufio.NewReader(os.Stdin)
+var w = bufio.NewWriter(os.Stdout)
+func main() {
+    var n int
+	fmt.Fscan(r, &n)
+	values := make([]int, n)
+	for i:=0;i<n;i++ {
+		fmt.Fscan(r, &values[i])
+	}
+    sort.Ints(values)
+    fmt.Fprintln(w, n)
+    for i:=0; i<n ;i++ {
+        if i > 0 {
+            fmt.Fprint(w, " ")
+        }
+        fmt.Fprint(w, values[i])
+    }
+    
+	defer w.Flush()
+}"#;

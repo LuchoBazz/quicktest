@@ -4,7 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-// RUST
+// CPP
 pub const TARGET_CPP_CMP: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
@@ -219,4 +219,97 @@ fn main() {
         write!(out, "{}", rng.gen_range(-Ai..=Ai)).ok();
     }
     out.flush();
+}"#;
+
+// GO
+pub const TARGET_GO_CMP: &str = r#"
+package main
+import (
+	"bufio"
+	"fmt"
+	"os"
+    "sort"
+)
+var r = bufio.NewReader(os.Stdin)
+var w = bufio.NewWriter(os.Stdout)
+func main() {
+    var n int
+	fmt.Fscan(r, &n)
+	values := make([]int, n)
+	for i:=0;i<n;i++ {
+		fmt.Fscan(r, &values[i])
+	}
+    sort.Ints(values)
+    fmt.Fprintln(w, n)
+    for i:=0; i<n ;i++ {
+        if i > 0 {
+            fmt.Fprint(w, " ")
+        }
+        fmt.Fprint(w, values[i])
+    }
+    
+	defer w.Flush()
+}"#;
+
+pub const CORRECT_GO_CMP: &str = r#"
+package main
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+var r = bufio.NewReader(os.Stdin)
+var w = bufio.NewWriter(os.Stdout)
+func main() {
+    var n int
+	fmt.Fscan(r, &n)
+	values := make([]int, n)
+	for i:=0;i<n;i++ {
+		fmt.Fscan(r, &values[i])
+	}
+    for i:=0; i< len(values)-1; i++ {
+        for j:=0; j < len(values)-i-1; j++ {
+           if (values[j] > values[j+1]) {
+              values[j], values[j+1] = values[j+1], values[j]
+           }
+        }
+     }
+    fmt.Fprintln(w, n)
+    for i:=0; i<n ;i++ {
+        if i > 0 {
+            fmt.Fprint(w, " ")
+        }
+        fmt.Fprint(w, values[i])
+    }
+    
+	defer w.Flush()
+}"#;
+
+pub const GEN_GO_CMP: &str = r#"
+package main
+import (
+    "bufio"
+    "fmt"
+    "math/rand"
+    "strconv"
+    "os"
+)
+var r = bufio.NewReader(os.Stdin)
+var w = bufio.NewWriter(os.Stdout)
+func main() {
+    args := os.Args
+    seed, _ := strconv.Atoi(args[1])
+    rand.Seed(int64(seed))
+    N := 100
+    mn := -100000
+    mx :=  100000
+    n := rand.Intn(N - 1) + 1
+    fmt.Fprintln(w, n);
+    for i := 0 ; i < n; i++ {
+        if i > 0 {
+            fmt.Fprint(w, " ");    
+        }
+        fmt.Fprint(w, rand.Intn(mx - mn) + mn);    
+    }
+    defer w.Flush()
 }"#;

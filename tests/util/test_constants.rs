@@ -36,6 +36,11 @@ pub const CORRECT_FILE_RUST: &str = "correct.rs";
 pub const CHECKER_FILE_RUST: &str = "checker.rs";
 pub const GEN_FILE_RUST: &str = "gen.rs";
 
+pub const TARGET_FILE_GO: &str = "main.go";
+pub const CORRECT_FILE_GO: &str = "correct.go";
+pub const CHECKER_FILE_GO: &str = "checker.go";
+pub const GEN_FILE_GO: &str = "gen.go";
+
 // CPP
 pub const RTE_CPP: &str = r#"
 #include <bits/stdc++.h>
@@ -129,5 +134,36 @@ fn main() {
     let mut vec = Vec::new();
     loop {
         vec.push(1_i64 << 60_i64);
+    }
+}"#;
+
+// GO
+pub const RTE_GO: &str = r#"
+package main
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+var w = bufio.NewWriter(os.Stdout)
+func main() {
+    for i:=-20; i <= 20; i++ {
+        fmt.Fprintln(w, 100 / i);
+    }
+}
+"#;
+
+pub const CE_GO: &str = r#"
+package main
+func main() {
+    Generate Compiler Error
+}"#;
+
+pub const MLE_GO: &str = r#"
+package main
+func main() {
+    a := []int{1, 2, 3}
+    for {
+        a = append(a, 1 << 60);
     }
 }"#;

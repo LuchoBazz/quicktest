@@ -2,6 +2,7 @@ jobs:
   build:
     docker:
       - image: cimg/rust:1.58.0
+      - image: cimg/go:1.18
     
     working_directory: ~/quicktest_folder
 
