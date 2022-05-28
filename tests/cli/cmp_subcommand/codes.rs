@@ -399,3 +399,68 @@ public class Gen {
         out.flush();
     }
 }"#;
+
+// KOTLIN
+pub const _TARGET_KOTLIN_CMP: &str = r#"
+fun main() {
+    val n = readLine()!!.toInt()
+    val a = readLine()!!.split(" ").map { it.toInt() }
+    val out = StringBuilder()
+    var sorted = a.sorted()
+    out.appendln(n)
+    for(i in 0..n-1) {
+        if(i > 0) {
+            out.append(" ")
+        }
+        out.append(sorted[i])
+    }
+    println(out)
+}
+"#;
+
+pub const _CORRECT_KOTLIN_CMP: &str = r#"
+fun main() {
+    val n = readLine()!!.toInt()
+    val a = readLine()!!.split(" ").map { it.toInt() }.toMutableList()
+    val out = StringBuilder()
+    for (i in 0..n-1) {
+        for (j in 0..n-i-2) {
+            if (a[j] > a[j+1]) {
+                val tmp = a[j]
+                a[j] = a[j + 1]
+                a[j + 1] = tmp
+            }
+        }
+    }
+    out.appendln(n)
+    for(i in 0..n-1) {
+        if(i > 0) {
+            out.append(" ")
+        }
+        out.append(a[i])
+    }
+    println(out)
+}
+"#;
+
+pub const _GEN_KOTLIN_CMP: &str = r#"
+import kotlin.random.Random
+fun random(random: Random, from: Int, to: Int): Int {
+    return (random.nextInt(from, to)).toInt()
+}
+fun main(args: Array<String>) {
+    var seed = args[1].toInt();
+    var rand = Random(seed)
+    val out = StringBuilder()
+    var N  = 1000
+    var Ai = 100000 
+    var n = random(rand, 1, N)
+    out.appendLine(n)
+    for (i in 0..n-1) {
+        if(i > 0) {
+            out.append(" ")
+        }
+        out.append(random(rand, -Ai, Ai))
+    }
+    println(out)
+}"#;

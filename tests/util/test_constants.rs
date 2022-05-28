@@ -46,6 +46,11 @@ pub const CORRECT_FILE_JAVA: &str = "Correct.java";
 pub const CHECKER_FILE_JAVA: &str = "Checker.java";
 pub const GEN_FILE_JAVA: &str = "Gen.java";
 
+pub const TARGET_FILE_KOTLIN: &str = "main.kt";
+pub const CORRECT_FILE_KOTLIN: &str = "correct.kt";
+pub const CHECKER_FILE_KOTLIN: &str = "checker.kt";
+pub const GEN_FILE_KOTLIN: &str = "gen.kt";
+
 // CPP
 pub const RTE_CPP: &str = r#"
 #include <bits/stdc++.h>
@@ -199,4 +204,17 @@ public class Main {
             arr.add(1 << 60);
         }
     }
+}"#;
+
+// JAVA
+pub const RTE_KOTLIN: &str = r#"
+fun main() {
+    for(i in -20..20) {
+        println(100 / i)
+    }
+}"#;
+
+pub const CE_KOTLIN: &str = r#"
+fun main() {
+    Generate Compiler Error
 }"#;
