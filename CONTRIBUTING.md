@@ -14,8 +14,10 @@ cargo fmt
 cargo build
 cargo clippy -- -D warnings
 ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
-cargo test stress_subcommand -- --test-threads 1
+# Or for Windows
+# .\target\debug\quicktest.exe setup config --label="Language::Python.PROGRAM" --value="python3"
 cargo test cmp_subcommand -- --test-threads 1
+cargo test stress_subcommand -- --test-threads 1
 cargo test check_subcommand -- --test-threads 1
 cargo test output_subcommand -- --test-threads 1
 cargo test setup_subcommand -- --test-threads 1
@@ -40,5 +42,5 @@ cargo test setup_subcommand -- --test-threads 1
 ### Future Updates (work not started yet, you can contribute by coding any of these features)
 
 - add `inter` subcommand to support testing for interactive problems
-- use [tokyo](https://crates.io/crates/tokio) y [futures](https://crates.io/crates/futures) crates to use async functions
+- use [tokio](https://crates.io/crates/tokio) y [futures](https://crates.io/crates/futures) crates to use async functions
 - Solve TODOs in code.

@@ -6,7 +6,7 @@
 
 use std::{
     collections::VecDeque,
-    fs::{self, remove_dir_all},
+    fs::{self, remove_dir_all, File},
     io::Write,
     path::{Path, PathBuf},
 };
@@ -256,4 +256,20 @@ pub fn load_test_cases_from_status(
         command.get_run_rte(),
         command.get_run_mle(),
     )
+}
+
+pub fn configuration_commands(cmd: &[&str]) -> bool {
+    assert!(!cmd.is_empty());
+    if cmd[0] == "cp" {
+        if !Path::new(cmd[2]).exists() && File::create(cmd[2]).is_ok() {}
+        return fs::copy(cmd[1], cmd[2]).is_ok();
+    } else if cmd[0] == "mkdir" {
+        return Path::new(cmd[1]).exists() || fs::create_dir(cmd[1]).is_ok();
+    } else if cmd[0] == "rm" {
+        if !Path::new(cmd[1]).exists() {
+            return true;
+        }
+        return fs::remove_file(cmd[1]).is_ok();
+    }
+    false
 }

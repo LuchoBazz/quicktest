@@ -6,6 +6,8 @@
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
+<h2 align="center">📖 <a href="https://luismbaezco.github.io/quicktest/docs/intro">Docs</a></h2>
+
 [![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
 
 ## Demo
@@ -212,8 +214,8 @@ You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
 | Java      | `javac -d .qt/ Main.java`                                                                                                                                              | `java -cp .qt/ Main`     |
 | Python3   |                                                                                                                                                                           | `python3 main.py`           |
 | Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main`                    |
-| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qt/main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
-| GNU C     | `gcc -std=gnu11 main.c -o .qt/main`                                                                                                                                    | `./main`                    |
+| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
+| GNU C     | `gcc -std=gnu11 main.c -o main`                                                                                                                                    | `./main`                    |
 | Kotlin    | `kotlinc main.kt -include-runtime -d .qt/main.jar`                                                                                                                     | `java -jar .qt/main.jar` |
 
 

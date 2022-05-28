@@ -4,6 +4,7 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+// CPP
 pub const TARGET_CPP_CHECK: &str = r#"
 #include <bits/stdc++.h>
 using namespace std;
@@ -66,6 +67,8 @@ int main() {
     cout << n << endl;
     return 0;
 }"#;
+
+// PYTHON
 
 pub const TARGET_PY_CHECK: &str = r#"
 n = int(input())

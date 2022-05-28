@@ -26,11 +26,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=c++17"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.o",
+                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}",
                 "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -43,13 +43,13 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
             ],
             "description":"Python Language Interpreter",
             "env":{
-                "PROGRAM":"python3"
+                "PROGRAM":"python"
             },
             "execute":{
                 "unix":"${PROGRAM} ${FILE_NAME}.py",
                 "windows":"${PROGRAM} ${FILE_NAME}.py"
             },
-            "check_installed":"${PROGRAM} --help"
+            "check_installed":"${PROGRAM} -c \"print('check installed')\""
         },
         {
             "id":"Language::Java",
@@ -85,11 +85,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=gnu11"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.o",
-                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} -lm ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}",
+                "windows":"${PROGRAM} ${STANDARD} -lm ${FILE_NAME}.c -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -115,11 +115,11 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "windows":"${PROGRAM} init ~/.quicktest/rust"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.o",
-                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY}.exe"
+                "unix":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/${FILE_NAME_BINARY} && rm ~/.quicktest/rust/target/release/rust && rm ~/.quicktest/rust/target/release/deps/rust",
+                "windows":"cp ${FILE_NAME}.rs ~/.quicktest/rust/src/main.rs && ${PROGRAM} build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust.exe .qt/${FILE_NAME_BINARY}.exe && rm ~/.quicktest/rust/target/release/rust.exe && rm ~/.quicktest/rust/target/release/deps/rust.exe"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --help"
@@ -131,25 +131,19 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "go"
             ],
             "description":"Go Programming Language",
-            "config_files":[
-                {
-                    "path":"~/.quicktest/go_mod/go.mod",
-                    "content":"module go_mod\n\ngo 1.17\n\ngithub.com/emirpasic/gods v1.18.1 // indirect\n\n"
-                }
-            ],
             "env":{
                 "PROGRAM":"go"
             },
             "initialize":{
-                "unix":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum",
-                "windows":"mkdir ~/.quicktest/go_mod && GO111MODULE=off ${PROGRAM} get github.com/emirpasic/gods && GO111MODULE=off ${PROGRAM} get https://github.com/gonum/gonum"
+                "unix":"mkdir ~/.quicktest/go_mod",
+                "windows":"mkdir ~/.quicktest/go_mod"
             },
             "compile":{
-                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.o ~/.quicktest/go_mod/main.go",
+                "unix":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY} ~/.quicktest/go_mod/main.go",
                 "windows":"cp ${FILE_NAME}.go ~/.quicktest/go_mod/main.go && ${PROGRAM} build -buildmode=exe -o ./.qt/${FILE_NAME_BINARY}.exe ~/.quicktest/go_mod/main.go"
             },
             "execute":{
-                "unix":".qt/${FILE_NAME_BINARY}.o",
+                "unix":".qt/${FILE_NAME_BINARY}",
                 "windows":".qt/${FILE_NAME_BINARY}.exe"
             },
             "check_installed":"${PROGRAM} --version"

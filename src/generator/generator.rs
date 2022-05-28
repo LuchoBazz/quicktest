@@ -4,12 +4,13 @@
 *  License: MIT (See the LICENSE file in the repository root directory)
 */
 
+use std::cmp::max;
 use std::collections::VecDeque;
 use std::path::PathBuf;
 use std::time::Duration;
 
 use crate::cli::model::traits::AdapterCommand;
-use crate::constants::QTEST_INPUT_FILE;
+use crate::constants::{GENERATOR_TIMEOUT, QTEST_INPUT_FILE};
 use crate::error::handle_error::{
     throw_compiler_error_msg, throw_memory_limit_exceeded_msg, throw_runtime_error_msg,
     throw_time_limit_exceeded_msg,
@@ -30,7 +31,7 @@ pub fn execute_generator(
 ) -> Result<(), ExitFailure> {
     if command.get_prefix().is_empty() {
         let response_gen = generator_file_lang.execute(
-            command.get_timeout() as u32,
+            max(command.get_timeout() as u32, GENERATOR_TIMEOUT),
             command.get_memory_limit(),
             test_number,
         );
@@ -44,11 +45,15 @@ pub fn execute_generator(
             return throw_memory_limit_exceeded_msg("generator", "<gen-file>");
         }
 
-        if time_gen >= Duration::from_millis(command.get_timeout() as u64)
+        if time_gen
+            >= Duration::from_millis(max(command.get_timeout() as u64, GENERATOR_TIMEOUT as u64))
             || is_time_limit_exceeded(&response_gen.status)
         {
             // TLE Generator
-            show_time_limit_exceeded_generator(test_number, command.get_timeout());
+            show_time_limit_exceeded_generator(
+                test_number,
+                max(command.get_timeout() as u32, GENERATOR_TIMEOUT),
+            );
             return throw_time_limit_exceeded_msg("generator", "<gen-file>");
         }
         *can_continue = true;

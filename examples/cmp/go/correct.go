@@ -16,12 +16,14 @@ func solveOne() {
 	for i:=0;i<n;i++ {
 		fmt.Fscan(r, &values[i])
 	}
-    var sum, best int
-    sum = 0
-    best = 0
-    for i:=0;i+1<n;i++ {
-        sum = max(values[i], sum + values[i]);
-        best = max(best, sum);
+
+	best := 0;
+    for i := 0; i < n; i++ {
+        sum := 0;
+        for j := i; j < n; j++ {
+            sum += values[j];
+            best = max(best, sum);
+        }
     }
     fmt.Fprintln(w, best)
 }
