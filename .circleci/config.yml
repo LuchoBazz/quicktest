@@ -15,11 +15,10 @@ jobs:
       # - run: sudo ln -s /usr/local/go/bin/* /usr/bin
       # - run: rm go1.18.linux-amd64.tar.gz
       - run: curl -s https://get.sdkman.io | bash # install Kotlin
-      - run: source "$HOME/.sdkman/bin/sdkman-init.sh"
+      - run: sudo -s && source "$HOME/.sdkman/bin/sdkman-init.sh"
       - run: ls ~/ -al
-      - run: sudo -s
-      - run: source ~/.bashrc
-      - run: source ~/.zshrc
+      - run: sudo -s && source ~/.bashrc
+      - run: sudo -s && source ~/.zshrc
       - run: sdk version
       # - run: cargo build
       # - run: cargo clippy -- -D warnings
