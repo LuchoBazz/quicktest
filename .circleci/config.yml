@@ -19,6 +19,7 @@ jobs:
       - run: ls ~/ -al
       - run: sudo -s && source ~/.bashrc
       - run: sudo -s && source ~/.zshrc
+      - run: cat ~/.bashrc
       - run: sdk version
       # - run: cargo build
       # - run: cargo clippy -- -D warnings
