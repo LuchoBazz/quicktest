@@ -323,16 +323,16 @@ pub fn compare_file(target_file: &str, correct_file: &str, ignore_space: bool) -
         return false;
     }
 
-    let mut target_content_vec: VecDeque<char> = VecDeque::new();
-    let mut correct_content_vec: VecDeque<char> = VecDeque::new();
+    let mut target_content_str = String::new();
+    let mut correct_content_str = String::new();
 
     is_good = match (target_content, correct_content) {
         (Some(_), None) => false,
         (None, Some(_)) => false,
         (None, None) => false,
         (Some(s1), Some(s2)) => {
-            target_content_vec = s1.chars().collect::<VecDeque<char>>();
-            correct_content_vec = s2.chars().collect::<VecDeque<char>>();
+            target_content_str = s1;
+            correct_content_str = s2;
             true
         }
     };
@@ -342,75 +342,21 @@ pub fn compare_file(target_file: &str, correct_file: &str, ignore_space: bool) -
     }
 
     if ignore_space {
-        // Remove spaces at the beginning and end of the file
+        let target_content = target_content_str.split('\n').collect::<Vec<&str>>();
+        let correct_content = correct_content_str.split('\n').collect::<Vec<&str>>();
 
-        // for target_content_vec
-        while !target_content_vec.is_empty()
-            && (*target_content_vec.back().unwrap() == ' '
-                || *target_content_vec.back().unwrap() == '\n')
-        {
-            target_content_vec.pop_back();
-        }
-        while !target_content_vec.is_empty()
-            && (*target_content_vec.front().unwrap() == ' '
-                || *target_content_vec.front().unwrap() == '\n')
-        {
-            target_content_vec.pop_front();
-        }
+        let target_content = target_content
+            .iter()
+            .map(|&ch| ch.trim())
+            .collect::<Vec<&str>>();
 
-        // for correct_content_vec
-        while !correct_content_vec.is_empty()
-            && (*correct_content_vec.back().unwrap() == ' '
-                || *correct_content_vec.back().unwrap() == '\n')
-        {
-            correct_content_vec.pop_back();
-        }
-        while !correct_content_vec.is_empty()
-            && (*correct_content_vec.front().unwrap() == ' '
-                || *correct_content_vec.front().unwrap() == '\n')
-        {
-            correct_content_vec.pop_front();
-        }
+        let correct_content = correct_content
+            .iter()
+            .map(|&ch| ch.trim())
+            .collect::<Vec<&str>>();
 
-        // replace "  " to " ", " \n" to "\n", "\n " to "\n" and "\n\n" to "\n"
-        let mut target_tmp = target_content_vec.clone();
-        let mut correct_tmp = correct_content_vec.clone();
-        target_content_vec.clear();
-        correct_content_vec.clear();
-
-        if !target_tmp.is_empty() {
-            target_content_vec.push_back(target_tmp.pop_front().unwrap());
-        }
-        while !target_tmp.is_empty() {
-            match (target_content_vec.back(), target_tmp.pop_front()) {
-                (Some(' '), Some('\n')) => {
-                    target_content_vec.pop_back();
-                    target_content_vec.push_back('\n');
-                }
-                (Some(' '), Some(' ')) => continue,
-                (Some('\n'), Some(' ')) => continue,
-                (Some('\n'), Some('\n')) => continue,
-                (Some(_), Some(ch)) => target_content_vec.push_back(ch),
-                _ => continue,
-            }
-        }
-        if !correct_tmp.is_empty() {
-            correct_content_vec.push_back(correct_tmp.pop_front().unwrap());
-        }
-        while !correct_tmp.is_empty() {
-            match (correct_content_vec.back(), correct_tmp.pop_front()) {
-                (Some(' '), Some('\n')) => {
-                    correct_content_vec.pop_back();
-                    correct_content_vec.push_back('\n');
-                }
-                (Some(' '), Some(' ')) => continue,
-                (Some('\n'), Some(' ')) => continue,
-                (Some('\n'), Some('\n')) => continue,
-                (Some(_), Some(ch)) => correct_content_vec.push_back(ch),
-                _ => continue,
-            }
-        }
+        return target_content == correct_content;
     }
 
-    target_content_vec == correct_content_vec
+    target_content_str == correct_content_str
 }

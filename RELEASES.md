@@ -3,6 +3,33 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0-rc.6 / 2022.05.27
+
+- feat: cargo build --release [2293bb1]
+- feat: c examples for the cmp command were added [09dfb98]
+- feat: rust examples for the cmp command were added [8ff4281]
+- feat: java examples for the cmp command were added [89b776c]
+- feat: go examples for the cmp command were added [fd604f7]
+- feat: kotlin examples for the cmp command were added [85e2c31]
+- feat: circleci config for java and go was added [9b2b49c]
+- fix: small errors in the documentation was fixed [91a98fe]
+- fix: go configuration was fixed [ee9b02b]
+- fix: issue about cp and mkdir not found was fixed [5e566b0]
+- fix: code smell was fixed [1b64942]
+- fix: status variable was renamed [25607b9]
+- fix: issue about configuration_commands was fixed [c479316]
+- test: test about cmp and output subcommand of c was added [f66eb64]
+- test: test cmp subcommand in rust was added II [5f8aeef]
+- test: test about cmp and output subcommand in java were added [78fd0da]
+- test: test about cmp subcommand in kotlin was added [cdefaaa]
+- refactor: extension .o was removed from the unix binaries [9bf6bc1]
+- refactor: cpp and python unit tests were refactored [d0ab909]
+- docs: intro was updated [531cd51]
+- docs: docs/errors was deleted [6c32225]
+- docs: documentation icon was updated in the README [9d23ace, 1819dc1, 22cb71d, 4a8a0b7]
+- docs: contributing file updated was [de5dc14]
+- circleci config was configured [719fb5b]
+
 ### 1.0.0-rc.5 /  2022.05.18
 
 - feat: installation script via powershell for windows was added [1f7bbde]

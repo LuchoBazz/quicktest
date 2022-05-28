@@ -13,7 +13,7 @@ use exitfailure::ExitFailure;
 use std::process::Command;
 
 use crate::{
-    file_handler::path::get_root_path,
+    file_handler::{file::configuration_commands, path::get_root_path},
     language::extension,
     runner::{
         cmd::{execute_program, has_installed_controller},
@@ -216,10 +216,15 @@ impl Language for LanguageHandler {
             let commands_str = commands_str
                 .iter()
                 .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .filter(|val| !val.trim().is_empty())
                 .collect::<Vec<_>>();
 
             // convert from Vec<String> to Vec<&str>
             let commands_str: Vec<&str> = commands_str.iter().map(|s| s as &str).collect();
+
+            if configuration_commands(&commands_str) {
+                continue;
+            }
 
             // add main command
             let mut process_cmd = Command::new(&commands_str[0]);
@@ -265,10 +270,15 @@ impl Language for LanguageHandler {
             let commands_str = commands_str
                 .iter()
                 .map(|val| shellexpand::tilde(&val.trim()).to_string())
+                .filter(|val| !val.trim().is_empty())
                 .collect::<Vec<_>>();
 
             // convert from Vec<String> to Vec<&str>
             let commands_str: Vec<&str> = commands_str.iter().map(|s| s as &str).collect();
+
+            if configuration_commands(&commands_str) {
+                continue;
+            }
 
             // add main command
             let mut process_cmd = Command::new(&commands_str[0]);
