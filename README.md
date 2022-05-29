@@ -26,6 +26,7 @@
 - [Supported Languages](#supported-languages)
 - [Compilation and Execution Commands](#compilation-and-execution-commands)
 - [License](#license)
+- [Credits](#credits)
 
 ## Getting Started
 
@@ -208,15 +209,15 @@ You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
 
 ## Compilation and Execution Commands
 
-| Language  | Compile / Interpreter                                                                                                                                                     | Execution Command           |
-|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
-| C++17     | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o main main.cpp`                                                                                                                  | `./main`                    |
-| Java      | `javac -d .qt/ Main.java`                                                                                                                                              | `java -cp .qt/ Main`     |
-| Python3   |                                                                                                                                                                           | `python3 main.py`           |
-| Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust main` | `./main`                    |
-| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./main ~/.quicktest/go_mod/main.go`                                                          | `./main`                    |
-| GNU C     | `gcc -std=gnu11 main.c -o main`                                                                                                                                    | `./main`                    |
-| Kotlin    | `kotlinc main.kt -include-runtime -d .qt/main.jar`                                                                                                                     | `java -jar .qt/main.jar` |
+| Language  | Compile / Interpreter                                                                                                                                                         | Execution Command        |
+|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
+| C++17     | `g++ -std=c++17 -Wall -DONLINE_JUDGE=1 -o .qt/main main.cpp`                                                                                                                  | `./.qt/main`             |
+| Java      | `javac -d .qt/ Main.java`                                                                                                                                                     | `java -cp .qt/ Main`     |
+| Python3   |                                                                                                                                                                               | `python3 main.py`        |
+| Rust Lang | `cp main.rs ~/.quicktest/rust/src/main.rs && cargo build --release --quiet --manifest-path ~/.quicktest/rust/Cargo.toml && cp ~/.quicktest/rust/target/release/rust .qt/main` | `./.qt/main`             |
+| Go Lang   | `cp main.go ~/.quicktest/go_mod/main.go && go build -buildmode=exe -o ./.qt/main ~/.quicktest/go_mod/main.go`                                                                 | `./.qt/main`             |
+| GNU C     | `gcc -std=gnu11  -lm main.c -o .qt/main`                                                                                                                                      | `./.qt/main`             |
+| Kotlin    | `kotlinc main.kt -include-runtime -d .qt/main.jar`                                                                                                                            | `java -jar .qt/main.jar` |
 
 
 ## License
@@ -225,6 +226,10 @@ Licensed under either of these:
 
 ---
 
-<sub>Logo image based on the one made by <a href="https://www.flaticon.com/authors/freepik" id-flaticon="owl_2369306;hexagonal_73861" title="Freepik">Freepik</a> for <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+## Credits
 
-<sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="Flaticon">cpbooster</a>
+> <sub>Logo image based on the one made by <a href="https://www.flaticon.com/authors/freepik" id-flaticon="owl_2369306;hexagonal_73861" title="Freepik">Freepik</a> for <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+
+> <sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="CP Booster">cpbooster</a>
+
+> <sub>Installation scripts were based on <a href="https://github.com/denoland/deno_install" title="Flaticon">deno_install</a>
