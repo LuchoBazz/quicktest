@@ -1,6 +1,7 @@
 ---
 slug: Launch Announcement
 title: Launch Announcement
+date: 2022-05-30
 authors: [luismbaezco]
 tags: [stress-testing, testing, cp-tool, tool]
 ---
