@@ -3,6 +3,26 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.0 / 2022.05.x
+
+feat: report table was added using ascii style [4923d80]
+feat: short code examples were added for cmp, stress and check subcommands [08f4cff]
+feat: examples were added for run and setup subcommands #55 [062c3f7]
+feat: Alias of timeout and test-cases options were updated [4d2b6a8, 3559c54]
+feat: show test case input was added in diff [bd366a2, 561590e]
+feat: mle support was added to the cmp, stress, check, run subcommands [2854cc1, c7ccecd, 3c74a6c, 84bd676]
+feat: run subcommand was renamed to output [a73b75e]
+feat: prefix option to run test cases matching that prefix was added to the cmp, stress and check subcommands [545213c]
+feat: Support for rust lang was added [e2be5c9]
+feat: Go lang support was added [4191367]
+feat: java support was added [496f70e]
+feat: C support was added [8f8f22d]
+feat: katlin support was added [16605df]
+feat: installation script via powershell for windows was added [1f7bbde, c604407]
+feat: installation script via shell for linux was added [7220318]
+docs: installation commands on Linux, Windows and macOS were added [d7a6cb0]
+docs: demo of the cmp subcommand was added to the website [e148fb1, 89d06c5, 585def3]]
+
 ### 1.0.0-rc.6 / 2022.05.27
 
 - feat: cargo build --release [2293bb1]
