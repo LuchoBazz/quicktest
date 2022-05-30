@@ -3,7 +3,7 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
-### 1.0.0 / 2022.05.x
+### 1.0.0 / 2022.05.30
 
 - feat: report table was added using ascii style [4923d80]
 - feat: short code examples were added for cmp, stress and check subcommands [08f4cff]
