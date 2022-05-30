@@ -26,8 +26,8 @@ pub const LANGUAGES_CONFIG_JSON: &str = r#"
                 "STANDARD":"-std=c++17"
             },
             "compile":{
-                "unix":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}",
-                "windows":"${PROGRAM} ${STANDARD} ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.exe"
+                "unix":"${PROGRAM} ${STANDARD} -DONLINE_JUDGE=1 ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}",
+                "windows":"${PROGRAM} ${STANDARD} -DONLINE_JUDGE=1 ${FILE_NAME}.cpp -o .qt/${FILE_NAME_BINARY}.exe"
             },
             "execute":{
                 "unix":".qt/${FILE_NAME_BINARY}",
