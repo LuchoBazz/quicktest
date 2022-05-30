@@ -6,6 +6,9 @@ sidebar_label: Setup
 
 ### `quicktest setup config | qt setup config`
 
+The list of accepted tags can be found by executing the following command
+
+`quicktest setup config --help`
 
 ```shell
 quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"

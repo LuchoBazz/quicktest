@@ -16,7 +16,7 @@ Using Shell:
 curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | sh
 ```
 
-then execute `source ~/.bashrc` or `source ~/.zshrc` as appropriate
+Please open a new terminal, or run the following in the existing one `source ~/.bashrc` or `source ~/.zshrc` as appropriate
 
 ### Windows
 
