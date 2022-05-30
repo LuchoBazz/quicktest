@@ -51,7 +51,9 @@ else
 
     echo "\nexport QT_INSTALL=\"$quicktest_install\"" >> "$HOME/$shell_profile"
     echo "\nexport PATH=\"\$QT_INSTALL/bin:\$PATH\"\n" >> "$HOME/$shell_profile"
-    
-    echo "\nManually run the following command 'source $HOME/$shell_profile'"
+
+    echo "\nPlease open a new terminal, or run the following in the existing one:"
+    echo "    $ source $HOME/$shell_profile"
+
     echo "Run 'quicktest --help' to get started"
 fi
