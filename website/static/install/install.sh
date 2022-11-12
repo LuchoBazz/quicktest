@@ -14,7 +14,12 @@ fi
 if [ "$OS" = "Windows_NT" ]; then
     target="x86_64-pc-windows-msvc"
 else
-    target="x86_64-unknown-linux-gnu" ;
+    case $(uname -sm) in
+	"Darwin x86_64") target="aarch64-apple-darwin" ;;
+	"Darwin arm64") target="aarch64-apple-darwin" ;;
+	"Linux aarch64") target="x86_64-unknown-linux-gnu" ;;
+	*) target="x86_64-unknown-linux-gnu" ;;
+	esac
 fi
 
 if [ "$v" = "" ]; then
