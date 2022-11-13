@@ -1,7 +1,13 @@
 jobs:
   build:
+    filters:
+        branches:
+          only:
+            - main
+            - feature
+            - develop
     docker:
-      - image: cimg/rust:1.58.0
+      - image: cimg/rust:1.60.0
     
     working_directory: ~/quicktest_folder
 

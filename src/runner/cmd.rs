@@ -15,6 +15,7 @@ use rand::distributions::{Distribution, Uniform};
 
 use super::types::{CPStatus, StatusResponse};
 
+#[allow(unused_variables)]
 pub fn execute_program(
     timeout: u32,
     memory_limit: u64,
@@ -30,8 +31,10 @@ pub fn execute_program(
 
     let mut cmd = Command::new(commands[0]);
 
+    #[cfg(any(target_os = "linux", target_os = "windows"))]
     let mut memory_factor_needed = 1usize;
 
+    #[cfg(any(target_os = "linux", target_os = "windows"))]
     if commands[0] == "java" {
         memory_factor_needed *= 10usize;
     }
@@ -60,14 +63,23 @@ pub fn execute_program(
 
     let mut res_status = CPStatus::AC;
 
+    
     if let Ok(child_output) = child {
+        #[cfg(any(target_os = "linux", target_os = "windows"))]
         let response = child_output
             .controlled_with_output()
             .memory_limit(memory_limit as usize * memory_factor_needed) // bytes
             .time_limit(Duration::from_millis(timeout as u64))
             .terminate_for_timeout()
             .wait();
-
+        
+        #[cfg(target_os="macos")]
+        let response = child_output
+            .controlled_with_output()
+            .time_limit(Duration::from_millis(timeout as u64))
+            .terminate_for_timeout()
+            .wait();
+        
         if let Ok(output_option) = response {
             if let Some(output) = output_option {
                 if output.status.success() {
