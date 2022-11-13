@@ -1,5 +1,11 @@
 jobs:
   build:
+    filters:
+        branches:
+          only:
+            - main
+            - feature
+            - develop
     docker:
       - image: cimg/rust:1.60.0
     

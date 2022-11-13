@@ -26,7 +26,17 @@ Using PowerShell:
 iwr https://luismbaezco.github.io/quicktest/install/install.ps1 -useb | iex
 ```
 
-### macOS, Linux or Windows
+### Mac OS
+
+Using Shell:
+
+```shell
+curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | v=1.0.1  sh
+```
+
+Please open a new terminal, or run the following in the existing one `source ~/.zshrc` or `source ~/.bashrc` as appropriate
+
+### Linux, Windows or Mac OS
 If you already have Rust on your system:
 
 ```sh
@@ -35,7 +45,7 @@ cargo install quicktest
 
 If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
 
-### macOS or Linux
+### Linux or Mac OS
 
 Shell:
 
