@@ -20,7 +20,7 @@ sidebar_label: Cmp
     or shorter
 
     ```shell
-    qt cmp -t main.cpp -c correct.cpp -g gen.cpp -tc 500 --tout 1000
+    qt cmp -t main.cpp -c correct.cpp -g gen.cpp --tc 500 --tout 1000
     ```
 
 * ### python examples

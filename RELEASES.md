@@ -3,6 +3,15 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuisMBaezCo/quicktest/releases
 
+### 1.0.1 / 2022.11.12
+
+- fix: issue about .memory_limit method not found on Mac OS' was fixed #92
+- chore: rust version was updated to v1.60.0
+- fix: --tc flag was fixed of cmp docs
+- feat: support for mac installation using curl was added
+- docs: installation for mac os was supported
+- feat: CI only for main, feature and develop branches was added
+
 ### 1.0.0 / 2022.05.30
 
 - feat: report table was added using ascii style [4923d80]
