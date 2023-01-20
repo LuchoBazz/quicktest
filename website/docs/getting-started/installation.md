@@ -6,14 +6,14 @@ sidebar_label: Installation
 
 Quick Test CLI works on Linux, Windows, and macOS. Quick Test CLI is a single binary executable. It has no external dependencies.
 
-[quicktest_install](https://github.com/LuisMBaezCo/quicktest/tree/main/website/static/install) provides convenience scripts to download and install the binary.
+[quicktest_install](https://github.com/LuchoBazz/quicktest/tree/main/website/static/install) provides convenience scripts to download and install the binary.
 
 ### Linux
 
 Using Shell:
 
 ```shell
-curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | sh
+curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | sh
 ```
 
 Please open a new terminal, or run the following in the existing one `source ~/.bashrc` or `source ~/.zshrc` as appropriate
@@ -23,7 +23,7 @@ Please open a new terminal, or run the following in the existing one `source ~/.
 Using PowerShell:
 
 ```powershell
-iwr https://luismbaezco.github.io/quicktest/install/install.ps1 -useb | iex
+iwr https://luchobazz.github.io/quicktest/install/install.ps1 -useb | iex
 ```
 
 ### Mac OS
@@ -31,7 +31,7 @@ iwr https://luismbaezco.github.io/quicktest/install/install.ps1 -useb | iex
 Using Shell:
 
 ```shell
-curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | v=1.0.1  sh
+curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | v=1.0.1  sh
 ```
 
 Please open a new terminal, or run the following in the existing one `source ~/.zshrc` or `source ~/.bashrc` as appropriate
@@ -59,8 +59,8 @@ curl https://sh.rustup.rs -sSf | sh  && cargo install quicktest
 The program [`unzip`](https://linux.die.net/man/1/unzip) is a requirement for the Shell installer.
 
 ```sh
-$ curl -fsSL https://luismbaezco.github.io/quicktest/install/install.sh | sh
-Error: unzip is required to install Quick Test CLI (see: https://luismbaezco.github.io/quicktest/docs/getting-started/installation#unzip-is-required).
+$ curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | sh
+Error: unzip is required to install Quick Test CLI (see: https://luchobazz.github.io/quicktest/docs/getting-started/installation#unzip-is-required).
 ```
 
 **When does this issue occur?**

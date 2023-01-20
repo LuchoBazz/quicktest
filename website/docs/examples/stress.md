@@ -8,7 +8,7 @@ sidebar_label: Stress
 
 * ### cpp examples
     ```shell
-    git clone https://github.com/LuisMBaezCo/quicktest.git
+    git clone https://github.com/LuchoBazz/quicktest.git
 
     cd quicktest/examples/stress/cpp
     ```
@@ -26,7 +26,7 @@ sidebar_label: Stress
 
 * ### python examples
     ```shell
-    git clone https://github.com/LuisMBaezCo/quicktest.git
+    git clone https://github.com/LuchoBazz/quicktest.git
 
     cd quicktest/examples/stress/python
     ```

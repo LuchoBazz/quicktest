@@ -7,7 +7,7 @@ sidebar_label: Output
 ## Run Examples
 
 ```shell
-git clone https://github.com/LuisMBaezCo/quicktest.git
+git clone https://github.com/LuchoBazz/quicktest.git
 
 cd quicktest/examples/output
 ```

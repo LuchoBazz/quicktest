@@ -7,7 +7,7 @@
 set -e
 
 if ! command -v unzip >/dev/null; then
-    echo "Error: unzip is required to install Quick Test CLI (see: https://luismbaezco.github.io/quicktest/docs/getting-started/installation#unzip-is-required)." 1>&2
+    echo "Error: unzip is required to install Quick Test CLI (see: https://luchobazz.github.io/quicktest/docs/getting-started/installation#unzip-is-required)." 1>&2
     exit 1
 fi
 
@@ -23,12 +23,12 @@ else
 fi
 
 if [ "$v" = "" ]; then
-    version=$(curl -s "https://api.github.com/repos/LuisMBaezCo/quicktest/releases/latest" | grep -Po '"tag_name": "\K[0-9.]+')
+    version=$(curl -s "https://api.github.com/repos/LuchoBazz/quicktest/releases/latest" | grep -Po '"tag_name": "\K[0-9.]+')
 else
     version="$v";
 fi
 
-qt_uri="https://github.com/LuisMBaezCo/quicktest/releases/latest/download/quicktest-${target}-v${version}.zip"
+qt_uri="https://github.com/LuchoBazz/quicktest/releases/latest/download/quicktest-${target}-v${version}.zip"
 
 quicktest_install="${QT_INSTALL:-$HOME/.quicktest}"
 bin_dir="$quicktest_install/bin"

@@ -6,9 +6,9 @@
 
 <p align="center">Command Line Interface (CLI) for Stress Testing for Competitive Programming</p>
 
-<h2 align="center">📖 <a href="https://luismbaezco.github.io/quicktest/docs/intro">Docs</a></h2>
+<h2 align="center">📖 <a href="https://luchobazz.github.io/quicktest/docs/intro">Docs</a></h2>
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuisMBaezCo/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuisMBaezCo/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuisMBaezCo/quicktest)
+[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuchoBazz/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuchoBazz/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuchoBazz/quicktest)
 
 ## Demo
 ![cmp gif](./website/static/gif/main.gif)
@@ -32,7 +32,7 @@
 
 ### Installation
 
-Installation tutorial for Linux, Windows and macOS can be found [here](https://luismbaezco.github.io/quicktest/docs/getting-started/installation) on the docs website
+Installation tutorial for Linux, Windows and macOS can be found [here](https://luchobazz.github.io/quicktest/docs/getting-started/installation) on the docs website
 
 ## Introduction
 
@@ -40,7 +40,7 @@ Quick Test CLI is a project to perform stress testing in competitive programming
 
 Currently, Quick Test CLI supports three types of tests which are listed below:
 
-| [quicktest cmp](https://luismbaezco.github.io/quicktest/docs/usage/cmp)                               | [quicktest stress](https://luismbaezco.github.io/quicktest/docs/usage/stress)                               | [quicktest check](https://luismbaezco.github.io/quicktest/docs/usage/check)                              |
+| [quicktest cmp](https://luchobazz.github.io/quicktest/docs/usage/cmp)                               | [quicktest stress](https://luchobazz.github.io/quicktest/docs/usage/stress)                               | [quicktest check](https://luchobazz.github.io/quicktest/docs/usage/check)                              |
 |------------------------------------------------|------------------------------------------------|----------------------------------------------|
 | ![cmp gif](./website/static/gif/cmp.gif) | ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
 
@@ -193,7 +193,7 @@ If you are interested in contributing to the Quick Test CLI project, please take
 
 ### Bug reports
 
-You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
+You can report any bugs [here](https://github.com/LuchoBazz/quicktest/issues).
 
 ## Supported Languages
 
@@ -222,7 +222,7 @@ You can report any bugs [here](https://github.com/LuisMBaezCo/quicktest/issues).
 
 ## License
 Licensed under either of these:
-* MIT license ([LICENSE-MIT](https://github.com/LuisMBaezCo/quicktest/blob/main/LICENSE) or https://opensource.org/licenses/MIT)
+* MIT license ([LICENSE-MIT](https://github.com/LuchoBazz/quicktest/blob/main/LICENSE) or https://opensource.org/licenses/MIT)
 
 ---
 

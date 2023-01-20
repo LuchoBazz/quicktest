@@ -8,7 +8,7 @@ sidebar_label: Cmp
 
 * ### cpp examples
     ```shell
-    git clone https://github.com/LuisMBaezCo/quicktest.git
+    git clone https://github.com/LuchoBazz/quicktest.git
 
     cd quicktest/examples/cmp/cpp
     ```
@@ -25,7 +25,7 @@ sidebar_label: Cmp
 
 * ### python examples
     ```shell
-    git clone https://github.com/LuisMBaezCo/quicktest.git
+    git clone https://github.com/LuchoBazz/quicktest.git
 
     cd quicktest/examples/cmp/python
     ```

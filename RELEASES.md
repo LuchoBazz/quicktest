@@ -1,7 +1,7 @@
 # Releases
 
 Binary releases can be downloaded manually at:
-https://github.com/LuisMBaezCo/quicktest/releases
+https://github.com/LuchoBazz/quicktest/releases
 
 ### 1.0.1 / 2022.11.12
 

@@ -8,12 +8,12 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Quick Test CLI',
   tagline: 'CLI for stress testing in competitive programming contest',
-  url: 'https://LuisMBaezCo.github.io',
+  url: 'https://luchobazz.github.io',
   baseUrl: '/quicktest/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'LuisMBaezCo', // Usually your GitHub org/user name.
+  organizationName: 'LuchoBazz', // Usually your GitHub org/user name.
   projectName: 'quicktest', // Usually your repo name.
 
   presets: [
@@ -24,13 +24,13 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/LuisMBaezCo/quicktest/tree/main/website/',
+          editUrl: 'https://github.com/LuchoBazz/quicktest/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/LuisMBaezCo/quicktest/tree/main/website/',
+            'https://github.com/LuchoBazz/quicktest/tree/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -46,7 +46,7 @@ const config = {
         title: 'Quick Test CLI',
         logo: {
           alt: 'Quick Test CLI Logo',
-          src: 'https://raw.githubusercontent.com/LuisMBaezCo/quicktest/main/assets/logo/quicktest-512x512.png',
+          src: 'https://raw.githubusercontent.com/LuchoBazz/quicktest/main/assets/logo/quicktest-512x512.png',
         },
         items: [
           {
@@ -57,7 +57,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/LuisMBaezCo/quicktest',
+            href: 'https://github.com/LuchoBazz/quicktest',
             label: 'GitHub',
             position: 'right',
           },
@@ -101,7 +101,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/LuisMBaezCo/quicktest',
+                href: 'https://github.com/LuchoBazz/quicktest',
               },
             ],
           },
