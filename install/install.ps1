@@ -7,7 +7,7 @@
 if ($v) {
     $Version = "${v}"
 } else {
-    $Response = Invoke-WebRequest -URI "https://api.github.com/repos/LuisMBaezCo/quicktest/releases/latest" |
+    $Response = Invoke-WebRequest -URI "https://api.github.com/repos/LuchoBazz/quicktest/releases/latest" |
         Select-Object -Property Content |
         Select-String -Pattern '"tag_name":"[0-9.]+'
     $Version = $Response.matches.Value.replace('"tag_name":"', '')
@@ -28,7 +28,7 @@ $Target = 'x86_64-pc-windows-msvc'
 # GitHub requires TLS 1.2
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-$QT_Uri = "https://github.com/LuisMBaezCo/quicktest/releases/latest/download/quicktest-${Target}-v${Version}.zip"
+$QT_Uri = "https://github.com/LuchoBazz/quicktest/releases/latest/download/quicktest-${Target}-v${Version}.zip"
 
 if (!(Test-Path $BinDir)) {
     New-Item $BinDir -ItemType Directory | Out-Null
