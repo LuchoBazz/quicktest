@@ -33,7 +33,7 @@ cargo test setup_subcommand -- --test-threads 1
 
 - add support for new languages
 
-- add new examples in the [`/examples`](https://github.com/LuisMBaezCo/quicktest/tree/main/examples) folder in the different supported languages
+- add new examples in the [`/examples`](https://github.com/LuchoBazz/quicktest/tree/main/examples) folder in the different supported languages
 
 - reporting undetected errors
 

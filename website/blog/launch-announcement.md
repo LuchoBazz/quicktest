@@ -2,19 +2,19 @@
 slug: Launch Announcement
 title: Launch Announcement
 date: 2022-05-30
-authors: [luismbaezco]
+authors: [LuchoBazz]
 tags: [stress-testing, testing, cp-tool, tool]
 ---
 
 Hi Competitive Programming Community!!
 
-I want to share with the entire competitive programming community my latest project: [Quick Test CLI](https://github.com/LuisMBaezCo/quicktest), which is a multiplatform open source tool to perform stress testing in competitive programming and that was inspired after watching the following screencasts: [1v1 Coding | 2020 Lockout Championship](https://www.youtube.com/watch?v=uABbBGtEWks&t=1434s) and [How to test your solution in Competitive Programming, on Linux?](https://www.youtube.com/watch?v=JXTVOyQpSGM) Made by [Errichto](https://codeforces.com/profile/Errichto) some time ago.
+I want to share with the entire competitive programming community my latest project: [Quick Test CLI](https://github.com/LuchoBazz/quicktest), which is a multiplatform open source tool to perform stress testing in competitive programming and that was inspired after watching the following screencasts: [1v1 Coding | 2020 Lockout Championship](https://www.youtube.com/watch?v=uABbBGtEWks&t=1434s) and [How to test your solution in Competitive Programming, on Linux?](https://www.youtube.com/watch?v=JXTVOyQpSGM) Made by [Errichto](https://codeforces.com/profile/Errichto) some time ago.
 
-📦**Source Code:** [https://github.com/LuisMBaezCo/quicktest](https://github.com/LuisMBaezCo/quicktest)
+📦**Source Code:** [https://github.com/LuchoBazz/quicktest](https://github.com/LuchoBazz/quicktest)
 
-📖**Docs:** [https://luismbaezco.github.io/quicktest](https://luismbaezco.github.io/quicktest)
+📖**Docs:** [https://luchobazz.github.io/quicktest](https://luchobazz.github.io/quicktest)
 
-🚀 **Installation:** [https://luismbaezco.github.io/quicktest/docs/getting-started/installation](https://luismbaezco.github.io/quicktest/docs/getting-started/installation)
+🚀 **Installation:** [https://luchobazz.github.io/quicktest/docs/getting-started/installation](https://luchobazz.github.io/quicktest/docs/getting-started/installation)
 
 ### What Quick Test CLI provides vs. the traditional way of performing stress testing?
 
@@ -79,6 +79,6 @@ Feature for testing interactive problems is planned to be implemented in future 
 
 I will be grateful to receive feedback, requests for new features and requests for improvements
 
-Don't forget to give it ⭐in the [Github](https://github.com/LuisMBaezCo/quicktest) repository
+Don't forget to give it ⭐in the [Github](https://github.com/LuchoBazz/quicktest) repository
 
 Thanks!

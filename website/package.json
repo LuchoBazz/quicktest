@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "license" : "MIT",
-  "homepage": "https://luismbaezco.github.io/quicktest/",
+  "homepage": "https://luchobazz.github.io/quicktest/",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
