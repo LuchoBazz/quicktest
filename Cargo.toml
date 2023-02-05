@@ -27,7 +27,7 @@ pad = "0.1.6"
 process_control = "3.4.0"
 rand = "0.8.4"
 regex = "1.5.5"
-shellexpand = "2.1.0"
+shellexpand = "3.0.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_yaml = "0.8"
