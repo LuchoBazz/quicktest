@@ -168,8 +168,7 @@ fn main() -> Result<(), ExitFailure> {
         } => controllers::cmd_example::run(&ExampleCommand::new(cmp, stress, check, output, setup)),
     };
 
-    if let Err(err) = status {
-        return Err(err);
-    }
+    status?;
+
     std::process::exit(exitcode::OK);
 }
