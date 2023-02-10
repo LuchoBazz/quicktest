@@ -7,7 +7,7 @@ jobs:
             - feature
             - develop
     docker:
-      - image: cimg/rust:1.60.0
+      - image: cimg/rust:1.64
     
     working_directory: ~/quicktest_folder
 

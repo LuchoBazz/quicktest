@@ -30,8 +30,8 @@ pub fn run(command: &SetupCommand) -> Result<(), ExitFailure> {
     }
 
     if let Ok(lg) = &mut langs {
-        let lang_label = &(*cmds[0]);
-        let label = &(*cmds[1]);
+        let lang_label = cmds[0];
+        let label = cmds[1];
 
         for idx in 0..lg.languages.len() {
             if lg.languages[idx].id == lang_label && lg.languages[idx].env.contains_key(label) {

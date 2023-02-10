@@ -27,7 +27,7 @@ impl StatusResponse {
 }
 
 #[allow(clippy::upper_case_acronyms)]
-#[derive(PartialEq)]
+#[derive(PartialEq, Eq)]
 pub enum CPStatus {
     AC,
     WA,
@@ -62,7 +62,7 @@ pub fn is_memory_limit_exceeded(status: &CPStatus) -> bool {
 }
 
 // Extension
-#[derive(PartialEq)]
+#[derive(PartialEq, Eq)]
 pub enum Extension {
     Cpp,
     Python,
