@@ -325,7 +325,7 @@ impl Language for LanguageHandler {
         has_installed_controller(
             commands_str[0],
             if commands_str.len() > 1 {
-                (&commands_str[1..]).to_vec()
+                commands_str[1..].to_vec()
             } else {
                 Vec::new()
             },
@@ -350,9 +350,7 @@ pub fn get_language_handler(
 
     let ext: &str = get_extension(path).unwrap();
 
-    if let Err(err) = extension::map_extension(file_label, ext, &mut lang_out) {
-        return Err(err);
-    }
+    extension::map_extension(file_label, ext, &mut lang_out)?;
 
     let mut file_name = file_name.split('.').collect::<Vec<_>>();
     file_name.pop();
@@ -384,9 +382,7 @@ pub fn get_generator_handler(
 
     let ext: &str = get_extension(path).unwrap();
 
-    if let Err(err) = extension::map_extension(file_label, ext, &mut lang_out) {
-        return Err(err);
-    }
+    extension::map_extension(file_label, ext, &mut lang_out)?;
 
     let mut file_name = file_name.split('.').collect::<Vec<_>>();
     file_name.pop();
