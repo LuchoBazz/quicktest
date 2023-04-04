@@ -13,7 +13,10 @@ use exitfailure::ExitFailure;
 use std::process::Command;
 
 use crate::{
-    file_handler::{file::{configuration_commands, get_extension}, path::get_root_path},
+    file_handler::{
+        file::{configuration_commands, get_extension},
+        path::get_root_path,
+    },
     language::extension,
     runner::{
         cmd::{execute_program, has_installed_controller},

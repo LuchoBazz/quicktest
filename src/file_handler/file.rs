@@ -7,7 +7,7 @@
 use std::{
     collections::VecDeque,
     fs::{self, remove_dir_all, File},
-    io::{Write, self},
+    io::{self, Write},
     path::{Path, PathBuf},
 };
 
