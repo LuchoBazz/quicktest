@@ -60,11 +60,3 @@ pub fn is_runtime_error(status: &CPStatus) -> bool {
 pub fn is_memory_limit_exceeded(status: &CPStatus) -> bool {
     *status == CPStatus::MLE
 }
-
-// Extension
-#[derive(PartialEq, Eq)]
-pub enum Extension {
-    Cpp,
-    Python,
-    NotExtensionSupported,
-}
