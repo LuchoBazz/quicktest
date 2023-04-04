@@ -19,7 +19,7 @@ pub mod file_handler;
 pub mod generator;
 pub mod language;
 pub mod runner;
-pub mod util;
+
 pub mod views;
 
 use exitfailure::ExitFailure;
