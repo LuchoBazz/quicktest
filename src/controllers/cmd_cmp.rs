@@ -15,7 +15,6 @@ use exitfailure::ExitFailure;
 use crate::cli::model::cmp_command::CmpCommand;
 use crate::cli::model::traits::AdapterCommand;
 // local library
-use crate::views::diff_line_by_line::diff_line_by_line;
 use crate::error::handle_error::{
     throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
     throw_runtime_error_msg, throw_time_limit_exceeded_msg,
@@ -34,6 +33,7 @@ use crate::language::language_handler::LanguageHandler;
 use crate::runner::types::{
     is_compiled_error, is_memory_limit_exceeded, is_runtime_error, Language,
 };
+use crate::views::diff_line_by_line::diff_line_by_line;
 use crate::views::style::{
     show_accepted, show_input_test_case, show_memory_limit_exceeded_error, show_runtime_error,
     show_stats, show_time_limit_exceeded, show_time_limit_exceeded_correct, show_wrong_answer,

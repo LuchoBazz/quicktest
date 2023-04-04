@@ -7,7 +7,7 @@
 use std::{
     collections::VecDeque,
     fs::{self, remove_dir_all, File},
-    io::Write,
+    io::{self, Write},
     path::{Path, PathBuf},
 };
 
@@ -27,8 +27,12 @@ use crate::{
     },
     language::extension::is_extension_supported,
     runner::types::Language,
-    util::file::file_exists,
 };
+
+pub fn file_exists(file_name: &str) -> Result<bool, io::Error> {
+    fs::File::open(file_name)?;
+    Ok(true)
+}
 
 pub fn remove_files(files: Vec<&str>) {
     for file in files {
@@ -112,6 +116,11 @@ pub fn copy_file(from: &str, to: &str) -> Result<(), ExitFailure> {
         write_file(to, data.as_bytes())?;
     }
     Ok(())
+}
+
+pub fn get_extension(path: &Path) -> Option<&str> {
+    let ext = path.extension()?.to_str()?;
+    Some(ext)
 }
 
 pub fn is_extension_supported_or_error(file_name: &str) -> Result<(), ExitFailure> {
