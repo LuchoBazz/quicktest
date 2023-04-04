@@ -14,7 +14,6 @@ pub mod cli;
 pub mod config;
 pub mod constants;
 pub mod controllers;
-pub mod diff;
 pub mod error;
 pub mod file_handler;
 pub mod generator;
