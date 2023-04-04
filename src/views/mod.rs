@@ -7,3 +7,4 @@
 pub mod example;
 pub mod setup;
 pub mod style;
+pub mod diff_line_by_line;
