@@ -11,14 +11,14 @@ on:
 
 jobs:
   build_and_test:
-    name: k6 local test on macos
+    name: Build and Run test
     runs-on: macos-latest
-    container: docker://rust:1.64
-
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
+      
+      - name: Cargo
+        uses: actions-rs/cargo@v1
 
       - name: Install k6 by homebrew
         run: brew install k6
