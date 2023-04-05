@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build_and_tests:
+  build:
     docker:
       - image: cimg/rust:1.64
     
@@ -51,7 +51,7 @@ jobs:
 workflows:
   build_and_tests:
     jobs:
-      - build_and_tests:
+      - build:
           filters:
             branches:
               only:
