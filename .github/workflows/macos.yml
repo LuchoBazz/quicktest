@@ -10,10 +10,10 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  k6_local_test:
+  build_and_test:
     name: k6 local test on macos
     runs-on: macos-latest
-    container: rust:1.64
+    container: docker://rust:1.64
 
     steps:
 
