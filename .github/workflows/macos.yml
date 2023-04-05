@@ -1,0 +1,48 @@
+name: MacOS Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, synchronize, reopened]
+
+jobs:
+  k6_local_test:
+    name: k6 local test on macos
+    runs-on: macos-latest
+    container: rust:1.64
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install k6 by homebrew
+        run: brew install k6
+
+      - name: Build
+        run: cargo build
+
+      - name: Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Setup 'python3' as default
+        run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+
+      - name: Test cmp command
+        run: cargo test cmp_subcommand -- --test-threads 1
+
+      - name: Test stress command
+        run: cargo test stress_subcommand -- --test-threads 1
+      
+      - name: Test check command
+        run: cargo test check_subcommand -- --test-threads 1
+
+      - name: Test output command
+        run: cargo test output_subcommand -- --test-threads 1
+
+      - name: Test setup command
+        run: cargo test setup_subcommand -- --test-threads 1
