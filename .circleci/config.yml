@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 jobs:
   build:
@@ -51,6 +51,9 @@ jobs:
 
     steps:
       - checkout
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
       - run: 
           name: Test cmp command
           command: cargo test cmp_subcommand -- --test-threads 1
@@ -68,7 +71,6 @@ jobs:
           command: cargo test setup_subcommand -- --test-threads 1
 
 workflows:
-  version: 2
   build_and_tests:
     jobs:
       - build
