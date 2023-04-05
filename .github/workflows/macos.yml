@@ -16,12 +16,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          rustc: 1.64
+          cargo: 1.64
+          target: x86_64-apple-darwin
       
       - name: Cargo
         uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
 
-      - name: Install k6 by homebrew
-        run: brew install k6
+      - name: Install Golang by homebrew
+        run: brew update && brew install golang
 
       - name: Build
         run: cargo build
