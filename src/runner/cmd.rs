@@ -61,65 +61,73 @@ pub fn execute_program(
     let child: Result<std::process::Child, std::io::Error> =
         cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
 
-    let mut res_status = CPStatus::AC;
-
-    if let Ok(child_output) = child {
-        #[cfg(any(target_os = "linux", target_os = "windows"))]
-        let response = child_output
-            .controlled_with_output()
-            .memory_limit(memory_limit as usize * memory_factor_needed) // bytes
-            .time_limit(Duration::from_millis(timeout as u64))
-            .terminate_for_timeout()
-            .wait();
-
-        #[cfg(target_os = "macos")]
-        let response = child_output
-            .controlled_with_output()
-            .time_limit(Duration::from_millis(timeout as u64))
-            .terminate_for_timeout()
-            .wait();
-
-        if let Ok(output_option) = response {
-            if let Some(output) = output_option {
-                if output.status.success() {
-                    // OK
-                    if let Some(file) = stdout {
-                        let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                        writer.write_all(&output.stdout).unwrap();
-                    }
-
-                    if let Some(file) = stderr {
-                        let mut writer = File::create(file.to_str().unwrap()).unwrap();
-                        writer.write_all(&output.stderr).unwrap();
-                    }
-
-                    res_status = CPStatus::AC;
-                } else {
-                    #[cfg(unix)]
-                    if let Some(6) = output.status.signal() {
-                        res_status = CPStatus::MLE;
-                    } else {
-                        res_status = CPStatus::RTE;
-                    }
-
-                    #[cfg(windows)]
-                    if let Some(3) = output.status.code() {
-                        res_status = CPStatus::MLE;
-                    } else {
-                        res_status = CPStatus::RTE;
-                    }
-                }
-            } else {
-                res_status = CPStatus::TLE;
-            }
-        }
-    } else {
-        res_status = CPStatus::CE;
+    if child.is_err() {
+        return execute_program_response(CPStatus::CE, now);
     }
 
+    let child_output = child.unwrap();
+
+    #[cfg(any(target_os = "linux", target_os = "windows"))]
+    let response = child_output
+        .controlled_with_output()
+        .memory_limit(memory_limit as usize * memory_factor_needed) // bytes
+        .time_limit(Duration::from_millis(timeout as u64))
+        .terminate_for_timeout()
+        .wait();
+
+    #[cfg(target_os = "macos")]
+    let response = child_output
+        .controlled_with_output()
+        .time_limit(Duration::from_millis(timeout as u64))
+        .terminate_for_timeout()
+        .wait();
+
+    if response.is_err() {
+        return execute_program_response(CPStatus::TLE, now);
+    }
+
+    let output_option = response.unwrap();
+
+    if output_option.is_none() {
+        return execute_program_response(CPStatus::TLE, now);
+    }
+
+    let output = output_option.unwrap();
+    let mut res_status = CPStatus::AC;
+
+    if output.status.success() {
+        // OK
+        if let Some(file) = stdout {
+            let mut writer = File::create(file.to_str().unwrap()).unwrap();
+            writer.write_all(&output.stdout).unwrap();
+        }
+
+        if let Some(file) = stderr {
+            let mut writer = File::create(file.to_str().unwrap()).unwrap();
+            writer.write_all(&output.stderr).unwrap();
+        }
+    } else {
+        #[cfg(unix)]
+        if let Some(6) = output.status.signal() {
+            res_status = CPStatus::MLE;
+        } else {
+            res_status = CPStatus::RTE;
+        }
+
+        #[cfg(windows)]
+        if let Some(3) = output.status.code() {
+            res_status = CPStatus::MLE;
+        } else {
+            res_status = CPStatus::RTE;
+        }
+    }
+
+    execute_program_response(res_status, now)
+}
+
+pub fn execute_program_response(res_status: CPStatus, now: Instant) -> StatusResponse {
     let new_now: Instant = Instant::now();
     let time: Duration = new_now.duration_since(now);
-
     StatusResponse::new(time, res_status)
 }
 
