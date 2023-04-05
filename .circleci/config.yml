@@ -1,11 +1,7 @@
+version: 2.1
+
 jobs:
   build:
-    filters:
-        branches:
-          only:
-            - main
-            - feature
-            - develop
     docker:
       - image: cimg/rust:1.64
     
@@ -13,18 +9,52 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt update
-      - run: sudo apt install default-jdk # Install java
-      - run: wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz # Install Go
-      - run: sudo tar -xvf go1.18.linux-amd64.tar.gz
-      - run: sudo mv go /usr/local
-      - run: sudo ln -s /usr/local/go/bin/* /usr/bin
-      - run: rm go1.18.linux-amd64.tar.gz
-      - run: cargo build
-      - run: cargo clippy -- -D warnings
-      - run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
-      - run: cargo test cmp_subcommand -- --test-threads 1
-      - run: cargo test stress_subcommand -- --test-threads 1
-      - run: cargo test check_subcommand -- --test-threads 1
-      - run: cargo test output_subcommand -- --test-threads 1
-      - run: cargo test setup_subcommand -- --test-threads 1
+      - run:
+          name: Updated list of packages
+          command: sudo apt update
+      - run: 
+          name: Install Java
+          command:  sudo apt install default-jdk
+      - run:
+          name: Install Go
+          command: |
+            wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz
+            sudo tar -xvf go1.18.linux-amd64.tar.gz
+            sudo mv go /usr/local
+            sudo ln -s /usr/local/go/bin/* /usr/bin
+            rm go1.18.linux-amd64.tar.gz
+      - run:
+          name: Build
+          command: cargo build
+      - run:
+          name: Clippy
+          command: cargo clippy -- -D warnings
+      - run:
+          name: Setup 'python3' as default
+          command: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      - run: 
+          name: Test cmp command
+          command: cargo test cmp_subcommand -- --test-threads 1
+      - run:
+          name: Test stress command
+          command: cargo test stress_subcommand -- --test-threads 1
+      - run:
+          name: Test check command
+          command: cargo test check_subcommand -- --test-threads 1
+      - run:
+          name: Test output command
+          command: cargo test output_subcommand -- --test-threads 1
+      - run: 
+          name: Test setup command
+          command: cargo test setup_subcommand -- --test-threads 1
+
+workflows:
+  build_and_tests:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+                - /^feature.*$/
+                - /^QT.*$/
