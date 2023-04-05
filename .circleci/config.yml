@@ -69,11 +69,13 @@ workflows:
               only:
                 - main
                 - /^feature.*$/
+                - /^QT.*$/
       - tests:
           filters:
             branches:
               only:
                 - main
                 - /^feature.*$/
+                - /^QT.*$/
           requires:
             - build
