@@ -2,11 +2,6 @@ version: 2.1
 
 jobs:
   build:
-    filters:
-        branches:
-          only:
-            - main
-            - /^feature.*$/
     docker:
       - image: cimg/rust:1.64
     
@@ -39,11 +34,6 @@ jobs:
           command: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
 
   tests:
-    filters:
-        branches:
-          only:
-            - main
-            - /^feature.*$/
     docker:
       - image: cimg/rust:1.64
     
@@ -73,7 +63,17 @@ jobs:
 workflows:
   build_and_tests:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+                - /^feature.*$/
       - tests:
+          filters:
+            branches:
+              only:
+                - main
+                - /^feature.*$/
           requires:
             - build
