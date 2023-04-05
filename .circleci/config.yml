@@ -38,7 +38,7 @@ jobs:
           name: Setup 'python3' as default
           command: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
 
-  test:
+  tests:
     filters:
         branches:
           only:
@@ -66,3 +66,9 @@ jobs:
       - run: 
           name: Test setup command
           command: cargo test setup_subcommand -- --test-threads 1
+
+workflows:
+  build_and_tests:
+    jobs:
+      - build
+      - tests
