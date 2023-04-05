@@ -1,11 +1,12 @@
+version: 2
+
 jobs:
   build:
     filters:
         branches:
           only:
             - main
-            - feature
-            - develop
+            - /^feature.*$/
     docker:
       - image: cimg/rust:1.64
     
@@ -36,6 +37,20 @@ jobs:
       - run:
           name: Setup 'python3' as default
           command: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+
+  test:
+    filters:
+        branches:
+          only:
+            - main
+            - /^feature.*$/
+    docker:
+      - image: cimg/rust:1.64
+    
+    working_directory: ~/quicktest_folder
+
+    steps:
+      - checkout
       - run: 
           name: Test cmp command
           command: cargo test cmp_subcommand -- --test-threads 1
