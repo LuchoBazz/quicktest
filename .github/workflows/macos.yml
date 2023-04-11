@@ -28,6 +28,9 @@ jobs:
           target: x86_64-apple-darwin
           components: rustfmt, clippy
       
+      - name: Install C/C++
+        run: brew install gcc
+      
       - name: Cargo
         uses: actions-rs/cargo@v1
         with:
