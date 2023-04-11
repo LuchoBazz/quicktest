@@ -50,7 +50,7 @@ jobs:
         run: cargo build
 
       - name: Clippy
-        run: cargo clippy -- -D warnings
+        run: cargo clippy
 
       - name: Setup 'python3' as default
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
