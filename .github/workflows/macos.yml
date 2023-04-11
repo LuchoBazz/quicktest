@@ -33,9 +33,6 @@ jobs:
           command: build
           args: --release --all-features
 
-      - name: Install Golang by homebrew
-        run: brew update && brew install golang
-
       - name: Build
         run: cargo build
 
