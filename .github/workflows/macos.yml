@@ -26,6 +26,7 @@ jobs:
           rustc: 1.64
           cargo: 1.64
           target: x86_64-apple-darwin
+          components: rustfmt, clippy
       
       - name: Cargo
         uses: actions-rs/cargo@v1
@@ -35,6 +36,15 @@ jobs:
       
       - name: Setup rust version
         run: rustup target list
+      
+      - name: Cargo Version
+        run: cargo --version
+      
+      - name: Cargo Clippy Version
+        run: cargo clippy --version
+      
+      - name: Rustc Version
+        run: rustc --version
 
       - name: Build
         run: cargo build
