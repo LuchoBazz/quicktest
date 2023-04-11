@@ -32,6 +32,9 @@ jobs:
         with:
           command: build
           args: --release --all-features
+      
+      - name: Setup rust version
+        run: rustup target list
 
       - name: Build
         run: cargo build
