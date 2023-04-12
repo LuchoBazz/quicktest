@@ -41,10 +41,10 @@ jobs:
         run: rustup target list
 
       - name: Setup C++
-        run: sudo ln -s $(which g++-12) $(which g++)
+        run: alias g++='g++-12'
       
       - name: Setup C
-        run: sudo ln -s $(which gcc-12) $(which gcc)
+        run: alias gcc='gcc-12'
 
       - name: Cargo Version
         run: cargo --version
