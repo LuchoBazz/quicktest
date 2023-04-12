@@ -54,9 +54,7 @@ jobs:
           echo 'alias gcc="gcc-12"' >> $rc
 
       - shell: bash
-        run: |
-          source ~/.bashrc
-          ll    
+        run: source ~/.bashrc
 
       - name: Cargo Version
         run: cargo --version
