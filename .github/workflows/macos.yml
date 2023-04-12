@@ -58,8 +58,8 @@ jobs:
       
       - name: C/C++ version
         run: |
-          gcc --version
-          g++ --version
+          gcc-12 --version
+          g++-12 --version
 
       - name: Cargo Version
         run: cargo --version
@@ -78,6 +78,12 @@ jobs:
 
       - name: Setup 'python3' as default
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      
+      - name: Setup 'g++-12' as default
+        run: ./target/debug/quicktest setup config --label="Language::CPP.PROGRAM" --value="g++-12"
+      
+      - name: Setup 'gcc-12' as default
+        run: ./target/debug/quicktest setup config --label="Language::CPP.PROGRAM" --value="gcc-12"
 
       - name: Test cmp command
         run: |
