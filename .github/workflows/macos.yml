@@ -55,6 +55,11 @@ jobs:
 
       - shell: bash
         run: source ~/.bashrc
+      
+      - name: C/C++ version
+        run: |
+          gcc --version
+          g++ --version
 
       - name: Cargo Version
         run: cargo --version
