@@ -45,6 +45,18 @@ jobs:
       
       - name: Setup C
         run: alias gcc='gcc-12'
+      
+      - shell: bash
+        run: |
+          rc=~/.bashrc
+          echo 'shopt -s expand_aliases' > $rc
+          echo 'alias g++="g++-12"' >> $rc
+          echo 'alias gcc="gcc-12"' >> $rc
+
+      - shell: bash
+        run: |
+          source ~/.bashrc
+          ll    
 
       - name: Cargo Version
         run: cargo --version
@@ -65,16 +77,26 @@ jobs:
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
 
       - name: Test cmp command
-        run: cargo test cmp_subcommand -- --test-threads 1
+        run: |
+          source ~/.bashrc
+          cargo test cmp_subcommand -- --test-threads 1
 
       - name: Test stress command
-        run: cargo test stress_subcommand -- --test-threads 1
+        run: |
+          source ~/.bashrc
+          cargo test stress_subcommand -- --test-threads 1
       
       - name: Test check command
-        run: cargo test check_subcommand -- --test-threads 1
+        run: |
+          source ~/.bashrc
+          cargo test check_subcommand -- --test-threads 1
 
       - name: Test output command
-        run: cargo test output_subcommand -- --test-threads 1
+        run: |
+          source ~/.bashrc
+          cargo test output_subcommand -- --test-threads 1
 
       - name: Test setup command
-        run: cargo test setup_subcommand -- --test-threads 1
+        run: |
+          source ~/.bashrc
+          cargo test setup_subcommand -- --test-threads 1
