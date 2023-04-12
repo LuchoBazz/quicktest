@@ -80,10 +80,10 @@ jobs:
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       
       - name: Setup 'g++-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::CPP.PROGRAM" --value="g++-12"
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
       
       - name: Setup 'gcc-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::CPP.PROGRAM" --value="gcc-12"
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="gcc-12"
 
       - name: Test cmp command
         run: |
