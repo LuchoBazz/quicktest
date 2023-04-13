@@ -83,7 +83,7 @@ jobs:
         run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
       
       - name: Setup 'gcc-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="gcc-12"
+        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
 
       - name: Test cmp command
         run: |
