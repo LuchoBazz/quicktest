@@ -36,39 +36,11 @@ jobs:
         with:
           command: build
           args: --release --all-features
-      
-      - name: Setup rust version
-        run: rustup target list
 
-      - name: Setup C++
-        run: alias g++='g++-12'
-      
-      - name: Setup C
-        run: alias gcc='gcc-12'
-      
-      - shell: bash
-        run: |
-          rc=~/.bashrc
-          echo 'shopt -s expand_aliases' > $rc
-          echo 'alias g++="g++-12"' >> $rc
-          echo 'alias gcc="gcc-12"' >> $rc
-
-      - shell: bash
-        run: source ~/.bashrc
-      
       - name: C/C++ version
         run: |
           gcc-12 --version
           g++-12 --version
-
-      - name: Cargo Version
-        run: cargo --version
-      
-      - name: Cargo Clippy Version
-        run: cargo clippy --version
-      
-      - name: Rustc Version
-        run: rustc --version
 
       - name: Build
         run: cargo build
@@ -86,26 +58,16 @@ jobs:
         run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
 
       - name: Test cmp command
-        run: |
-          source ~/.bashrc
-          cargo test cmp_subcommand -- --test-threads 1
+        run: cargo test cmp_subcommand -- --test-threads 1
 
       - name: Test stress command
-        run: |
-          source ~/.bashrc
-          cargo test stress_subcommand -- --test-threads 1
+        run: cargo test stress_subcommand -- --test-threads 1
       
       - name: Test check command
-        run: |
-          source ~/.bashrc
-          cargo test check_subcommand -- --test-threads 1
+        run: cargo test check_subcommand -- --test-threads 1
 
       - name: Test output command
-        run: |
-          source ~/.bashrc
-          cargo test output_subcommand -- --test-threads 1
+        run: cargo test output_subcommand -- --test-threads 1
 
       - name: Test setup command
-        run: |
-          source ~/.bashrc
-          cargo test setup_subcommand -- --test-threads 1
+        run: cargo test setup_subcommand -- --test-threads 1
