@@ -23,8 +23,8 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          rustc: 1.64
-          cargo: 1.64
+          rustc: 1.66
+          cargo: 1.66
           target: x86_64-apple-darwin
           components: rustfmt, clippy
       
