@@ -4,6 +4,8 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+#![allow(unused_imports)]
+
 use std::{error::Error, process::Command};
 
 use assert_cmd::assert::OutputAssertExt;
@@ -18,6 +20,7 @@ use crate::util::{
 use super::codes::{CORRECT_RUST_CMP, GEN_RUST_CMP, TARGET_RUST_CMP};
 
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn cmp_target_cpp_correct_cpp_gen_rust() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_RUST,

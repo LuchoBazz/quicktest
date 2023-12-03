@@ -1,0 +1,73 @@
+name: MacOS Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_and_test:
+    name: Build and Run test
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          rustc: 1.66
+          cargo: 1.66
+          target: x86_64-apple-darwin
+          components: rustfmt, clippy
+      
+      - name: Install C/C++
+        run: brew install gcc
+      
+      - name: Cargo
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
+
+      - name: C/C++ version
+        run: |
+          gcc-12 --version
+          g++-12 --version
+
+      - name: Build
+        run: cargo build
+
+      - name: Clippy
+        run: cargo clippy
+
+      - name: Setup 'python3' as default
+        run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
+      
+      - name: Setup 'g++-12' as default
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
+      
+      - name: Setup 'gcc-12' as default
+        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
+
+      - name: Test cmp command
+        run: cargo test cmp_subcommand -- --test-threads 1
+
+      - name: Test stress command
+        run: cargo test stress_subcommand -- --test-threads 1
+      
+      - name: Test check command
+        run: cargo test check_subcommand -- --test-threads 1
+
+      - name: Test output command
+        run: cargo test output_subcommand -- --test-threads 1
+
+      - name: Test setup command
+        run: cargo test setup_subcommand -- --test-threads 1

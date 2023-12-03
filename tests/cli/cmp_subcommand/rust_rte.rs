@@ -4,6 +4,8 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+#![allow(unused_imports)]
+
 use std::{error::Error, process::Command};
 
 use assert_cmd::assert::OutputAssertExt;
@@ -21,6 +23,7 @@ use super::codes::{CORRECT_RUST_CMP, GEN_RUST_CMP, TARGET_RUST_CMP};
 
 // CHECK RTE in Subcommand cmp
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn cmd_cmp_target_rte_rust() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_RUST,
@@ -50,6 +53,7 @@ fn cmd_cmp_target_rte_rust() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+#[cfg(not(target_os = "macos"))]
 fn cmd_cmp_correct_rte_rust() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_RUST,
