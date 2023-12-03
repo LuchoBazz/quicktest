@@ -132,7 +132,7 @@ pub fn execute_program_response(res_status: CPStatus, now: Instant) -> StatusRes
 }
 
 pub fn has_installed_controller(program: &str, args: Vec<&str>) -> bool {
-    let mut cmd = Command::new(&program);
+    let mut cmd = Command::new(program);
     cmd.args(args);
 
     let child: Result<std::process::Child, std::io::Error> =
