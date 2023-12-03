@@ -16,23 +16,23 @@ exclude = ["docs/*", "examples/*", "*.md", "website/*"]
 include = ["**/*.rs", "Cargo.toml"]
 
 [dependencies]
-clap = "4.1.4"
-colored = "2.0.0"
+clap = "4.4"
+colored = "2.0.4"
 difference = "2.0.0"
 exitcode = "1.1.2"
 exitfailure = "0.5.1"
 failure = "0.1.8"
-glob = "0.3.0"
+glob = "0.3.1"
 pad = "0.1.6"
-process_control = "4.0.2"
-rand = "0.8.4"
-regex = "1.5.5"
-shellexpand = "3.0.0"
+process_control = "4.0.3"
+rand = "0.8.5"
+regex = "1.10.2"
+shellexpand = "3.1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_yaml = "0.9"
 separator = "0.4.1"
-structopt = "0.3.25"
+structopt = "0.3"
 yaml-rust = "0.4"
 
 [dev-dependencies]
