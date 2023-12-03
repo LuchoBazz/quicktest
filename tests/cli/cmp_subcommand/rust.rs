@@ -4,6 +4,8 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+#![allow(unused_imports)]
+
 use std::{error::Error, process::Command};
 
 use assert_cmd::assert::OutputAssertExt;
