@@ -31,7 +31,7 @@ pub fn execute_generator(
 ) -> Result<(), ExitFailure> {
     if command.get_prefix().is_empty() {
         let response_gen = generator_file_lang.execute(
-            max(command.get_timeout() as u32, GENERATOR_TIMEOUT),
+            max(command.get_timeout(), GENERATOR_TIMEOUT),
             command.get_memory_limit(),
             test_number,
         );
@@ -52,7 +52,7 @@ pub fn execute_generator(
             // TLE Generator
             show_time_limit_exceeded_generator(
                 test_number,
-                max(command.get_timeout() as u32, GENERATOR_TIMEOUT),
+                max(command.get_timeout(), GENERATOR_TIMEOUT),
             );
             return throw_time_limit_exceeded_msg("generator", "<gen-file>");
         }

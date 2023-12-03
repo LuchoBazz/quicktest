@@ -229,7 +229,7 @@ impl Language for LanguageHandler {
             }
 
             // add main command
-            let mut process_cmd = Command::new(&commands_str[0]);
+            let mut process_cmd = Command::new(commands_str[0]);
 
             // Disable stdout and stderr
             process_cmd.stderr(Stdio::piped());
@@ -283,7 +283,7 @@ impl Language for LanguageHandler {
             }
 
             // add main command
-            let mut process_cmd = Command::new(&commands_str[0]);
+            let mut process_cmd = Command::new(commands_str[0]);
 
             // add the arguments
             if commands_str.len() > 1 {

@@ -52,7 +52,7 @@ pub fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
         copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
 
         let response_target = target_file_lang.execute(
-            command.get_timeout() as u32,
+            command.get_timeout(),
             command.get_memory_limit(),
             test_number,
         );

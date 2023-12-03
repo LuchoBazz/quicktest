@@ -82,7 +82,7 @@ pub fn run(command: &StressCommand) -> Result<(), ExitFailure> {
         }
 
         let response_target = target_file_lang.execute(
-            command.get_timeout() as u32,
+            command.get_timeout(),
             command.get_memory_limit(),
             test_number,
         );
