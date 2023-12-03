@@ -36,12 +36,12 @@ pub fn file_exists(file_name: &str) -> Result<bool, io::Error> {
 
 pub fn remove_files(files: Vec<&str>) {
     for file in files {
-        if file_exists(file).is_ok() && fs::remove_file(&file).is_ok() {}
+        if file_exists(file).is_ok() && fs::remove_file(file).is_ok() {}
     }
 }
 
 pub fn remove_file(file: &str) -> bool {
-    if file_exists(file).is_ok() && fs::remove_file(&file).is_ok() {
+    if file_exists(file).is_ok() && fs::remove_file(file).is_ok() {
         return true;
     }
     false

@@ -96,7 +96,7 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         }
 
         let response_correct = correct_file_lang.execute(
-            command.get_timeout() as u32,
+            command.get_timeout(),
             command.get_memory_limit(),
             test_number,
         );
@@ -117,7 +117,7 @@ pub fn run(command: &CmpCommand) -> Result<(), ExitFailure> {
         }
 
         let response_target = target_file_lang.execute(
-            command.get_timeout() as u32,
+            command.get_timeout(),
             command.get_memory_limit(),
             test_number,
         );

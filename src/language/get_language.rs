@@ -26,7 +26,7 @@ pub fn get_executor_generator(
 ) -> Result<Box<LanguageHandler>, ExitFailure> {
     // if --prefix was set, the generator will not be executed
     if !command.get_prefix().is_empty() {
-        return Ok(Box::new(LanguageHandler::default()));
+        return Ok(Box::default());
     }
 
     // verify that the generator file exists
