@@ -1,4 +1,4 @@
 # Ref: https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/rustup-for-managing-rust-versions.html
 # rustup target list
 [toolchain]
-channel = "1.70"
+channel = "1.74"
