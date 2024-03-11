@@ -68,7 +68,7 @@ pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
             // check if the tle_breck flag is high
             if command.get_break_bad() {
                 // remove input, output and error files
-                remove_cmp_output_files().await.ok();
+                delete_temporary_files_cmp_output().await.ok();
                 return Ok(());
             }
             continue;
@@ -79,7 +79,7 @@ pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
             // check if the tle_breck flag is high
             if command.get_break_bad() {
                 // remove input, output and error files
-                remove_cmp_output_files().await.ok();
+                delete_temporary_files_cmp_output().await.ok();
                 return Ok(());
             }
             continue;
@@ -92,7 +92,7 @@ pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
             // check if the tle_breck flag is high
             if command.get_break_bad() {
                 // remove input, output and error files
-                remove_cmp_output_files().await.ok();
+                delete_temporary_files_cmp_output().await.ok();
                 return Ok(());
             }
         } else {
@@ -112,7 +112,7 @@ pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
     Ok(())
 }
 
-async fn remove_cmp_output_files() -> Result<(), tokio::io::Error> {
+async fn delete_temporary_files_cmp_output() -> Result<(), tokio::io::Error> {
     remove_files(vec![
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
