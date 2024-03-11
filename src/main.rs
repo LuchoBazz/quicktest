@@ -25,7 +25,8 @@ pub mod views;
 use exitfailure::ExitFailure;
 use structopt::StructOpt;
 
-fn main() -> Result<(), ExitFailure> {
+#[tokio::main]
+async fn main() -> Result<(), ExitFailure> {
     let opt = Opt::from_args();
 
     #[cfg(windows)]
@@ -144,14 +145,17 @@ fn main() -> Result<(), ExitFailure> {
             memory_limit,
             break_bad,
             save_out,
-        } => controllers::cmd_output::run(&OutputCommand::new(
-            target_file,
-            prefix,
-            timeout,
-            memory_limit,
-            break_bad,
-            save_out,
-        )),
+        } => {
+            controllers::cmd_output::run(&OutputCommand::new(
+                target_file,
+                prefix,
+                timeout,
+                memory_limit,
+                break_bad,
+                save_out,
+            ))
+            .await
+        }
         Opt::Setup { subcommand } => match subcommand {
             cli::opt::SetUp::Config { label, value } => {
                 controllers::cmd_setup::run(&SetupCommand::new(label, value))

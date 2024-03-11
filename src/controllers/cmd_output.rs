@@ -30,7 +30,7 @@ use crate::{
     },
 };
 
-pub fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
+pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
     // Check if the CACHE_FOLDER folder is already created
     create_folder_or_error(CACHE_FOLDER)?;
 
