@@ -101,7 +101,7 @@ pub fn format_filename_test_case(folder: &str, prefix: &str, number: u32) -> Str
 
 pub fn save_test_case(file_name: &str, from_path: &str) {
     // create test_cases folder
-    if create_folder_or_error(TEST_CASES_FOLDER).is_ok() {}
+    let _ = create_folder_or_error(TEST_CASES_FOLDER).is_ok();
     // Example: test_cases/testcase_tle_1.txt
     //let file_name: &str = &format!( "{}/{}_{}.txt", TEST_CASES_FOLDER, PREFIX_TLE_FILES, tle_count)[..];
     if write_file(file_name, fs::read_to_string(from_path).unwrap().as_bytes()).is_ok() {}
@@ -270,7 +270,7 @@ pub fn load_test_cases_from_status(
 pub fn configuration_commands(cmd: &[&str]) -> bool {
     assert!(!cmd.is_empty());
     if cmd[0] == "cp" {
-        if !Path::new(cmd[2]).exists() && File::create(cmd[2]).is_ok() {}
+        let _ = !Path::new(cmd[2]).exists() && File::create(cmd[2]).is_ok();
         return fs::copy(cmd[1], cmd[2]).is_ok();
     } else if cmd[0] == "mkdir" {
         return Path::new(cmd[1]).exists() || fs::create_dir(cmd[1]).is_ok();
