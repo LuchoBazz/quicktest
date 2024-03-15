@@ -14,7 +14,7 @@ async fn remove_file_async(file: &str) -> Result<(), io::Error> {
     }
 }
 
-pub async fn remove_files(files: Vec<&str>) -> Result<(), io::Error> {
+pub async fn remove_files_async(files: Vec<&str>) -> Result<(), io::Error> {
     let mut futures = Vec::new();
     for file in files {
         futures.push(remove_file_async(file));

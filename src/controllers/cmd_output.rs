@@ -16,7 +16,7 @@ use crate::{
     },
     error::handle_error::throw_compiler_error_msg,
     file_handler::{
-        async_file::remove_files,
+        async_file::remove_files_async,
         file::{
             copy_file, create_folder_or_error, get_filename_output, load_testcases_from_prefix,
             save_test_case_output,
@@ -113,7 +113,7 @@ pub async fn run(command: &OutputCommand) -> Result<(), ExitFailure> {
 }
 
 async fn delete_temporary_files_cmp_output() -> Result<(), tokio::io::Error> {
-    remove_files(vec![
+    remove_files_async(vec![
         QTEST_INPUT_FILE,
         QTEST_OUTPUT_FILE,
         QTEST_ERROR_FILE,
