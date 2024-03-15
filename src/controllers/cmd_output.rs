@@ -164,7 +164,7 @@ impl OutputController {
         (self.test_number as usize) < self.cases_len
     }
 
-    fn increment_test_count(&mut self) -> () {
+    fn increment_test_count(&mut self) {
         self.test_number += 1;
     }
 
