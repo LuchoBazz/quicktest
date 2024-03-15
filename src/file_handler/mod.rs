@@ -4,5 +4,6 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
+pub mod async_file;
 pub mod file;
 pub mod path;
