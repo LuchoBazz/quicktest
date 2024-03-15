@@ -146,7 +146,7 @@ async fn main() -> Result<(), ExitFailure> {
             break_bad,
             save_out,
         } => {
-            controllers::cmd_output::run(&OutputCommand::new(
+            controllers::cmd_output::OutputController::new(&OutputCommand::new(
                 target_file,
                 prefix,
                 timeout,
@@ -154,6 +154,7 @@ async fn main() -> Result<(), ExitFailure> {
                 break_bad,
                 save_out,
             ))
+            .run()
             .await
         }
         Opt::Setup { subcommand } => match subcommand {
