@@ -65,29 +65,14 @@ impl OutputController {
                 self.command.get_memory_limit(),
                 self.test_number,
             );
-            let time_target: Duration = response_target.time;
-            let mills_target = time_target.as_millis();
 
             if is_runtime_error(&response_target.status) {
-                show_runtime_error(self.test_number, mills_target as u32);
-
-                // check if the tle_breck flag is high
-                if self.command.get_break_bad() {
-                    // remove input, output and error files
-                    self.delete_temporary_files_cmp_output().await.ok();
-                    return Ok(());
-                }
+                self.runtime_error_handler(&response_target).await?;
                 continue;
             } else if is_compiled_error(&response_target.status) {
                 return throw_compiler_error_msg("target", "<target-file>");
             } else if is_memory_limit_exceeded(&response_target.status) {
-                show_memory_limit_exceeded_error(self.test_number, mills_target as u32);
-                // check if the tle_breck flag is high
-                if self.command.get_break_bad() {
-                    // remove input, output and error files
-                    self.delete_temporary_files_cmp_output().await.ok();
-                    return Ok(());
-                }
+                self.memory_limit_exceeded_handler(&response_target).await?;
                 continue;
             }
 
@@ -182,6 +167,37 @@ impl OutputController {
     fn is_target_time_limit_exceeded(&self, response_target: &StatusResponse) -> bool {
         response_target.time >= Duration::from_millis(self.command.get_timeout() as u64)
             || is_time_limit_exceeded(&response_target.status)
+    }
+
+    async fn runtime_error_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        let mills_target = response_target.time.as_millis();
+        show_runtime_error(self.test_number, mills_target as u32);
+
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmp_output().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    async fn memory_limit_exceeded_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        let mills_target = response_target.time.as_millis();
+        show_memory_limit_exceeded_error(self.test_number, mills_target as u32);
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmp_output().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
     }
 
     async fn delete_temporary_files_cmp_output(&mut self) -> Result<(), tokio::io::Error> {
