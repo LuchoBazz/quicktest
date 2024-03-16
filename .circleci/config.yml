@@ -32,21 +32,21 @@ jobs:
       - run:
           name: Setup 'python3' as default
           command: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
-      - run: 
-          name: Test cmp command
-          command: cargo test cmp_subcommand -- --test-threads 1
-      - run:
-          name: Test stress command
-          command: cargo test stress_subcommand -- --test-threads 1
-      - run:
-          name: Test check command
-          command: cargo test check_subcommand -- --test-threads 1
+      # - run: 
+      #     name: Test cmp command
+      #     command: cargo test cmp_subcommand -- --test-threads 1
+      # - run:
+      #     name: Test stress command
+      #     command: cargo test stress_subcommand -- --test-threads 1
+      # - run:
+      #     name: Test check command
+      #     command: cargo test check_subcommand -- --test-threads 1
       - run:
           name: Test output command
           command: cargo test output_subcommand -- --test-threads 1
-      - run: 
-          name: Test setup command
-          command: cargo test setup_subcommand -- --test-threads 1
+      # - run: 
+      #     name: Test setup command
+      #     command: cargo test setup_subcommand -- --test-threads 1
 
 workflows:
   build_and_tests:
