@@ -30,6 +30,9 @@ use crate::{
 pub struct OutputController {
     command: OutputCommand,
     target_file_lang: Option<LanguageHandler>,
+    cases: VecDeque<PathBuf>,
+    test_number: u32,
+    cases_len: usize,
 }
 
 impl OutputController {
@@ -37,38 +40,36 @@ impl OutputController {
         OutputController {
             command,
             target_file_lang: None,
+            cases: VecDeque::new(),
+            test_number: 0,
+            cases_len: 0,
         }
     }
 
-    #[allow(dead_code)]
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
         self.create_initial_files()?;
         self.initialize_variables()?;
+        self.load_testcases()?;
 
-        let mut cases: VecDeque<PathBuf> = VecDeque::new();
-        load_testcases_from_prefix(&mut cases, &self.command.get_prefix()[..])?;
+        self.cases_len = self.cases.len();
 
-        let mut test_number: u32 = 0;
-
-        let cases_len: usize = cases.len();
-
-        while (test_number as usize) < cases_len {
-            test_number += 1;
+        while self.are_tests_pending() {
+            self.increment_test_count();
 
             // Load test case in stdin
-            let case = cases.pop_front().unwrap();
+            let case = self.cases.pop_front().unwrap();
             copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
 
             let response_target = self.get_target_lang_handler().execute(
                 self.command.get_timeout(),
                 self.command.get_memory_limit(),
-                test_number,
+                self.test_number,
             );
             let time_target: Duration = response_target.time;
             let mills_target = time_target.as_millis();
 
             if is_runtime_error(&response_target.status) {
-                show_runtime_error(test_number, mills_target as u32);
+                show_runtime_error(self.test_number, mills_target as u32);
 
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
@@ -80,7 +81,7 @@ impl OutputController {
             } else if is_compiled_error(&response_target.status) {
                 return throw_compiler_error_msg("target", "<target-file>");
             } else if is_memory_limit_exceeded(&response_target.status) {
-                show_memory_limit_exceeded_error(test_number, mills_target as u32);
+                show_memory_limit_exceeded_error(self.test_number, mills_target as u32);
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
                     // remove input, output and error files
@@ -93,7 +94,7 @@ impl OutputController {
             if time_target >= Duration::from_millis(self.command.get_timeout() as u64)
                 || is_time_limit_exceeded(&response_target.status)
             {
-                show_time_limit_exceeded(test_number, self.command.get_timeout());
+                show_time_limit_exceeded(self.test_number, self.command.get_timeout());
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
                     // remove input, output and error files
@@ -110,7 +111,7 @@ impl OutputController {
                     // save testcase
                     save_test_case_output(file_name, QTEST_OUTPUT_FILE);
                 }
-                show_ran_successfully(test_number, mills_target as u32);
+                show_ran_successfully(self.test_number, mills_target as u32);
             }
         }
 
@@ -132,6 +133,19 @@ impl OutputController {
 
     fn get_target_lang_handler(&self) -> LanguageHandler {
         self.target_file_lang.clone().unwrap()
+    }
+
+    fn load_testcases(&mut self) -> Result<(), ExitFailure> {
+        load_testcases_from_prefix(&mut self.cases, &self.command.get_prefix()[..])?;
+        Ok(())
+    }
+
+    fn are_tests_pending(&self) -> bool {
+        (self.test_number as usize) < self.cases_len
+    }
+
+    fn increment_test_count(&mut self) {
+        self.test_number += 1;
     }
 
     async fn delete_temporary_files_cmp_output(&mut self) -> Result<(), tokio::io::Error> {
