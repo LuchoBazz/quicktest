@@ -29,20 +29,21 @@ use crate::{
 
 pub struct OutputController {
     command: OutputCommand,
+    target_file_lang: Option<LanguageHandler>,
 }
 
 impl OutputController {
     pub fn new(command: OutputCommand) -> OutputController {
-        OutputController { command }
+        OutputController {
+            command,
+            target_file_lang: None,
+        }
     }
 
     #[allow(dead_code)]
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
-        // Check if the CACHE_FOLDER folder is already created
-        create_folder_or_error(CACHE_FOLDER)?;
-
-        // Get the language depending on the extension of the target_file
-        let target_file_lang: LanguageHandler = *get_executor_target(&self.command)?;
+        self.create_initial_files()?;
+        self.initialize_variables()?;
 
         let mut cases: VecDeque<PathBuf> = VecDeque::new();
         load_testcases_from_prefix(&mut cases, &self.command.get_prefix()[..])?;
@@ -58,7 +59,7 @@ impl OutputController {
             let case = cases.pop_front().unwrap();
             copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
 
-            let response_target = target_file_lang.execute(
+            let response_target = self.get_target_lang_handler().execute(
                 self.command.get_timeout(),
                 self.command.get_memory_limit(),
                 test_number,
@@ -72,7 +73,7 @@ impl OutputController {
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
                     // remove input, output and error files
-                    delete_temporary_files_cmp_output().await.ok();
+                    self.delete_temporary_files_cmp_output().await.ok();
                     return Ok(());
                 }
                 continue;
@@ -83,7 +84,7 @@ impl OutputController {
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
                     // remove input, output and error files
-                    delete_temporary_files_cmp_output().await.ok();
+                    self.delete_temporary_files_cmp_output().await.ok();
                     return Ok(());
                 }
                 continue;
@@ -96,7 +97,7 @@ impl OutputController {
                 // check if the tle_breck flag is high
                 if self.command.get_break_bad() {
                     // remove input, output and error files
-                    delete_temporary_files_cmp_output().await.ok();
+                    self.delete_temporary_files_cmp_output().await.ok();
                     return Ok(());
                 }
             } else {
@@ -115,15 +116,32 @@ impl OutputController {
 
         Ok(())
     }
-}
 
-async fn delete_temporary_files_cmp_output() -> Result<(), tokio::io::Error> {
-    remove_files_async(vec![
-        QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE,
-        QTEST_ERROR_FILE,
-        TARGET_BINARY_FILE,
-        GEN_BINARY_FILE,
-    ])
-    .await
+    fn create_initial_files(&self) -> Result<(), ExitFailure> {
+        // Check if the CACHE_FOLDER folder is already created
+        create_folder_or_error(CACHE_FOLDER)?;
+        Ok(())
+    }
+
+    fn initialize_variables(&mut self) -> Result<(), ExitFailure> {
+        // Get the language depending on the extension of the target_file
+        let target_file_lang: LanguageHandler = *get_executor_target(&self.command)?;
+        self.target_file_lang = Some(target_file_lang);
+        Ok(())
+    }
+
+    fn get_target_lang_handler(&self) -> LanguageHandler {
+        self.target_file_lang.clone().unwrap()
+    }
+
+    async fn delete_temporary_files_cmp_output(&mut self) -> Result<(), tokio::io::Error> {
+        remove_files_async(vec![
+            QTEST_INPUT_FILE,
+            QTEST_OUTPUT_FILE,
+            QTEST_ERROR_FILE,
+            TARGET_BINARY_FILE,
+            GEN_BINARY_FILE,
+        ])
+        .await
+    }
 }
