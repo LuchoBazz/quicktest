@@ -83,6 +83,8 @@ impl OutputController {
             }
         }
 
+        self.delete_temporary_files_cmp_output().await?;
+
         Ok(())
     }
 
