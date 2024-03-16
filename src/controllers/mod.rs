@@ -10,3 +10,5 @@ pub mod cmd_example;
 pub mod cmd_output;
 pub mod cmd_setup;
 pub mod cmd_stress;
+
+pub mod cmd_output_async;
