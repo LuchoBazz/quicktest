@@ -19,7 +19,7 @@ use crate::{
     language::{get_language::get_executor_target, language_handler::LanguageHandler},
     runner::types::{
         is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded,
-        Language,
+        Language, StatusResponse,
     },
     views::style::{
         show_memory_limit_exceeded_error, show_ran_successfully, show_runtime_error,
@@ -33,6 +33,7 @@ pub struct OutputController {
     cases: VecDeque<PathBuf>,
     test_number: u32,
     cases_len: usize,
+    current_case: Option<PathBuf>,
 }
 
 impl OutputController {
@@ -43,6 +44,7 @@ impl OutputController {
             cases: VecDeque::new(),
             test_number: 0,
             cases_len: 0,
+            current_case: None,
         }
     }
 
@@ -55,10 +57,8 @@ impl OutputController {
 
         while self.are_tests_pending() {
             self.increment_test_count();
-
-            // Load test case in stdin
-            let case = self.cases.pop_front().unwrap();
-            copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
+            self.update_next_case();
+            self.load_case_file()?;
 
             let response_target = self.get_target_lang_handler().execute(
                 self.command.get_timeout(),
@@ -91,27 +91,10 @@ impl OutputController {
                 continue;
             }
 
-            if time_target >= Duration::from_millis(self.command.get_timeout() as u64)
-                || is_time_limit_exceeded(&response_target.status)
-            {
-                show_time_limit_exceeded(self.test_number, self.command.get_timeout());
-                // check if the tle_breck flag is high
-                if self.command.get_break_bad() {
-                    // remove input, output and error files
-                    self.delete_temporary_files_cmp_output().await.ok();
-                    return Ok(());
-                }
+            if self.is_target_time_limit_exceeded(&response_target) {
+                self.time_limit_exceeded_handler().await?;
             } else {
-                if self.command.get_save_out() {
-                    let file_name = &get_filename_output(
-                        &self.command.get_prefix()[..],
-                        case.file_name().unwrap().to_str().unwrap(),
-                    )[..];
-
-                    // save testcase
-                    save_test_case_output(file_name, QTEST_OUTPUT_FILE);
-                }
-                show_ran_successfully(self.test_number, mills_target as u32);
+                self.ran_successfully_handler(&response_target)?;
             }
         }
 
@@ -146,6 +129,59 @@ impl OutputController {
 
     fn increment_test_count(&mut self) {
         self.test_number += 1;
+    }
+
+    fn update_next_case(&mut self) {
+        self.current_case = self.cases.pop_front();
+    }
+
+    fn get_current_case(&self) -> PathBuf {
+        self.current_case.clone().unwrap()
+    }
+
+    fn load_case_file(&self) -> Result<(), ExitFailure> {
+        // Load test case in stdin
+        copy_file(self.get_current_case().to_str().unwrap(), QTEST_INPUT_FILE)?;
+        Ok(())
+    }
+
+    async fn time_limit_exceeded_handler(&mut self) -> Result<(), ExitFailure> {
+        show_time_limit_exceeded(self.test_number, self.command.get_timeout());
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmp_output().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    fn ran_successfully_handler(
+        &self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        let mills_target = response_target.time.as_millis();
+
+        if self.command.get_save_out() {
+            let file_name = &get_filename_output(
+                &self.command.get_prefix()[..],
+                self.get_current_case()
+                    .file_name()
+                    .unwrap()
+                    .to_str()
+                    .unwrap(),
+            )[..];
+
+            // save testcase
+            save_test_case_output(file_name, QTEST_OUTPUT_FILE);
+        }
+        show_ran_successfully(self.test_number, mills_target as u32);
+        Ok(())
+    }
+
+    fn is_target_time_limit_exceeded(&self, response_target: &StatusResponse) -> bool {
+        response_target.time >= Duration::from_millis(self.command.get_timeout() as u64)
+            || is_time_limit_exceeded(&response_target.status)
     }
 
     async fn delete_temporary_files_cmp_output(&mut self) -> Result<(), tokio::io::Error> {
