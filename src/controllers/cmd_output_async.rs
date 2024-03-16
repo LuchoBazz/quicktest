@@ -18,8 +18,8 @@ use crate::{
     },
     language::{get_language::get_executor_target, language_handler::LanguageHandler},
     runner::types::{
-        is_compiled_error, is_memory_limit_exceeded, is_runtime_error, is_time_limit_exceeded,
-        Language, StatusResponse,
+        is_accepted, is_compiled_error, is_memory_limit_exceeded, is_runtime_error,
+        is_time_limit_exceeded, Language, StatusResponse,
     },
     views::style::{
         show_memory_limit_exceeded_error, show_ran_successfully, show_runtime_error,
@@ -78,7 +78,7 @@ impl OutputController {
 
             if self.is_target_time_limit_exceeded(&response_target) {
                 self.time_limit_exceeded_handler().await?;
-            } else {
+            } else if is_accepted(&response_target.status) {
                 self.ran_successfully_handler(&response_target)?;
             }
         }
