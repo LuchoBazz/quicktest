@@ -1,9 +1,10 @@
-name: MacOS Workflow
+name: Ubuntu Workflow
 
 on:
   push:
     branches:
       - main
+      - housekeeping
   pull_request:
     branches:
       - '**'
@@ -11,8 +12,8 @@ on:
 
 jobs:
   build_and_test:
-    name: MacOS Build and Run test
-    runs-on: macos-latest
+    name: Ubuntu Build and Run test
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,12 +26,19 @@ jobs:
           override: true
           rustc: 1.74
           cargo: 1.74
-          target: x86_64-apple-darwin
           components: rustfmt, clippy
+
+      - name: Updated list of packages
+        run: sudo apt update
+
+      - name: Install Java
+        run:  sudo apt install default-jdk
       
-      - name: Install C/C++
-        run: brew install gcc
-      
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18'
+
       - name: Cargo
         uses: actions-rs/cargo@v1
         with:
