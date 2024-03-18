@@ -53,8 +53,6 @@ impl OutputController {
         self.initialize_variables()?;
         self.load_testcases()?;
 
-        self.cases_len = self.cases.len();
-
         while self.are_tests_pending() {
             self.increment_test_count();
             self.update_next_case();
@@ -68,15 +66,11 @@ impl OutputController {
 
             if is_runtime_error(&response_target.status) {
                 self.runtime_error_handler(&response_target).await?;
-                continue;
             } else if is_compiled_error(&response_target.status) {
                 return throw_compiler_error_msg("target", "<target-file>");
             } else if is_memory_limit_exceeded(&response_target.status) {
                 self.memory_limit_exceeded_handler(&response_target).await?;
-                continue;
-            }
-
-            if self.is_target_time_limit_exceeded(&response_target) {
+            } else if self.is_target_time_limit_exceeded(&response_target) {
                 self.time_limit_exceeded_handler().await?;
             } else if is_accepted(&response_target.status) {
                 self.ran_successfully_handler(&response_target)?;
@@ -107,6 +101,7 @@ impl OutputController {
 
     fn load_testcases(&mut self) -> Result<(), ExitFailure> {
         load_testcases_from_prefix(&mut self.cases, &self.command.get_prefix()[..])?;
+        self.cases_len = self.cases.len();
         Ok(())
     }
 
