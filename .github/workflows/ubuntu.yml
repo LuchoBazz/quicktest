@@ -13,20 +13,20 @@ on:
 jobs:
   build_and_test:
     name: Build and Run test
-    runs-on: ubuntu-latest
+    runs-on: cimg/rust:1.74
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          rustc: 1.74
-          cargo: 1.74
-          components: rustfmt, clippy
+      # - name: Install stable toolchain
+      #   uses: actions-rs/toolchain@v1
+      #   with:
+      #     profile: minimal
+      #     toolchain: stable
+      #     override: true
+      #     rustc: 1.74
+      #     cargo: 1.74
+      #     components: rustfmt, clippy
 
       - name: Updated list of packages
         run: sudo apt update
