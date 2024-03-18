@@ -56,5 +56,6 @@ workflows:
             branches:
               only:
                 - main
+                - housekeeping
                 - /^feature.*$/
                 - /^QT.*$/
