@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - housekeeping
   pull_request:
     branches:
       - '**'
@@ -12,7 +13,7 @@ on:
 jobs:
   build_and_test:
     name: Build and Run test
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -25,12 +26,25 @@ jobs:
           override: true
           rustc: 1.74
           cargo: 1.74
-          target: x86_64-apple-darwin
           components: rustfmt, clippy
-      
+
+      - name: Updated list of packages
+        run: sudo apt update
+
+      - name: Install Java
+        run:  sudo apt install default-jdk
+
+      - name: Install Go
+        run: |
+            wget https://dl.google.com/go/go1.18.linux-amd64.tar.gz
+            sudo tar -xvf go1.18.linux-amd64.tar.gz
+            sudo mv go /usr/local
+            sudo ln -s /usr/local/go/bin/* /usr/bin
+            rm go1.18.linux-amd64.tar.gz
+
       - name: Install C/C++
         run: brew install gcc
-      
+
       - name: Cargo
         uses: actions-rs/cargo@v1
         with:
