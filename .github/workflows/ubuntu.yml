@@ -1,4 +1,4 @@
-name: MacOS Workflow
+name: Ubuntu Workflow
 
 on:
   push:
