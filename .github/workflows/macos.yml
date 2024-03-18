@@ -11,7 +11,7 @@ on:
 
 jobs:
   build_and_test:
-    name: Build and Run test
+    name: MacOS Build and Run test
     runs-on: macos-latest
     steps:
       - name: Checkout
