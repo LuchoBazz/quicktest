@@ -66,7 +66,7 @@ impl SetupController {
     //     quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
     //     quicktest setup config --label="Language::Cpp.STANDARD" --value="-std=c++17"
     //     quicktest setup config --label="Language::Python.PROGRAM" --value="python"
-    pub fn show_help_setup(&self) -> &'static str {
+    pub fn show_help_setup() -> &'static str {
         let text = read_language_configuration();
 
         let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
