@@ -20,17 +20,19 @@ impl SetupController {
     }
 
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
-        let text = read_language_configuration();
-        let label: &str = &self.command.label[..];
-        let value: &str = &self.command.value[..];
+        let text: &str = &read_language_configuration()[..];
 
-        let mut langs: serde_json::Result<Languages> = serde_json::from_str(&text[..]);
+        let (label, value): (&str, &str) = (&self.command.label[..], &self.command.value[..]);
 
         let cmds: Vec<&str> = label.split('.').collect();
 
-        if cmds.len() != 2 {
+        let has_correct_structure: bool = cmds.len() == 2;
+
+        if !has_correct_structure {
             return throw_setup_label_is_not_correct_msg(label);
         }
+
+        let mut langs: serde_json::Result<Languages> = serde_json::from_str(text);
 
         if let Ok(lg) = &mut langs {
             let lang_label = cmds[0];
