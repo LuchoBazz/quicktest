@@ -3,6 +3,11 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.2 / 2024.04.01
+
+- housekeeping(controllers) add object-oriented structure to the output command #126
+
+
 ### 1.0.1 / 2022.11.12
 
 - fix: issue about .memory_limit method not found on Mac OS' was fixed #92
