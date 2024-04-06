@@ -20,40 +20,62 @@ impl SetupController {
     }
 
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
-        let text: &str = &read_language_configuration()[..];
-
-        let (label, value): (&str, &str) = (&self.command.label[..], &self.command.value[..]);
-
-        let cmds: Vec<&str> = label.split('.').collect();
-
-        let has_correct_structure: bool = cmds.len() == 2;
-
-        if !has_correct_structure {
+        if !self.has_correct_structure() {
+            let label = self.get_label();
             return throw_setup_label_is_not_correct_msg(label);
         }
 
-        let mut langs: serde_json::Result<Languages> = serde_json::from_str(text);
+        let langs = self.get_languages();
 
-        if let Ok(lg) = &mut langs {
-            let lang_label = cmds[0];
-            let label = cmds[1];
-
-            for idx in 0..lg.languages.len() {
-                if lg.languages[idx].id == lang_label && lg.languages[idx].env.contains_key(label) {
-                    lg.languages[idx]
-                        .env
-                        .insert(label.to_string(), value.to_string());
-                    write_language_configuration(&langs.unwrap())?;
-
-                    show_argument_was_updated_success(lang_label, label, value);
-
-                    return Ok(());
-                }
-            }
+        if langs.is_err() {
+            let label = self.get_label();
+            return throw_setup_label_is_not_correct_msg(label);
         }
 
-        throw_setup_label_is_not_correct_msg(label)
+        let mut lg = langs.unwrap();
+
+        let cmds = self.get_commands();
+        let language_key = cmds[0];
+        let label = cmds[1];
+        let value = self.get_value();
+
+        for lang in &mut lg.languages {
+            if lang.id == language_key && lang.env.contains_key(label) {
+                lang.env.insert(label.to_string(), value.to_string());
+                write_language_configuration(&lg)?;
+
+                show_argument_was_updated_success(language_key, label, value);
+
+                return Ok(());
+            }
+        }
+        Ok(())
     }
+
+    fn get_languages(&self) -> serde_json::Result<Languages> {
+        let text: &str = &read_language_configuration()[..];
+        serde_json::from_str(text)
+    }
+
+    fn get_commands(&self) -> Vec<&str> {
+        let cmds: Vec<&str> = self.command.label.split('.').collect();
+        cmds
+    }
+
+    fn get_label(&self) -> &str {
+        &self.command.label[..]
+    }
+
+    fn get_value(&self) -> &str {
+        &self.command.value[..]
+    }
+
+    fn has_correct_structure(&self) -> bool {
+        let cmds = self.get_commands();
+        cmds.len() == 2
+    }
+
+    // fn is_language_by_label()
 
     pub async fn reset() -> Result<(), ExitFailure> {
         let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
