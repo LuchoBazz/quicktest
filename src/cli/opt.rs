@@ -8,13 +8,13 @@ use std::path::PathBuf;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
-use crate::controllers::cmd_setup::show_help_setup;
+use crate::controllers::cmd_setup_async::SetupController;
 
 /// Setup subcommand
 #[derive(StructOpt, Debug)]
 pub enum SetUp {
     /// Subcommand that allows to change settings
-    #[structopt(after_help = show_help_setup())]
+    #[structopt(after_help = SetupController::show_help_setup())]
     Config {
         /// Label of the configuration to update
         #[structopt(short = "l", long = "label")]
