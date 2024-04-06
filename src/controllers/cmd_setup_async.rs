@@ -20,29 +20,23 @@ impl SetupController {
     }
 
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
-        if !self.has_correct_structure() {
-            let label = self.get_label();
-            return throw_setup_label_is_not_correct_msg(label);
+        let languages_wrapper = self.get_languages();
+
+        if !self.has_correct_structure() || languages_wrapper.is_err() {
+            return self.throw_setup_label_error();
         }
 
-        let langs = self.get_languages();
-
-        if langs.is_err() {
-            let label = self.get_label();
-            return throw_setup_label_is_not_correct_msg(label);
-        }
-
-        let mut lg = langs.unwrap();
+        let mut languages = languages_wrapper.unwrap();
 
         let cmds = self.get_commands();
         let language_key = cmds[0];
         let label = cmds[1];
         let value = self.get_value();
 
-        for lang in &mut lg.languages {
+        for lang in &mut languages.languages {
             if lang.id == language_key && lang.env.contains_key(label) {
                 lang.env.insert(label.to_string(), value.to_string());
-                write_language_configuration(&lg)?;
+                write_language_configuration(&languages)?;
 
                 show_argument_was_updated_success(language_key, label, value);
 
@@ -75,7 +69,10 @@ impl SetupController {
         cmds.len() == 2
     }
 
-    // fn is_language_by_label()
+    fn throw_setup_label_error(&self) -> Result<(), ExitFailure> {
+        let label = self.get_label();
+        throw_setup_label_is_not_correct_msg(label)
+    }
 
     pub async fn reset() -> Result<(), ExitFailure> {
         let config_file = &shellexpand::tilde(LANGUAGE_CONFIG_FILE).to_string()[..];
