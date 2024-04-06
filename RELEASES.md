@@ -3,6 +3,12 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+
+### 1.0.3 / 2024.04.06
+
+- housekeeping(controllers) add object-oriented structure to the setup command (#128) 
+
+
 ### 1.0.2 / 2024.04.01
 
 - housekeeping(controllers) add object-oriented structure to the output command #126
