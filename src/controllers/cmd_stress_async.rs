@@ -4,12 +4,14 @@ use exitfailure::ExitFailure;
 
 use crate::{
     cli::model::{stress_command::StressCommand, traits::AdapterCommand},
-    constants::CACHE_FOLDER,
-    file_handler::file::{create_folder_or_error, load_testcases_from_prefix},
+    constants::{CACHE_FOLDER, QTEST_INPUT_FILE},
+    file_handler::file::{copy_file, create_folder_or_error, load_testcases_from_prefix},
+    generator::generator::execute_generator,
     language::{
         get_language::{get_executor_generator, get_executor_target},
         language_handler::LanguageHandler,
     },
+    runner::types::Language,
 };
 
 pub struct StressController {
@@ -43,6 +45,28 @@ impl StressController {
         while self.are_tests_pending() {
             self.increment_test_count();
             self.update_next_case();
+            self.load_case_file()?;
+
+            let mut can_continue = false;
+
+            // run generator or load testcases using prefix
+            execute_generator(
+                &self.get_generator_lang_handler(),
+                &self.command,
+                &mut self.cases,
+                self.test_number,
+                &mut can_continue,
+            )?;
+
+            if !can_continue {
+                break;
+            }
+
+            let _response_target = self.get_target_lang_handler().execute(
+                self.command.get_timeout(),
+                self.command.get_memory_limit(),
+                self.test_number,
+            );
         }
 
         Ok(())
@@ -81,5 +105,23 @@ impl StressController {
 
     fn update_next_case(&mut self) {
         self.current_case = self.cases.pop_front();
+    }
+
+    fn get_current_case(&self) -> PathBuf {
+        self.current_case.clone().unwrap()
+    }
+
+    fn load_case_file(&self) -> Result<(), ExitFailure> {
+        // Load test case in stdin
+        copy_file(self.get_current_case().to_str().unwrap(), QTEST_INPUT_FILE)?;
+        Ok(())
+    }
+
+    fn get_target_lang_handler(&self) -> LanguageHandler {
+        self.target_file_lang.clone().unwrap()
+    }
+
+    fn get_generator_lang_handler(&self) -> LanguageHandler {
+        self.generator_file_lang.clone().unwrap()
     }
 }
