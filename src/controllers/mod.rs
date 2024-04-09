@@ -11,3 +11,4 @@ pub mod cmd_stress;
 
 pub mod cmd_output_async;
 pub mod cmd_setup_async;
+pub mod cmd_stress_async;
