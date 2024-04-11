@@ -147,14 +147,8 @@ impl StressController {
         }
 
         self.show_summary();
-
         self.delete_temporary_files_cmd_stress().await?;
-
-        // check if the target file has errors
-        if self.state_counter.has_stress_command_error() {
-            // exit status as error in software
-            process::exit(exitcode::SOFTWARE);
-        }
+        self.check_errors_and_exit();
 
         Ok(())
     }
@@ -331,6 +325,13 @@ impl StressController {
         let mills_target = response_target.time.as_millis();
         show_accepted(self.test_number, mills_target as u32);
         Ok(())
+    }
+
+    fn check_errors_and_exit(&self) {
+        // check if the target file has errors
+        if self.state_counter.has_stress_command_error() {
+            process::exit(exitcode::SOFTWARE);
+        }
     }
 
     fn show_summary(&self) {
