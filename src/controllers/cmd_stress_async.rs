@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, path::PathBuf, time::Duration};
+use std::{collections::VecDeque, path::PathBuf, process, time::Duration};
 
 use exitfailure::ExitFailure;
 
@@ -27,7 +27,7 @@ use crate::{
         is_time_limit_exceeded, Language, StatusResponse,
     },
     views::style::{
-        show_accepted, show_memory_limit_exceeded_error, show_runtime_error,
+        show_accepted, show_memory_limit_exceeded_error, show_runtime_error, show_stats,
         show_time_limit_exceeded,
     },
 };
@@ -63,6 +63,10 @@ impl StateCounter {
 
     pub fn increase_mle(&mut self) {
         self.mle += 1;
+    }
+
+    pub fn has_stress_command_error(&self) -> bool {
+        (self.tle + self.rte + self.mle) > 0
     }
 }
 
@@ -140,6 +144,16 @@ impl StressController {
             } else if is_accepted(&response_target.status) {
                 self.accepted_handler(&response_target)?;
             }
+        }
+
+        self.show_summary();
+
+        self.delete_temporary_files_cmd_stress().await?;
+
+        // check if the target file has errors
+        if self.state_counter.has_stress_command_error() {
+            // exit status as error in software
+            process::exit(exitcode::SOFTWARE);
         }
 
         Ok(())
@@ -312,6 +326,16 @@ impl StressController {
         let mills_target = response_target.time.as_millis();
         show_accepted(self.test_number, mills_target as u32);
         Ok(())
+    }
+
+    fn show_summary(&self) {
+        show_stats(
+            self.state_counter.ac,
+            0,
+            self.state_counter.tle,
+            self.state_counter.rte,
+            self.state_counter.mle,
+        );
     }
 
     async fn delete_temporary_files_cmd_stress(&mut self) -> Result<(), tokio::io::Error> {
