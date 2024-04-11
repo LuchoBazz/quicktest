@@ -71,17 +71,13 @@ impl StressController {
             self.update_next_case();
             self.load_case_file()?;
 
-            let generator_execution_success = self.execute_generator_hander()?;
+            let generator_execution_success: bool = self.execute_generator_handler()?;
 
             if !generator_execution_success {
                 break;
             }
 
-            let response_target = self.get_target_lang_handler().execute(
-                self.command.get_timeout(),
-                self.command.get_memory_limit(),
-                self.test_number,
-            );
+            let response_target: StatusResponse = self.execute_target_handler()?;
 
             if is_runtime_error(&response_target.status) {
                 self.runtime_error_handler(&response_target).await?;
@@ -162,7 +158,7 @@ impl StressController {
         Ok(())
     }
 
-    fn execute_generator_hander(&mut self) -> Result<bool, ExitFailure> {
+    fn execute_generator_handler(&mut self) -> Result<bool, ExitFailure> {
         let mut can_continue = false;
 
         // run generator or load testcases using prefix
@@ -175,6 +171,15 @@ impl StressController {
         )?;
 
         Ok(can_continue)
+    }
+
+    fn execute_target_handler(&self) -> Result<StatusResponse, ExitFailure> {
+        let response_target = self.get_target_lang_handler().execute(
+            self.command.get_timeout(),
+            self.command.get_memory_limit(),
+            self.test_number,
+        );
+        Ok(response_target)
     }
 
     fn get_target_lang_handler(&self) -> LanguageHandler {
