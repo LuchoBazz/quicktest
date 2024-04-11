@@ -9,7 +9,7 @@ use crate::{
         PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
         TARGET_BINARY_FILE, TEST_CASES_FOLDER,
     },
-    error::handle_error::throw_compiler_error_msg,
+    error::handle_error::{throw_break_found_msg, throw_compiler_error_msg},
     file_handler::{
         async_file::remove_files_async,
         file::{
@@ -259,7 +259,11 @@ impl StressController {
         if self.command.get_break_bad() {
             // remove input, output and error files
             self.delete_temporary_files_cmd_stress().await.ok();
-            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+            return throw_break_found_msg(
+                "Memory Limit Exceeded",
+                "MLE",
+                self.command.get_test_cases(),
+            );
         }
         Ok(())
     }
