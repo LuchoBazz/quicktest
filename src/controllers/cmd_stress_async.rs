@@ -192,7 +192,7 @@ impl StressController {
     }
 
     fn are_tests_pending(&self) -> bool {
-        (self.test_number as usize) < self.cases_len
+        self.command.has_test_cases(self.test_number)
     }
 
     fn increment_test_count(&mut self) {
