@@ -192,7 +192,14 @@ impl StressController {
     }
 
     fn are_tests_pending(&self) -> bool {
-        self.command.has_test_cases(self.test_number)
+        // self.command.has_test_cases(self.test_number)
+        println!(
+            "{} {} {}",
+            self.test_number,
+            self.command.get_test_cases(),
+            self.command.can_run_cases()
+        );
+        self.test_number < self.command.get_test_cases() || self.command.can_run_cases()
     }
 
     fn increment_test_count(&mut self) {
@@ -203,13 +210,11 @@ impl StressController {
         self.current_case = self.cases.pop_front();
     }
 
-    fn get_current_case(&self) -> PathBuf {
-        self.current_case.clone().unwrap()
-    }
-
     fn load_case_file(&self) -> Result<(), ExitFailure> {
         // Load test case in stdin
-        copy_file(self.get_current_case().to_str().unwrap(), QTEST_INPUT_FILE)?;
+        if let Some(case) = self.current_case.clone() {
+            copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
+        }
         Ok(())
     }
 
