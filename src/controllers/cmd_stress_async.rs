@@ -1,18 +1,76 @@
-use std::{collections::VecDeque, path::PathBuf};
+use std::{collections::VecDeque, path::PathBuf, time::Duration};
 
 use exitfailure::ExitFailure;
 
 use crate::{
     cli::model::{stress_command::StressCommand, traits::AdapterCommand},
-    constants::{CACHE_FOLDER, QTEST_INPUT_FILE},
-    file_handler::file::{copy_file, create_folder_or_error, load_testcases_from_prefix},
+    constants::{
+        CACHE_FOLDER, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_MLE_FILES, PREFIX_RTE_FILES,
+        PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE,
+        TARGET_BINARY_FILE, TEST_CASES_FOLDER,
+    },
+    error::handle_error::throw_compiler_error_msg,
+    file_handler::{
+        async_file::remove_files_async,
+        file::{
+            copy_file, create_folder_or_error, format_filename_test_case,
+            load_testcases_from_prefix, save_test_case,
+        },
+    },
     generator::generator::execute_generator,
     language::{
         get_language::{get_executor_generator, get_executor_target},
         language_handler::LanguageHandler,
     },
-    runner::types::Language,
+    runner::types::{
+        is_accepted, is_compiled_error, is_memory_limit_exceeded, is_runtime_error,
+        is_time_limit_exceeded, Language, StatusResponse,
+    },
+    views::style::{
+        show_accepted, show_memory_limit_exceeded_error, show_runtime_error,
+        show_time_limit_exceeded,
+    },
 };
+
+pub struct StateCounter {
+    tle: u32,
+    rte: u32,
+    ac: u32,
+    mle: u32,
+}
+
+impl StateCounter {
+    pub fn new() -> Self {
+        Self {
+            tle: 0,
+            rte: 0,
+            ac: 0,
+            mle: 0,
+        }
+    }
+
+    pub fn increase_tle(&mut self) {
+        self.tle += 1;
+    }
+
+    pub fn increase_rte(&mut self) {
+        self.rte += 1;
+    }
+
+    pub fn increase_ac(&mut self) {
+        self.ac += 1;
+    }
+
+    pub fn increase_mle(&mut self) {
+        self.mle += 1;
+    }
+}
+
+impl Default for StateCounter {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 pub struct StressController {
     command: StressCommand,
@@ -22,6 +80,7 @@ pub struct StressController {
     test_number: u32,
     cases_len: usize,
     current_case: Option<PathBuf>,
+    state_counter: StateCounter,
 }
 
 impl StressController {
@@ -34,6 +93,7 @@ impl StressController {
             test_number: 0,
             cases_len: 0,
             current_case: None,
+            state_counter: StateCounter::default(),
         }
     }
 
@@ -62,11 +122,23 @@ impl StressController {
                 break;
             }
 
-            let _response_target = self.get_target_lang_handler().execute(
+            let response_target = self.get_target_lang_handler().execute(
                 self.command.get_timeout(),
                 self.command.get_memory_limit(),
                 self.test_number,
             );
+
+            if is_runtime_error(&response_target.status) {
+                self.runtime_error_handler(&response_target).await?;
+            } else if is_compiled_error(&response_target.status) {
+                return throw_compiler_error_msg("target", "<target-file>");
+            } else if is_memory_limit_exceeded(&response_target.status) {
+                self.memory_limit_exceeded_handler(&response_target).await?;
+            } else if self.is_target_time_limit_exceeded(&response_target) {
+                self.time_limit_exceeded_handler().await?;
+            } else if is_accepted(&response_target.status) {
+                self.accepted_handler(&response_target)?;
+            }
         }
 
         Ok(())
@@ -123,5 +195,119 @@ impl StressController {
 
     fn get_generator_lang_handler(&self) -> LanguageHandler {
         self.generator_file_lang.clone().unwrap()
+    }
+
+    async fn runtime_error_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        self.state_counter.increase_rte();
+        let mills_target = response_target.time.as_millis();
+        show_runtime_error(self.test_number, mills_target as u32);
+
+        // Save the input of the test case that gave status tle
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Example: test_cases/testcase_rte_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_RTE_FILES,
+                self.state_counter.rte,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmd_stress().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    async fn memory_limit_exceeded_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        self.state_counter.increase_mle();
+        let mills_target = response_target.time.as_millis();
+        show_memory_limit_exceeded_error(self.test_number, mills_target as u32);
+
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Example: test_cases/testcase_mle_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_MLE_FILES,
+                self.state_counter.mle,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmd_stress().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    fn is_target_time_limit_exceeded(&self, response_target: &StatusResponse) -> bool {
+        response_target.time >= Duration::from_millis(self.command.get_timeout() as u64)
+            || is_time_limit_exceeded(&response_target.status)
+    }
+
+    async fn time_limit_exceeded_handler(&mut self) -> Result<(), ExitFailure> {
+        self.state_counter.increase_tle();
+        show_time_limit_exceeded(self.test_number, self.command.get_timeout());
+
+        // Save the input of the test case that gave status tle
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Example: test_cases/testcase_tle_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_TLE_FILES,
+                self.state_counter.tle,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmd_stress().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    fn accepted_handler(&mut self, response_target: &StatusResponse) -> Result<(), ExitFailure> {
+        self.state_counter.increase_ac();
+        if self.command.get_save_all() {
+            // Example: test_cases/testcase_ac_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_AC_FILES,
+                self.state_counter.ac,
+            )[..];
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+        let mills_target = response_target.time.as_millis();
+        show_accepted(self.test_number, mills_target as u32);
+        Ok(())
+    }
+
+    async fn delete_temporary_files_cmd_stress(&mut self) -> Result<(), tokio::io::Error> {
+        remove_files_async(vec![
+            QTEST_INPUT_FILE,
+            QTEST_OUTPUT_FILE,
+            QTEST_ERROR_FILE,
+            TARGET_BINARY_FILE,
+            GEN_BINARY_FILE,
+        ])
+        .await
     }
 }
