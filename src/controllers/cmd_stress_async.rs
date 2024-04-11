@@ -14,7 +14,7 @@ use crate::{
         async_file::remove_files_async,
         file::{
             copy_file, create_folder_or_error, format_filename_test_case,
-            load_testcases_from_prefix, save_test_case,
+            load_test_cases_from_status, load_testcases_from_prefix, remove_folder, save_test_case,
         },
     },
     generator::generator::execute_generator,
@@ -98,6 +98,7 @@ impl StressController {
     }
 
     pub async fn run(&mut self) -> Result<(), ExitFailure> {
+        self.delete_test_case_folder();
         self.create_initial_files()?;
         self.initialize_variables()?;
         self.load_testcases()?;
@@ -160,7 +161,16 @@ impl StressController {
         Ok(())
     }
 
+    fn delete_test_case_folder(&self) {
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Remove all previous test cases
+            remove_folder(TEST_CASES_FOLDER);
+        }
+    }
+
     fn load_testcases(&mut self) -> Result<(), ExitFailure> {
+        load_test_cases_from_status(&self.command, &mut self.cases)?;
+
         let prefix = &self.command.get_prefix()[..];
         load_testcases_from_prefix(&mut self.cases, prefix)?;
         self.cases_len = self.cases.len();
