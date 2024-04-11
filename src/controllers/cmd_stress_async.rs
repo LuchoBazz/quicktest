@@ -307,7 +307,7 @@ impl StressController {
     fn show_summary(&self) {
         show_stats(
             self.state_counter.ac,
-            0,
+            self.state_counter.wa,
             self.state_counter.tle,
             self.state_counter.rte,
             self.state_counter.mle,
