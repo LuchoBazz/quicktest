@@ -132,13 +132,6 @@ impl StressController {
     }
 
     fn are_tests_pending(&self) -> bool {
-        // self.command.has_test_cases(self.test_number)
-        println!(
-            "{} {} {}",
-            self.test_number,
-            self.command.get_test_cases(),
-            self.command.can_run_cases()
-        );
         self.test_number < self.command.get_test_cases() || self.command.can_run_cases()
     }
 
