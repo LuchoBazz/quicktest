@@ -22,59 +22,18 @@ use crate::{
         get_language::{get_executor_generator, get_executor_target},
         language_handler::LanguageHandler,
     },
-    runner::types::{
-        is_accepted, is_compiled_error, is_memory_limit_exceeded, is_runtime_error,
-        is_time_limit_exceeded, Language, StatusResponse,
+    runner::{
+        state_counter::StateCounter,
+        types::{
+            is_accepted, is_compiled_error, is_memory_limit_exceeded, is_runtime_error,
+            is_time_limit_exceeded, Language, StatusResponse,
+        },
     },
     views::style::{
         show_accepted, show_memory_limit_exceeded_error, show_runtime_error, show_stats,
         show_time_limit_exceeded,
     },
 };
-
-pub struct StateCounter {
-    tle: u32,
-    rte: u32,
-    ac: u32,
-    mle: u32,
-}
-
-impl StateCounter {
-    pub fn new() -> Self {
-        Self {
-            tle: 0,
-            rte: 0,
-            ac: 0,
-            mle: 0,
-        }
-    }
-
-    pub fn increase_tle(&mut self) {
-        self.tle += 1;
-    }
-
-    pub fn increase_rte(&mut self) {
-        self.rte += 1;
-    }
-
-    pub fn increase_ac(&mut self) {
-        self.ac += 1;
-    }
-
-    pub fn increase_mle(&mut self) {
-        self.mle += 1;
-    }
-
-    pub fn has_stress_command_error(&self) -> bool {
-        (self.tle + self.rte + self.mle) > 0
-    }
-}
-
-impl Default for StateCounter {
-    fn default() -> Self {
-        Self::new()
-    }
-}
 
 pub struct StressController {
     command: StressCommand,
@@ -112,18 +71,9 @@ impl StressController {
             self.update_next_case();
             self.load_case_file()?;
 
-            let mut can_continue = false;
+            let generator_execution_success = self.execute_generator_hander()?;
 
-            // run generator or load testcases using prefix
-            execute_generator(
-                &self.get_generator_lang_handler(),
-                &self.command,
-                &mut self.cases,
-                self.test_number,
-                &mut can_continue,
-            )?;
-
-            if !can_continue {
+            if !generator_execution_success {
                 break;
             }
 
@@ -210,6 +160,21 @@ impl StressController {
             copy_file(case.to_str().unwrap(), QTEST_INPUT_FILE)?;
         }
         Ok(())
+    }
+
+    fn execute_generator_hander(&mut self) -> Result<bool, ExitFailure> {
+        let mut can_continue = false;
+
+        // run generator or load testcases using prefix
+        execute_generator(
+            &self.get_generator_lang_handler(),
+            &self.command,
+            &mut self.cases,
+            self.test_number,
+            &mut can_continue,
+        )?;
+
+        Ok(can_continue)
     }
 
     fn get_target_lang_handler(&self) -> LanguageHandler {

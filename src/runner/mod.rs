@@ -5,4 +5,5 @@
  */
 
 pub mod cmd;
+pub mod state_counter;
 pub mod types;
