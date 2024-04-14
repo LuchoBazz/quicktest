@@ -4,19 +4,30 @@ use exitfailure::ExitFailure;
 
 use crate::{
     cli::model::{check_command::CheckCommand, traits::AdapterCommand},
-    constants::{CACHE_FOLDER, QTEST_INPUT_FILE, TEST_CASES_FOLDER},
-    file_handler::file::{
-        copy_file, create_folder_or_error, load_test_cases_from_status, load_testcases_from_prefix,
-        remove_folder,
+    constants::{
+        CACHE_FOLDER, CHECKER_BINARY_FILE, GEN_BINARY_FILE, PREFIX_RTE_FILES, QTEST_CHECKER_FILE,
+        QTEST_ERROR_FILE, QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE,
+        TEST_CASES_FOLDER,
+    },
+    file_handler::{
+        async_file::remove_files_async,
+        file::{
+            copy_file, create_folder_or_error, format_filename_test_case,
+            load_test_cases_from_status, load_testcases_from_prefix, remove_folder, save_test_case,
+        },
     },
     generator::generator::execute_generator,
     language::{
         get_language::{get_executor_checker, get_executor_generator, get_executor_target},
         language_handler::LanguageHandler,
     },
-    runner::types::{
-        is_compiled_error, is_memory_limit_exceeded, is_runtime_error, Language, StatusResponse,
+    runner::{
+        state_counter::StateCounter,
+        types::{
+            is_compiled_error, is_memory_limit_exceeded, is_runtime_error, Language, StatusResponse,
+        },
     },
+    views::style::show_runtime_error,
 };
 
 pub struct CheckController {
@@ -28,7 +39,7 @@ pub struct CheckController {
     test_number: u32,
     cases_len: usize,
     current_case: Option<PathBuf>,
-    // state_counter: StateCounter,
+    state_counter: StateCounter,
 }
 
 impl CheckController {
@@ -42,7 +53,7 @@ impl CheckController {
             test_number: 0,
             cases_len: 0,
             current_case: None,
-            // state_counter: StateCounter::default(),
+            state_counter: StateCounter::default(),
         }
     }
 
@@ -66,7 +77,7 @@ impl CheckController {
             let response_target: StatusResponse = self.execute_target_handler()?;
 
             if is_runtime_error(&response_target.status) {
-                // self.runtime_error_handler(&response_target).await?;
+                self.runtime_error_handler(&response_target).await?;
             } else if is_compiled_error(&response_target.status) {
                 // return throw_compiler_error_msg("target", "<target-file>");
             } else if is_memory_limit_exceeded(&response_target.status) {
@@ -165,5 +176,47 @@ impl CheckController {
             self.test_number,
         );
         Ok(response_target)
+    }
+
+    async fn runtime_error_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        self.state_counter.increase_rte();
+        let mills_target = response_target.time.as_millis();
+        show_runtime_error(self.test_number, mills_target as u32);
+
+        // Save the input of the test case that gave status tle
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Example: test_cases/testcase_rte_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_RTE_FILES,
+                self.state_counter.rte,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+
+        // check if the tle_breck flag is high
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmd_checker().await.ok();
+            return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    async fn delete_temporary_files_cmd_checker(&mut self) -> Result<(), tokio::io::Error> {
+        remove_files_async(vec![
+            QTEST_INPUT_FILE,
+            QTEST_OUTPUT_FILE,
+            QTEST_ERROR_FILE,
+            QTEST_CHECKER_FILE,
+            TARGET_BINARY_FILE,
+            GEN_BINARY_FILE,
+            CHECKER_BINARY_FILE,
+        ])
+        .await
     }
 }
