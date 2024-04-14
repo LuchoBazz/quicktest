@@ -104,7 +104,7 @@ pub fn throw_break_found_msg(
         "Wrong answer {} on test {}",
         status_name, test_number
     )));
-    Ok(error.context(format!("{} status - break flag on", status))?)
+    Err(error.context(format!("{} status - break flag on", status))?)
 }
 
 #[allow(dead_code)]
