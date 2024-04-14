@@ -49,23 +49,27 @@ async fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => controllers::cmd_stress::run(&StressCommand::new(
-            target_file,
-            gen_file,
-            test_cases,
-            timeout,
-            memory_limit,
-            prefix,
-            break_bad,
-            save_bad,
-            save_all,
-            run_all,
-            run_ac,
-            run_wa,
-            run_tle,
-            run_rte,
-            run_mle,
-        )),
+        } => {
+            controllers::cmd_stress_async::StressController::new(StressCommand::new(
+                target_file,
+                gen_file,
+                test_cases,
+                timeout,
+                memory_limit,
+                prefix,
+                break_bad,
+                save_bad,
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte,
+                run_mle,
+            ))
+            .run()
+            .await
+        }
         Opt::Cmp {
             target_file,
             correct_file,
