@@ -4,7 +4,6 @@
  *  License: MIT (See the LICENSE file in the repository root directory)
  */
 
-pub mod cmd_check;
 pub mod cmd_cmp;
 pub mod cmd_example;
 
