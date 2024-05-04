@@ -30,7 +30,7 @@ jobs:
           components: rustfmt, clippy
       
       - name: Install C/C++
-        run: brew install gcc
+        run: brew install gcc@12
       
       - name: Cargo
         uses: actions-rs/cargo@v1
