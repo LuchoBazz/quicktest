@@ -1,4 +1,4 @@
-use std::{collections::VecDeque, path::PathBuf, time::Duration};
+use std::{collections::VecDeque, path::PathBuf, process, time::Duration};
 
 use exitfailure::ExitFailure;
 
@@ -37,9 +37,7 @@ use crate::{
     views::{
         diff_line_by_line::diff_line_by_line,
         style::{
-            show_accepted, show_input_test_case, show_memory_limit_exceeded_error,
-            show_runtime_error, show_time_limit_exceeded, show_time_limit_exceeded_correct,
-            show_wrong_answer,
+            show_accepted, show_input_test_case, show_memory_limit_exceeded_error, show_runtime_error, show_stats, show_time_limit_exceeded, show_time_limit_exceeded_correct, show_wrong_answer
         },
     },
 };
@@ -131,6 +129,10 @@ impl CmpController {
                 self.wrong_answer_handler(&response_target).await?;
             }
         }
+
+        self.show_summary();
+        self.delete_temporary_files_cmd_cmp().await?;
+        self.check_errors_and_exit();
 
         Ok(())
     }
@@ -379,6 +381,23 @@ impl CmpController {
             return throw_break_found_msg("Wrong Answer", "WA", self.command.get_test_cases());
         }
         Ok(())
+    }
+
+    fn show_summary(&self) {
+        show_stats(
+            self.state_counter.ac,
+            self.state_counter.wa,
+            self.state_counter.tle,
+            self.state_counter.rte,
+            self.state_counter.mle,
+        );
+    }
+
+    fn check_errors_and_exit(&self) {
+        // check if the target file has errors
+        if self.state_counter.has_cmp_command_error() {
+            process::exit(exitcode::SOFTWARE);
+        }
     }
 
     async fn delete_temporary_files_cmd_cmp(&mut self) -> Result<(), tokio::io::Error> {
