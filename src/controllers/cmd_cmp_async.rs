@@ -56,7 +56,6 @@ pub struct CmpController {
     cases_len: usize,
     current_case: Option<PathBuf>,
     state_counter: StateCounter,
-    root: String,
     file_in: String,
     file_out: String,
     file_expected: String,
@@ -79,7 +78,6 @@ impl CmpController {
             file_in: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
             file_out: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
             file_expected: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
-            root,
         }
     }
 
