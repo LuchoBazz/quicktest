@@ -3,6 +3,10 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.4 / 2024.05.04
+
+- housekeeping(controller): Add object-oriented structure + async to the stress command (#131)
+
 
 ### 1.0.3 / 2024.04.06
 
