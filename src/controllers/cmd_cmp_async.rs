@@ -5,9 +5,9 @@ use exitfailure::ExitFailure;
 use crate::{
     cli::model::{cmp_command::CmpCommand, traits::AdapterCommand},
     constants::{
-        CACHE_FOLDER, CORRECT_BINARY_FILE, GEN_BINARY_FILE, PREFIX_MLE_FILES, PREFIX_RTE_FILES,
-        PREFIX_TLE_FILES, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE, QTEST_INPUT_FILE,
-        QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
+        CACHE_FOLDER, CORRECT_BINARY_FILE, GEN_BINARY_FILE, PREFIX_AC_FILES, PREFIX_MLE_FILES,
+        PREFIX_RTE_FILES, PREFIX_TLE_FILES, PREFIX_WA_FILES, QTEST_ERROR_FILE, QTEST_EXPECTED_FILE,
+        QTEST_INPUT_FILE, QTEST_OUTPUT_FILE, TARGET_BINARY_FILE, TEST_CASES_FOLDER,
     },
     error::handle_error::{
         throw_break_found_msg, throw_compiler_error_msg, throw_memory_limit_exceeded_msg,
@@ -17,7 +17,8 @@ use crate::{
         async_file::remove_files_async,
         file::{
             copy_file, create_folder_or_error, format_filename_test_case,
-            load_test_cases_from_status, load_testcases_from_prefix, remove_folder, save_test_case,
+            load_test_cases_from_status, load_testcases_from_prefix, read_file, remove_folder,
+            save_test_case,
         },
         path::get_root_path,
     },
@@ -33,11 +34,17 @@ use crate::{
             Language, StatusResponse,
         },
     },
-    views::style::{
-        show_memory_limit_exceeded_error, show_runtime_error, show_time_limit_exceeded,
-        show_time_limit_exceeded_correct,
+    views::{
+        diff_line_by_line::diff_line_by_line,
+        style::{
+            show_accepted, show_input_test_case, show_memory_limit_exceeded_error,
+            show_runtime_error, show_time_limit_exceeded, show_time_limit_exceeded_correct,
+            show_wrong_answer,
+        },
     },
 };
+
+use super::cmd_cmp::compare_file;
 
 pub struct CmpController {
     command: CmpCommand,
@@ -72,7 +79,7 @@ impl CmpController {
         self.initialize_variables()?;
         self.load_testcases()?;
 
-        let _root = &get_root_path()[..];
+        let root = &get_root_path()[..];
 
         while self.are_tests_pending() {
             self.increment_test_count();
@@ -108,6 +115,17 @@ impl CmpController {
                 self.memory_limit_exceeded_handler(&response_target).await?;
             } else if self.is_status_time_limit_exceeded(&response_target) {
                 self.time_limit_exceeded_handler().await?;
+            }
+
+            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
+            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
+
+            if compare_file(&file_out, &file_expected, true) {
+                // is OK
+                self.accepted_handler(&response_target)?;
+            } else {
+                // WA found
+                self.wrong_answer_handler(&response_target).await?;
             }
         }
 
@@ -231,7 +249,7 @@ impl CmpController {
         // Save the input of the test case that gave status tle
         if self.command.get_save_bad() || self.command.get_save_all() {
             // Example: test_cases/testcase_rte_01.txt
-            let file_name: &str = &&format_filename_test_case(
+            let file_name: &str = &format_filename_test_case(
                 TEST_CASES_FOLDER,
                 PREFIX_RTE_FILES,
                 self.state_counter.rte,
@@ -302,6 +320,67 @@ impl CmpController {
             // remove input, output and error files
             self.delete_temporary_files_cmd_cmp().await.ok();
             return Err(failure::err_msg("").into()); // TODO: Errors Refactor
+        }
+        Ok(())
+    }
+
+    fn accepted_handler(&mut self, response_target: &StatusResponse) -> Result<(), ExitFailure> {
+        self.state_counter.increase_ac();
+        let mills_target = response_target.time.as_millis();
+        show_accepted(self.test_number, mills_target as u32);
+
+        if self.command.get_save_all() {
+            // Example: test_cases/testcase_ac_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_AC_FILES,
+                self.state_counter.ac,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+        Ok(())
+    }
+
+    async fn wrong_answer_handler(
+        &mut self,
+        response_target: &StatusResponse,
+    ) -> Result<(), ExitFailure> {
+        self.state_counter.increase_wa();
+        let mills_target = response_target.time.as_millis();
+        show_wrong_answer(self.test_number, mills_target as u32);
+
+        if self.command.get_diff() {
+            // TODO: add root, file_in, file_out and file_expected as an attribute of class
+            let root = &get_root_path()[..];
+
+            let file_in = format!("{}/{}", root, QTEST_INPUT_FILE);
+            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
+            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
+
+            let mut tout = std::io::stdout();
+            let input = read_file(&file_in[..]).unwrap();
+            let expected = read_file(&file_expected[..]).unwrap();
+            let output = read_file(&file_out[..]).unwrap();
+            show_input_test_case(&mut tout, &input[..]);
+            diff_line_by_line(&mut tout, &expected[..], &output[..]);
+        }
+
+        if self.command.get_save_bad() || self.command.get_save_all() {
+            // Example: test_cases/testcase_wa_01.txt
+            let file_name: &str = &format_filename_test_case(
+                TEST_CASES_FOLDER,
+                PREFIX_WA_FILES,
+                self.state_counter.wa,
+            )[..];
+            // save testcase
+            save_test_case(file_name, QTEST_INPUT_FILE);
+        }
+
+        if self.command.get_break_bad() {
+            // remove input, output and error files
+            self.delete_temporary_files_cmd_cmp().await.ok();
+            return throw_break_found_msg("Wrong Answer", "WA", self.command.get_test_cases());
         }
         Ok(())
     }
