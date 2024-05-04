@@ -56,10 +56,16 @@ pub struct CmpController {
     cases_len: usize,
     current_case: Option<PathBuf>,
     state_counter: StateCounter,
+    root: String,
+    file_in: String,
+    file_out: String,
+    file_expected: String,
 }
 
 impl CmpController {
     pub fn new(command: CmpCommand) -> CmpController {
+        let root = get_root_path();
+
         CmpController {
             command,
             target_file_lang: None,
@@ -70,6 +76,10 @@ impl CmpController {
             cases_len: 0,
             current_case: None,
             state_counter: StateCounter::default(),
+            file_in: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
+            file_out: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
+            file_expected: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
+            root,
         }
     }
 
@@ -78,8 +88,6 @@ impl CmpController {
         self.create_initial_files()?;
         self.initialize_variables()?;
         self.load_testcases()?;
-
-        let root = &get_root_path()[..];
 
         while self.are_tests_pending() {
             self.increment_test_count();
@@ -117,10 +125,7 @@ impl CmpController {
                 self.time_limit_exceeded_handler().await?;
             }
 
-            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
-            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
-
-            if compare_file(&file_out, &file_expected, true) {
+            if compare_file(&self.file_out, &self.file_expected, true) {
                 // is OK
                 self.accepted_handler(&response_target)?;
             } else {
@@ -351,17 +356,10 @@ impl CmpController {
         show_wrong_answer(self.test_number, mills_target as u32);
 
         if self.command.get_diff() {
-            // TODO: add root, file_in, file_out and file_expected as an attribute of class
-            let root = &get_root_path()[..];
-
-            let file_in = format!("{}/{}", root, QTEST_INPUT_FILE);
-            let file_out = format!("{}/{}", root, QTEST_OUTPUT_FILE);
-            let file_expected = format!("{}/{}", root, QTEST_EXPECTED_FILE);
-
             let mut tout = std::io::stdout();
-            let input = read_file(&file_in[..]).unwrap();
-            let expected = read_file(&file_expected[..]).unwrap();
-            let output = read_file(&file_out[..]).unwrap();
+            let input = read_file(&self.file_in[..]).unwrap();
+            let expected = read_file(&self.file_expected[..]).unwrap();
+            let output = read_file(&self.file_out[..]).unwrap();
             show_input_test_case(&mut tout, &input[..]);
             diff_line_by_line(&mut tout, &expected[..], &output[..]);
         }
