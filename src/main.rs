@@ -88,25 +88,29 @@ async fn main() -> Result<(), ExitFailure> {
             run_rte,
             run_mle,
             diff,
-        } => controllers::cmd_cmp::run(&CmpCommand::new(
-            target_file,
-            correct_file,
-            gen_file,
-            timeout,
-            memory_limit,
-            test_cases,
-            prefix,
-            break_bad,
-            save_bad,
-            save_all,
-            run_all,
-            run_ac,
-            run_wa,
-            run_tle,
-            run_rte,
-            run_mle,
-            diff,
-        )),
+        } => {
+            controllers::cmd_cmp_async::CmpController::new(CmpCommand::new(
+                target_file,
+                correct_file,
+                gen_file,
+                timeout,
+                memory_limit,
+                test_cases,
+                prefix,
+                break_bad,
+                save_bad,
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte,
+                run_mle,
+                diff,
+            ))
+            .run()
+            .await
+        }
         Opt::Check {
             target_file,
             checker_file,
