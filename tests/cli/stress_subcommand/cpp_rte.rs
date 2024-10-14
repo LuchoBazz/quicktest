@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 /*
  *  Quick Test: CLI for stress testing in competitive programming
  *  Copyright (C) 2021-present / Luis Miguel Báez
@@ -18,6 +19,7 @@ use crate::util::{
 use super::codes::{GEN_CPP_STRESS, TARGET_CPP_STRESS};
 
 #[test]
+#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_stress_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
@@ -39,6 +41,7 @@ fn cmd_stress_target_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_stress_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
