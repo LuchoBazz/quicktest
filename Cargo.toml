@@ -6,7 +6,7 @@ license = "MIT"
 description = "Command Line Interface (CLI) for stress testing for competitive programming contest"
 readme = "README.md"
 repository = "https://github.com/LuchoBazz/quicktest"
-keywords = ["cli", "command-line-interface", "stress-testing", "cp-tool", "testing", "testing-tool"]
+keywords = ["cli", "stress-testing", "cp-tool", "testing", "testing-tool"]
 categories = ["command-line-interface"]
 edition = "2018"
 
