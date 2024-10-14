@@ -131,6 +131,8 @@ int main() {
 
 pub const GEN_C_CMP: &str = r#"
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 int main(int argc, char *argv[]) {
     int seed;
     sscanf(argv[1], "%d", &seed);
