@@ -30,7 +30,10 @@ jobs:
           components: rustfmt, clippy
       
       - name: Install C/C++
-        run: brew install gcc@12
+        run: brew install gcc
+      
+      - name: Install Go
+        run: brew install go
       
       - name: Cargo
         uses: actions-rs/cargo@v1
@@ -40,8 +43,8 @@ jobs:
 
       - name: C/C++ version
         run: |
-          gcc-12 --version
-          g++-12 --version
+          gcc --version
+          g++ --version
 
       - name: Build
         run: cargo build
@@ -52,11 +55,11 @@ jobs:
       - name: Setup 'python3' as default
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       
-      - name: Setup 'g++-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
+      - name: Setup 'g++' as default
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
       
-      - name: Setup 'gcc-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
+      - name: Setup 'gcc' as default
+        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc"
 
       - name: Test cmp command
         run: cargo test cmp_subcommand -- --test-threads 1
@@ -71,4 +74,4 @@ jobs:
         run: cargo test output_subcommand -- --test-threads 1
 
       - name: Test setup command
-        run: cargo test setup_subcommand -- --test-threads 1
+        run: cargo test setup_subcommand -- --test-threads 1  
