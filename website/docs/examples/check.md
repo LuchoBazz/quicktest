@@ -43,7 +43,7 @@ qt check -t main.cpp -c checker.cpp -g gen.cpp --tc 50 --tout 1000 --save-bad
 
 ## Run Saved Test Cases
 
-you can use the following flags
+you can use the following flags:
 
 * `--run-ac`     Run test cases Accepted
 * `--run-all`    Run all test cases
