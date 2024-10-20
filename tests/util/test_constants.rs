@@ -102,9 +102,11 @@ int main() {
 
 pub const RTE_C: &str = r#"
 #include <stdio.h>
+#include <assert.h>
 int main() {
     // Generate divide by zero error
     for(int i = 0; i < 10; ++i) {
+        assert(i != 0);
         int y = 10 / i;
     }
     return 0;
