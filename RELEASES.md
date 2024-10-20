@@ -3,6 +3,12 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+
+### 1.0.6 / 2024.10.20
+
+- housekeeping(controller): Add object-oriented structure + async to the cmp command (#134)
+- chore: Add Pull Request Template File (`.github/pull_request_template.md`) (#142)
+
 ### 1.0.5 / 2024.10.20
 
 - housekeeping(controller): Add object-oriented structure + async to the check command (#132)
