@@ -1,4 +1,4 @@
-name: MacOS Workflow
+name: Windows Workflow
 
 on:
   push:
@@ -11,8 +11,8 @@ on:
 
 jobs:
   build_and_test:
-    name: MacOS Build and Run test
-    runs-on: macos-latest
+    name: Windows Build and Run Test
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -23,18 +23,18 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          rustc: 1.74
-          cargo: 1.74
-          target: x86_64-apple-darwin
+          rustc: 1.79
+          cargo: 1.79
           components: rustfmt, clippy
-      
-      - name: Install GCC
-        run: |
-          brew install gcc@12
-      
+
+      - name: Install Java
+        run: choco install jdk11
+
       - name: Install Go
-        run: brew install go
-      
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18'
+
       - name: Cargo
         uses: actions-rs/cargo@v1
         with:
@@ -43,10 +43,10 @@ jobs:
 
       - name: C/C++ version
         run: |
-          gcc-12 --version
-          g++-12 --version
+          gcc --version
+          g++ --version
 
-      - name: Build Rust code
+      - name: Build
         run: cargo build
 
       - name: Clippy
@@ -55,11 +55,11 @@ jobs:
       - name: Setup 'python3' as default
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       
-      - name: Setup 'g++-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
+      - name: Setup 'g++' as default
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
       
-      - name: Setup 'gcc-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
+      - name: Setup 'gcc' as default
+        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc"
 
       - name: Test cmp command
         run: cargo test cmp_subcommand -- --test-threads 1
