@@ -1,4 +1,4 @@
-name: Ubuntu Workflow
+name: Windows Workflow
 
 on:
   push:
@@ -11,11 +11,14 @@ on:
 
 jobs:
   build_and_test:
-    name: Ubuntu Build and Run test
-    runs-on: ubuntu-latest
+    name: Windows Build and Run Test
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Update Chocolatey
+        run: choco upgrade chocolatey
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -27,12 +30,9 @@ jobs:
           cargo: 1.79
           components: rustfmt, clippy
 
-      - name: Updated list of packages
-        run: sudo apt update
+      - name: Install JDK 11
+        run: choco install openjdk11 -y
 
-      - name: Install Java
-        run:  sudo apt install default-jdk
-      
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -46,8 +46,8 @@ jobs:
 
       - name: C/C++ version
         run: |
-          gcc-12 --version
-          g++-12 --version
+          gcc --version
+          g++ --version
 
       - name: Build
         run: cargo build
@@ -58,11 +58,11 @@ jobs:
       - name: Setup 'python3' as default
         run: ./target/debug/quicktest setup config --label="Language::Python.PROGRAM" --value="python3"
       
-      - name: Setup 'g++-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++-12"
+      - name: Setup 'g++' as default
+        run: ./target/debug/quicktest setup config --label="Language::Cpp.PROGRAM" --value="g++"
       
-      - name: Setup 'gcc-12' as default
-        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc-12"
+      - name: Setup 'gcc' as default
+        run: ./target/debug/quicktest setup config --label="Language::C.PROGRAM" --value="gcc"
 
       - name: Test cmp command
         run: cargo test cmp_subcommand -- --test-threads 1

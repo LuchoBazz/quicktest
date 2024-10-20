@@ -103,10 +103,8 @@ int main() {
 pub const RTE_C: &str = r#"
 #include <stdio.h>
 int main() {
-    // Generate divide by zero error
-    for(int i = 0; i < 10; ++i) {
-        int y = 10 / i;
-    }
+    int *ptr = NULL;
+    *ptr = 42;
     return 0;
 }
 "#;
