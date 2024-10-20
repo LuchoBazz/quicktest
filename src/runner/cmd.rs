@@ -107,14 +107,10 @@ pub fn execute_program(
             writer.write_all(&output.stderr).unwrap();
         }
     } else {
-        println!("{:?}", output.status.code());
-        println!("{:#?}", output.status.code());
-
         #[cfg(unix)]
-        if let Some(6) = output.status.signal() {
-            res_status = CPStatus::MLE;
-        } else {
-            res_status = CPStatus::RTE;
+        match output.status.signal() {
+            Some(6) => res_status = CPStatus::MLE, // SIGABRT: 6
+            _ => res_status = CPStatus::RTE,
         }
 
         #[cfg(windows)]

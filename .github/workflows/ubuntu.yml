@@ -1,13 +1,13 @@
 name: Ubuntu Workflow
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - '**'
-#     types: [opened, synchronize, reopened]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+    types: [opened, synchronize, reopened]
 
 jobs:
   build_and_test:
