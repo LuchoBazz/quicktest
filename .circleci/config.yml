@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/rust:1.70
+      - image: cimg/rust:1.79
     
     working_directory: ~/quicktest_folder
 
