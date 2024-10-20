@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Update Chocolatey
+        run: choco upgrade chocolatey
+
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -27,8 +30,8 @@ jobs:
           cargo: 1.79
           components: rustfmt, clippy
 
-      - name: Install Java
-        run: choco install jdk11
+      - name: Install JDK 11
+        run: choco install jdk11 -y
 
       - name: Install Go
         uses: actions/setup-go@v2
