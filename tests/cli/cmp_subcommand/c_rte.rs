@@ -11,7 +11,7 @@ use assert_cmd::assert::OutputAssertExt;
 use predicates::prelude::predicate;
 
 use crate::util::{
-    test_command_handler::execute_command_cmp,
+    test_command_handler::execute_command_cmp_with_timeout,
     test_constants::{BINARY, CORRECT_FILE_C, FOLDER_CMP, GEN_FILE_C, RTE_C, TARGET_FILE_C},
     test_utilities::create_files_cmp,
 };
@@ -34,7 +34,14 @@ fn cmd_cmp_target_rte_c() -> Result<(), Box<dyn Error>> {
     let cases: usize = 10;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_cmp(&mut cmd, TARGET_FILE_C, CORRECT_FILE_C, GEN_FILE_C, cases);
+    execute_command_cmp_with_timeout(
+        &mut cmd,
+        TARGET_FILE_C,
+        CORRECT_FILE_C,
+        GEN_FILE_C,
+        cases,
+        3000usize,
+    );
 
     cmd.assert()
         .failure()
@@ -58,7 +65,14 @@ fn cmd_cmp_correct_rte_c() -> Result<(), Box<dyn Error>> {
     let cases: usize = 10;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_cmp(&mut cmd, TARGET_FILE_C, CORRECT_FILE_C, GEN_FILE_C, cases);
+    execute_command_cmp_with_timeout(
+        &mut cmd,
+        TARGET_FILE_C,
+        CORRECT_FILE_C,
+        GEN_FILE_C,
+        cases,
+        3000usize,
+    );
 
     cmd.assert().failure().stderr(predicate::str::contains(
         "Error: QTEST_RUNTIME_ERROR\nInfo: caused by correct file exited by Runtime Error / label <correct-file>\n",
@@ -82,7 +96,14 @@ fn cmd_cmp_gen_rte_c() -> Result<(), Box<dyn Error>> {
     let cases: usize = 10;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_cmp(&mut cmd, TARGET_FILE_C, CORRECT_FILE_C, GEN_FILE_C, cases);
+    execute_command_cmp_with_timeout(
+        &mut cmd,
+        TARGET_FILE_C,
+        CORRECT_FILE_C,
+        GEN_FILE_C,
+        cases,
+        3000usize,
+    );
 
     cmd.assert().failure().stderr(predicate::str::contains(
         "Error: QTEST_RUNTIME_ERROR\nInfo: caused by generator file exited by Runtime Error / label <gen-file>\n",
