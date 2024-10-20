@@ -128,24 +128,28 @@ async fn main() -> Result<(), ExitFailure> {
             run_tle,
             run_rte,
             run_mle,
-        } => controllers::cmd_check::run(&CheckCommand::new(
-            target_file,
-            checker_file,
-            gen_file,
-            timeout,
-            memory_limit,
-            test_cases,
-            prefix,
-            break_bad,
-            save_bad,
-            save_all,
-            run_all,
-            run_ac,
-            run_wa,
-            run_tle,
-            run_rte,
-            run_mle,
-        )),
+        } => {
+            controllers::cmd_check_async::CheckController::new(CheckCommand::new(
+                target_file,
+                checker_file,
+                gen_file,
+                timeout,
+                memory_limit,
+                test_cases,
+                prefix,
+                break_bad,
+                save_bad,
+                save_all,
+                run_all,
+                run_ac,
+                run_wa,
+                run_tle,
+                run_rte,
+                run_mle,
+            ))
+            .run()
+            .await
+        }
         Opt::Output {
             target_file,
             prefix,

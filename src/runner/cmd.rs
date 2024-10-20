@@ -52,7 +52,7 @@ pub fn execute_program(
 
         // Initialize random generator
         let mut rng = rand::thread_rng();
-        let die = Uniform::from(0..(std::i32::MAX / 2));
+        let die = Uniform::from(0..(i32::MAX / 2));
 
         // add seed and test case
         cmd.args(&[die.sample(&mut rng).to_string(), testcase.to_string()]);

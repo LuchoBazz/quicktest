@@ -40,8 +40,12 @@ impl StateCounter {
     pub fn has_stress_command_error(&self) -> bool {
         (self.tle + self.rte + self.mle) > 0
     }
-
+  
     pub fn has_cmp_command_error(&self) -> bool {
+        (self.wa + self.tle + self.rte + self.mle) > 0
+    }
+
+    pub fn has_checker_command_error(&self) -> bool {
         (self.wa + self.tle + self.rte + self.mle) > 0
     }
 }
