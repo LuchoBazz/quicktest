@@ -31,7 +31,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Install JDK 11
-        run: choco install jdk11 -y
+        run: choco install openjdk11 -y
 
       - name: Install Go
         uses: actions/setup-go@v2

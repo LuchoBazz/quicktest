@@ -107,6 +107,9 @@ pub fn execute_program(
             writer.write_all(&output.stderr).unwrap();
         }
     } else {
+        println!("{:?}", output.status.code());
+        println!("{:#?}", output.status.code());
+
         #[cfg(unix)]
         if let Some(6) = output.status.signal() {
             res_status = CPStatus::MLE;
@@ -115,10 +118,10 @@ pub fn execute_program(
         }
 
         #[cfg(windows)]
-        if let Some(3) = output.status.code() {
-            res_status = CPStatus::MLE;
-        } else {
-            res_status = CPStatus::RTE;
+        match output.status.code() {
+            Some(3221226505) | Some(3) => res_status = CPStatus::MLE, // STATUS_HEAP_CORRUPTION: 3221226505, ERROR_PATH_NOT_FOUND: 3
+            Some(_) => res_status = CPStatus::RTE,
+            None => res_status = CPStatus::RTE,
         }
     }
 

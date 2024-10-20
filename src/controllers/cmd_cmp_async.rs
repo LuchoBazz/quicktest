@@ -37,7 +37,9 @@ use crate::{
     views::{
         diff_line_by_line::diff_line_by_line,
         style::{
-            show_accepted, show_input_test_case, show_memory_limit_exceeded_error, show_runtime_error, show_stats, show_time_limit_exceeded, show_time_limit_exceeded_correct, show_wrong_answer
+            show_accepted, show_input_test_case, show_memory_limit_exceeded_error,
+            show_runtime_error, show_stats, show_time_limit_exceeded,
+            show_time_limit_exceeded_correct, show_wrong_answer,
         },
     },
 };
