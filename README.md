@@ -20,6 +20,7 @@
 - [Getting Started](#getting-started)
   - [Installation](#installation)
 - [Introduction](#introduction)
+- [Disclaimer](#disclaimer)
 - [Commands](#commands)
 - [How to Contribute](#how-to-contribute)
 - [Bug reports](#bug-reports)
@@ -33,6 +34,9 @@
 ### Installation
 
 Installation tutorial for Linux, Windows and macOS can be found [here](https://luchobazz.github.io/quicktest/docs/getting-started/installation) on the docs website
+
+### Disclaimer
+QuickTest, supports Windows and Linux. The CLI has been tested successfully on these platforms, but functionality on macOS has not yet been verified. Users on macOS are advised to proceed with caution and provide feedback on any issues encountered.
 
 ## Introduction
 
