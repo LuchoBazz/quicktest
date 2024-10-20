@@ -3,6 +3,12 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.7 / 2024.10.21
+
+- chore: add GitHub actions configuration for windows (#146)
+- chore: Update Dependency Versions (#145)
+- chore: Update Rust Version to 1.79 (#144)
+- docs: Add Disclaimer to README Regarding Platform Support (#147)
 
 ### 1.0.6 / 2024.10.20
 
