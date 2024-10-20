@@ -37,7 +37,7 @@ pub fn execute_command_cmp(
     gen_file: &str,
     cases: usize,
 ) {
-    execute_command_cmp_with_timeout(cmd, target_file, correct_file, gen_file, cases, 1500usize);
+    execute_command_cmp_with_timeout(cmd, target_file, correct_file, gen_file, cases, 1000usize);
 }
 
 pub fn execute_command_cmp_with_timeout(
