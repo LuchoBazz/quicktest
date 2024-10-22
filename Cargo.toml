@@ -1,6 +1,6 @@
 [package]
 name = "quicktest"
-version = "1.0.6"
+version = "1.0.7"
 authors = ["Luis Miguel Báez <es.luismiguelbaez@gmail.com>"]
 license = "MIT"
 description = "Command Line Interface (CLI) for stress testing for competitive programming contest"
