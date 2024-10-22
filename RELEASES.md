@@ -3,7 +3,7 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
-### 1.0.7 / 2024.10.21
+### 1.0.7 / 2024.10.22
 
 - chore: add GitHub actions configuration for windows (#146)
 - chore: Update Dependency Versions (#145)
