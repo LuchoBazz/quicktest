@@ -17,7 +17,7 @@ include = ["**/*.rs", "Cargo.toml"]
 
 [dependencies]
 clap = "4.5"
-colored = "2.1.0"
+colored = "3.0.0"
 difference = "2.0.0"
 exitcode = "1.1.2"
 exitfailure = "0.5.1"
