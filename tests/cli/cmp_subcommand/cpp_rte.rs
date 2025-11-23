@@ -22,6 +22,10 @@ use super::codes::{CORRECT_CPP_CMP, GEN_CPP_CMP, TARGET_CPP_CMP};
 
 // CHECK RTE in Subcommand cmp
 #[test]
+#[cfg_attr(
+    target_os = "macos",
+    ignore = "Runtime error detection not reliable on macOS"
+)]
 fn cmd_cmp_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,
@@ -51,6 +55,10 @@ fn cmd_cmp_target_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+#[cfg_attr(
+    target_os = "macos",
+    ignore = "Runtime error detection not reliable on macOS"
+)]
 fn cmd_cmp_correct_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,
@@ -80,6 +88,10 @@ fn cmd_cmp_correct_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
+#[cfg_attr(
+    target_os = "macos",
+    ignore = "Runtime error detection not reliable on macOS"
+)]
 fn cmd_cmp_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,

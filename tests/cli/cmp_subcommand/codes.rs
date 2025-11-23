@@ -170,7 +170,7 @@ fn main() {
         }
         write!(out, "{}", n).ok();
     }
-    out.flush();
+    out.flush().ok();
 }"#;
 
 pub const CORRECT_RUST_CMP: &str = r#"
@@ -199,7 +199,7 @@ fn main() {
         }
         write!(out, "{}", n).ok();
     }
-    out.flush();
+    out.flush().ok();
 }"#;
 
 pub const GEN_RUST_CMP: &str = r#"
@@ -220,7 +220,7 @@ fn main() {
         }
         write!(out, "{}", rng.gen_range(-Ai..=Ai)).ok();
     }
-    out.flush();
+    out.flush().ok();
 }"#;
 
 // GO

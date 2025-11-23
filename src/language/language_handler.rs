@@ -206,6 +206,19 @@ impl Language for LanguageHandler {
             return true;
         }
 
+        // Check if config files already exist to skip reinitial initialization
+        if let Some(ref config_files) = self.config_files {
+            let all_exist = config_files.iter().all(|file| {
+                let path_str = shellexpand::tilde(&file.path).to_string();
+                Path::new(&path_str).exists()
+            });
+
+            // If all config files exist, skip initialization
+            if all_exist {
+                return true;
+            }
+        }
+
         show_installing_dependencies(&self.name[..]);
 
         // execute initialization command

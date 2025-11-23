@@ -107,9 +107,6 @@ pub fn execute_program(
             writer.write_all(&output.stderr).unwrap();
         }
     } else {
-        println!("{:?}", output.status.code());
-        println!("{:#?}", output.status.code());
-
         #[cfg(unix)]
         match output.status.signal() {
             Some(6) => res_status = CPStatus::MLE, // SIGABRT: 6
