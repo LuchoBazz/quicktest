@@ -85,6 +85,7 @@ pub fn execute_command_check_with_timeout(
         .arg("--gen-file")
         .arg(format!("{}/{}/{}", FOLDER, FOLDER_CHECK, gen_file))
         .arg(format!("--timeout={}", timeout))
+        .arg(format!("--memory-limit={}", 2_147_483_648usize))
         .arg(format!("--test-cases={}", cases));
 }
 

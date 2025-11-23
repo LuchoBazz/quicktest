@@ -20,7 +20,6 @@ use crate::util::{
 use super::codes::{GEN_CPP_STRESS, TARGET_CPP_STRESS};
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_stress_target_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,
@@ -42,7 +41,6 @@ fn cmd_stress_target_mle_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_stress_gen_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_tle(
         TARGET_FILE_CPP,

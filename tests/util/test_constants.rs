@@ -77,6 +77,7 @@ using namespace std;
 int main() {
     vector<long long> vec;
     while(true) vec.push_back(1LL);
+    return 0;
 }
 "#;
 
