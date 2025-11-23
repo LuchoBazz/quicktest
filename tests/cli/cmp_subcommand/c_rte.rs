@@ -20,7 +20,6 @@ use super::codes::{CORRECT_C_CMP, GEN_C_CMP, TARGET_C_CMP};
 
 // CHECK RTE in Subcommand cmp
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_cmp_target_rte_c() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_C,
@@ -51,7 +50,6 @@ fn cmd_cmp_target_rte_c() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_cmp_correct_rte_c() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_C,
@@ -82,7 +80,7 @@ fn cmd_cmp_correct_rte_c() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
+#[cfg(not(target_os = ""))] // TODO: Fix this test when possible
 fn cmd_cmp_gen_rte_c() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_C,

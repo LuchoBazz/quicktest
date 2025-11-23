@@ -15,6 +15,9 @@ use rand::distributions::{Distribution, Uniform};
 
 use super::types::{CPStatus, StatusResponse};
 
+#[cfg(target_os = "macos")]
+use std::os::unix::process::CommandExt;
+
 #[allow(unused_variables)]
 pub fn execute_program(
     timeout: u32,
@@ -31,10 +34,8 @@ pub fn execute_program(
 
     let mut cmd = Command::new(commands[0]);
 
-    #[cfg(any(target_os = "linux", target_os = "windows"))]
     let mut memory_factor_needed = 1usize;
 
-    #[cfg(any(target_os = "linux", target_os = "windows"))]
     if commands[0] == "java" {
         memory_factor_needed *= 10usize;
     }
@@ -58,10 +59,35 @@ pub fn execute_program(
         cmd.args(&[die.sample(&mut rng).to_string(), testcase.to_string()]);
     }
 
+    #[cfg(target_os = "macos")]
+    unsafe {
+        cmd.pre_exec(move || {
+            let limit = libc::rlimit {
+                rlim_cur: memory_limit * memory_factor_needed as u64,
+                rlim_max: memory_limit * memory_factor_needed as u64,
+            };
+
+            // Set both RLIMIT_AS and RLIMIT_DATA for better memory limit detection on macOS
+            if libc::setrlimit(libc::RLIMIT_AS, &limit) != 0 {
+                eprintln!("Warning: Failed to set RLIMIT_AS");
+            }
+
+            if libc::setrlimit(libc::RLIMIT_DATA, &limit) != 0 {
+                eprintln!("Warning: Failed to set RLIMIT_DATA");
+            }
+
+            Ok(())
+        });
+    }
+
     let child: Result<std::process::Child, std::io::Error> =
         cmd.stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
 
     if child.is_err() {
+        eprintln!(
+            "[DEBUG SPAWN] Failed to spawn process: {:?}",
+            child.as_ref().err()
+        );
         return execute_program_response(CPStatus::CE, now);
     }
 
@@ -81,6 +107,8 @@ pub fn execute_program(
         .time_limit(Duration::from_millis(timeout as u64))
         .terminate_for_timeout()
         .wait();
+
+    eprintln!("[DEBUG RESPONSE] {:?}", response);
 
     if response.is_err() {
         return execute_program_response(CPStatus::TLE, now);
@@ -107,13 +135,25 @@ pub fn execute_program(
             writer.write_all(&output.stderr).unwrap();
         }
     } else {
-        #[cfg(unix)]
+        eprintln!("[DEBUG SUCCESS] {:?}", output.status.success());
+        eprintln!("[DEBUG SIGNAL] {:?}", output.status.signal());
+        eprintln!("[DEBUG CODE] {:?}", output.status.code());
+
+        #[cfg(target_os = "macos")]
+        match output.status.signal() {
+            Some(6) => res_status = CPStatus::MLE,  // SIGABRT: 6
+            Some(9) => res_status = CPStatus::MLE,  // SIGKILL: 9 (memory limit exceeded on macOS)
+            Some(11) => res_status = CPStatus::RTE, // SIGSEGV: 11
+            _ => res_status = CPStatus::RTE,
+        }
+
+        #[cfg(target_os = "linux")]
         match output.status.signal() {
             Some(6) => res_status = CPStatus::MLE, // SIGABRT: 6
             _ => res_status = CPStatus::RTE,
         }
 
-        #[cfg(windows)]
+        #[cfg(target_os = "windows")]
         match output.status.code() {
             Some(3221226505) | Some(3) => res_status = CPStatus::MLE, // STATUS_HEAP_CORRUPTION: 3221226505, ERROR_PATH_NOT_FOUND: 3
             Some(_) => res_status = CPStatus::RTE,

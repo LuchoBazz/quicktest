@@ -22,7 +22,6 @@ use crate::util::{
 use super::codes::{CHECKER_CPP_CHECK, GEN_CPP_CHECK, TARGET_CPP_CHECK};
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_check_target_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
@@ -42,7 +41,7 @@ fn cmd_check_target_mle_cpp() -> Result<(), Box<dyn Error>> {
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         cases,
-        5000usize,
+        10000usize,
     );
 
     cmd.assert()
@@ -53,7 +52,6 @@ fn cmd_check_target_mle_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_check_checker_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
@@ -73,7 +71,7 @@ fn cmd_check_checker_mle_cpp() -> Result<(), Box<dyn Error>> {
         CHECKER_FILE_CPP,
         GEN_FILE_CPP,
         cases,
-        5000usize,
+        10000usize,
     );
 
     cmd.assert().failure().stderr(predicate::str::contains(
@@ -84,7 +82,6 @@ fn cmd_check_checker_mle_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_check_gen_mle_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
