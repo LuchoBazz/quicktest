@@ -6,15 +6,15 @@ sidebar_label: Stress
 
 ### `quicktest stress | qt stress`
 
-Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+Verifies that the code executes within the time limit using a random generator for multiple test cases.
 
-**Note:** In this scenario there is no slower solution with which to compare the correction.
+**Note:** This mode does not compare against a slower, correct solution.
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 qt stress -t main.cpp -g gen.cpp
@@ -38,15 +38,15 @@ qt stress -t main.cpp -g gen.cpp
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+    * `--prefix=<value> | -p=<value>` Conflicts with `--gen-file` (Only one can be used at a time).
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
 
-    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
-    * `--run-ac`     Run test cases Accepted
-    * `--run-all`    Run all test cases
-    * `--run-rte`    Run test cases Run Time Error
-    * `--run-tle`    Run test cases Time Limited Exceeded
-    * `--run-wa`     Run test cases Wrong Answer
-    * `--save-all`   Save all test cases
-    * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+    * `--break-bad | --break`  Stops execution if WA, TLE, or RTE states occur.
+    * `--run-ac`     Runs Accepted test cases.
+    * `--run-all`    Runs all test cases.
+    * `--run-rte`    Runs Run Time Error test cases.
+    * `--run-tle`    Runs Time Limit Exceeded test cases.
+    * `--run-wa`     Runs Wrong Answer test cases.
+    * `--save-all`   Saves all test cases.
+    * `--save-bad`   Saves only bad cases (WA, TLE, or RTE).
