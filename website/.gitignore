@@ -149,6 +149,3 @@ yarn-error.log*
 
 # Yarn Lock
 yarn.lock
-
-# Package Lock
-package-lock.json
