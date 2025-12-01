@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[904],{9426:e=>{e.exports=JSON.parse('{"label":"cp-tool","permalink":"/quicktest/blog/tags/cp-tool","allTagsPath":"/quicktest/blog/tags","count":1}')}}]);
