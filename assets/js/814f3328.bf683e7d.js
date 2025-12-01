@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkwebsite=globalThis.webpackChunkwebsite||[]).push([[472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Launch Announcement","permalink":"/quicktest/blog/Launch Announcement","unlisted":false,"date":"2022-05-30T00:00:00.000Z"}]}')}}]);
