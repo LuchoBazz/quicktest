@@ -237,3 +237,5 @@ Licensed under either of these:
 > <sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="CP Booster">cpbooster</a>
 
 > <sub>Installation scripts were based on <a href="https://github.com/denoland/deno_install" title="Flaticon">deno_install</a>
+
+> <sub>Authorship note: portions of this README were generated with assistance from an AI tool and have been reviewed and edited by the project author to ensure technical accuracy and legal compliance.
