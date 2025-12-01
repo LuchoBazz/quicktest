@@ -1,7 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const {themes} = require('prism-react-renderer');
+const { themes } = require('prism-react-renderer');
 const lightCodeTheme = themes.github;
 const darkCodeTheme = themes.dracula;
 
@@ -14,8 +14,18 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'LuchoBazz', // Usually your GitHub org/user name.
-  projectName: 'quicktest', // Usually your repo name.
+  organizationName: 'LuchoBazz',
+  projectName: 'quicktest',
+
+  themes: [
+    [
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      ({
+        hashed: true,
+        language: ['en', 'es']
+      }),
+    ],
+  ],
 
   presets: [
     [
@@ -24,14 +34,11 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl: 'https://github.com/LuchoBazz/quicktest/tree/main/website/',
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          editUrl:
-            'https://github.com/LuchoBazz/quicktest/tree/main/website/',
+          editUrl: 'https://github.com/LuchoBazz/quicktest/tree/main/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -56,7 +63,7 @@ const config = {
             position: 'left',
             label: 'Docs',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://github.com/LuchoBazz/quicktest',
             label: 'GitHub',
