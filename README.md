@@ -33,22 +33,22 @@
 
 ### Installation
 
-Installation tutorial for Linux, Windows and macOS can be found [here](https://luchobazz.github.io/quicktest/docs/getting-started/installation) on the docs website
+Installation tutorials for Linux, Windows, and macOS are available [here](https://luchobazz.github.io/quicktest/docs/getting-started/installation) on the documentation website.
 
 ### Disclaimer
-QuickTest, supports Windows and Linux. The CLI has been tested successfully on these platforms, but functionality on macOS has not yet been verified. Users on macOS are advised to proceed with caution and provide feedback on any issues encountered.
+QuickTest supports Windows and Linux. While the CLI has been successfully tested on these platforms, macOS functionality is currently unverified. macOS users should proceed with caution and are encouraged to report any issues.
 
 ## Introduction
 
-Quick Test CLI is a project to perform stress testing in competitive programming contests in an easy and fast way, focusing only on the contest.
+Quick Test CLI is a tool designed for fast and easy stress testing in competitive programming, allowing you to focus entirely on the contest.
 
-Currently, Quick Test CLI supports three types of tests which are listed below:
+Quick Test CLI currently supports the following three test types:
 
 | [quicktest cmp](https://luchobazz.github.io/quicktest/docs/usage/cmp)                               | [quicktest stress](https://luchobazz.github.io/quicktest/docs/usage/stress)                               | [quicktest check](https://luchobazz.github.io/quicktest/docs/usage/check)                              |
 |------------------------------------------------|------------------------------------------------|----------------------------------------------|
 | ![cmp gif](./website/static/gif/cmp.gif) | ![stress gif](./website/static/gif/stress.gif) | ![check gif](./website/static/gif/check.gif) |
 
-* `quicktest cmp | qt cmp`: It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
+* `quicktest cmp | qt cmp`: Verifies the correctness of an algorithm by comparing it against a brute-force solution. The brute-force solution, while typically slower, is guaranteed to be correct.
     * **Sample:**
 
         ```shell
@@ -57,9 +57,9 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         qt cmp -t main.cpp -c correct.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-* `quicktest stress | qt stress`: Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+* `quicktest stress | qt stress`: Verifies that the code executes within the time limit using a random generator for multiple test cases.
 
-    **Note:** In this scenario there is no slower solution with which to compare the correction.
+    **Note:** This mode does not compare against a slower, correct solution.
 
     * **Sample:**
         ```shell
@@ -68,7 +68,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         qt stress -t main.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-*  `quicktest check | qt check`: In some problems more than one answer is accepted, so the `quicktest cmp` command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.
+*  `quicktest check | qt check`: For problems with multiple valid answers where `quicktest cmp` is unsuitable, a script checker is used to verify algorithm correctness.
 
     * **Sample:**
         ```shell
@@ -77,7 +77,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
         qt check -t main.cpp -c check.cpp -g gen.cpp --tout 1000 --tc 1000
         ```
 
-* `quicktest output | qt output`: run all test cases that match a prefix and save the response to an output file
+* `quicktest output | qt output`: Runs all test cases matching a prefix and saves the results to an output file.
     * **Sample:**
         ```shell
         quicktest output --target-file=main.cpp --prefix=testcase_ac
@@ -102,7 +102,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+    * `--prefix=<value> | -p=<value>` Conflicts with `--gen-file` (Only one can be used at a time).
     * `--diff`  Show differences between the expected file and the output file
 
 ---
@@ -119,7 +119,7 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+    * `--prefix=<value> | -p=<value>` Conflicts with `--gen-file` (Only one can be used at a time).
 
 ---
 
@@ -136,20 +136,20 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)
+    * `--prefix=<value> | -p=<value>` Conflicts with `--gen-file` (Only one can be used at a time).
 
 ---
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
 
-    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
-    * `--run-ac`     Run test cases Accepted
-    * `--run-all`    Run all test cases
-    * `--run-rte`    Run test cases Run Time Error
-    * `--run-tle`    Run test cases Time Limited Exceeded
-    * `--run-wa`     Run test cases Wrong Answer
-    * `--save-all`   Save all test cases
-    * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+    * `--break-bad | --break`  Stops execution if WA, TLE, or RTE states occur.
+    * `--run-ac`     Runs Accepted test cases.
+    * `--run-all`    Runs all test cases.
+    * `--run-rte`    Runs Run Time Error test cases.
+    * `--run-tle`    Runs Time Limit Exceeded test cases.
+    * `--run-wa`     Runs Wrong Answer test cases.
+    * `--save-all`   Saves all test cases.
+    * `--save-bad`   Saves only bad cases (WA, TLE, or RTE).
 
 ---
 * `quicktest output | qt output`
@@ -163,33 +163,33 @@ Currently, Quick Test CLI supports three types of tests which are listed below:
 
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
-    * `--save-out`   Save the output of the target file for each test case
+    * `--break-bad | --break`  Stops execution if WA, TLE, or RTE states occur.
+    * `--save-out`   Saves the target file output for each test case.
 
 ---
 * `quicktest setup | qt setup`
 
     **Subcommand**
 
-    * `config` Subcommand that allows to change C++ settings
+    * `config` Subcommand for modifying C++ configuration settings.
 
         **Options**
 
-        * `--label=<value>` Label with the path of the configuration that you want to change
-        * `--value=<value>` value you want to change a selected label to
+        * `--label=<value>` The configuration label path to modify.
+        * `--value=<value>` The new value for the selected label.
 
 ---
 * `quicktest example | qt example`
     
     **Flags**
     
-    * `--check`   Show examples of the check subcommand
-    * `--cmp`     Show examples of the cmp subcommand
-    * `--stress`  Show examples of the stress subcommand
-    * `--output`     Show examples of the output subcommand
-    * `--setup`   Show examples of the setup subcommand
+    * `--check`   Shows examples for the check subcommand.
+    * `--cmp`     Shows examples for the cmp subcommand.
+    * `--stress`  Shows examples for the stress subcommand.
+    * `--output`     Shows examples for the output subcommand.
+    * `--setup`   Shows examples for the setup subcommand.
     
-    **Nota:** can only use one flag at a time
+    **Note:** Only one flag can be used at a time.
 
 ## How to Contribute
 
@@ -237,3 +237,5 @@ Licensed under either of these:
 > <sub>Documentation was based on <a href="https://searleser97.github.io/cpbooster/" title="CP Booster">cpbooster</a>
 
 > <sub>Installation scripts were based on <a href="https://github.com/denoland/deno_install" title="Flaticon">deno_install</a>
+
+> <sub>Authorship note: portions of this README were generated with assistance from an AI tool and have been reviewed and edited by the project author to ensure technical accuracy and legal compliance.
