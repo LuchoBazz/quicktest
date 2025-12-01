@@ -45,11 +45,11 @@ _Path:_ `~/.quicktest/languages.config.json`
 }
 ```
 
-## Fields Description
+## Field Descriptions
 
 ### `languages: list<Languages>` Field
 
-List of supported languages
+List of supported languages.
 
 ## `languages[i]`
 
@@ -104,7 +104,7 @@ Brief description of the language
 
 ### `config_files: Object` Field
 
-Configuration files for the specific language, which will be created in the `path` with the `content`
+Configuration files for the specific language. These files will be created at the specified `path` with the provided `content`.
 
 * _Required:_ `false`
 * _Example:_ 
@@ -120,7 +120,7 @@ Configuration files for the specific language, which will be created in the `pat
 
 ### `env: Object` Field
 
-Environment variables that can be used in command fields
+Environment variables that can be used in command fields.
 
 * _Required:_ `true`
 * _Example:_ 
@@ -145,7 +145,7 @@ Environment variables that can be used in command fields
 
 ### `initialize: Object` Field
 
-Command to be executed before language compilation
+Command to be executed before language compilation.
 * _Required:_ `false`
 * _Example:_ 
 
@@ -158,7 +158,7 @@ Command to be executed before language compilation
 
 ### `compile: Object` Field
 
-Language compile command
+Language compilation command.
 
 * _Required:_ `false`
 * _Example:_ 
@@ -172,7 +172,7 @@ Language compile command
 
 ### `execute: Object` Field
 
-Language execution command
+Language execution command.
 
 * _Required:_ `true`
 * _Example:_ 
@@ -186,7 +186,7 @@ Language execution command
 
 ### `check_installed: String` Field
 
-Command to verify that the program with which the programming language is going to be executed is installed locally
+Command to verify that the program required to execute the programming language is installed locally.
 
 * _Required:_ `true`
 * _Example:_ 

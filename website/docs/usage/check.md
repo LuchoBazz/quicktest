@@ -6,13 +6,13 @@ sidebar_label: Check
 
 ### `quicktest check | qt check`
 
-In some problems more than one answer is accepted, so the `quicktest cmp` command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.
+For problems where multiple answers are valid, `quicktest cmp` may not work correctly. In these cases, the `check` command uses a custom checker script to verify the correctness of your algorithm's output.
 
 ```shell
 quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 qt check --t main.cpp -c correct.cpp -g gen.cpp
@@ -37,15 +37,15 @@ qt check --t main.cpp -c correct.cpp -g gen.cpp
     * `--test-cases=<value> | --tc=<value> [default: 1000]`
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--prefix=<value> | -p=<value>` conflict with `--gen-file` (Only one can be used at a time)1
+    * `--prefix=<value> | -p=<value>` Conflicts with `--gen-file` (Only one can be used at a time).
 
 * **Flags of the `cmp`, `stress` and `check` subcommands**
 
-    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
-    * `--run-ac`     Run test cases Accepted
-    * `--run-all`    Run all test cases
-    * `--run-rte`    Run test cases Run Time Error
-    * `--run-tle`    Run test cases Time Limited Exceeded
-    * `--run-wa`     Run test cases Wrong Answer
-    * `--save-all`   Save all test cases
-    * `--save-bad`   Save only bad cases with WA, TLE or RTE states
+    * `--break-bad | --break`  Stops execution if WA, TLE, or RTE states occur.
+    * `--run-ac`     Runs Accepted test cases.
+    * `--run-all`    Runs all test cases.
+    * `--run-rte`    Runs Run Time Error test cases.
+    * `--run-tle`    Runs Time Limit Exceeded test cases.
+    * `--run-wa`     Runs Wrong Answer test cases.
+    * `--save-all`   Saves all test cases.
+    * `--save-bad`   Saves only bad cases (WA, TLE, or RTE).

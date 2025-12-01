@@ -4,7 +4,7 @@ title: Output Examples
 sidebar_label: Output
 ---
 
-## Run Examples
+## Running Examples
 
 ```shell
 git clone https://github.com/LuchoBazz/quicktest.git
@@ -12,33 +12,33 @@ git clone https://github.com/LuchoBazz/quicktest.git
 cd quicktest/examples/output
 ```
 
-* ### cpp examples
+* ### C++ Examples
    
     ```shell
     quicktest output --target-file=cpp/main.cpp --prefix=test_cases/testcase_ac
     ```
-    Or which saves the output to a file
+    Or to save the output to a file:
     ```shell
     quicktest output --target-file=cpp/main.cpp --prefix=test_cases/testcase_ac --save-out
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     quicktest output -t cpp/main.cpp -p test_cases/testcase_ac --save-out
     ```
 
-* ### python examples
+* ### Python Examples
     
     ```shell
     quicktest output --target-file=python/main.py --prefix=test_cases/testcase_ac
     ```
-    Or which saves the output to a file
+    Or to save the output to a file:
     ```shell
     quicktest output --target-file=python/main.py --prefix=test_cases/testcase_ac --save-out
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     quicktest output -t python/main.py -p test_cases/testcase_ac --save-out

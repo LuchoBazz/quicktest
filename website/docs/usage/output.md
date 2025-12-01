@@ -6,13 +6,13 @@ sidebar_label: Output
 
 ### `quicktest output | qt output`
 
-Run all test cases that match a prefix and save the response to an output file
+Runs all test cases matching a prefix and saves the results to an output file.
 
 ```shell
 quicktest output --target-file=main.cpp --prefix=testcase_ac
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 qt output -t main.cpp -p testcase_ac
@@ -35,5 +35,5 @@ qt output -t main.cpp -p testcase_ac
 
     * `--timeout=<value> | --tout=<value> [default: 2000]` Unit of time: `ms`
     * `--memory-limit=<value> | --ml=<value> [default: 1000000000 - 1GB]` Unit of time: `bytes`
-    * `--break-bad | --break`  Break if WA, TLE or RTE states occurs
-    * `--save-out`   Save the output of the target file for each test case
+    * `--break-bad | --break`  Stops execution if WA, TLE, or RTE states occur.
+    * `--save-out`   Saves the target file output for each test case.
