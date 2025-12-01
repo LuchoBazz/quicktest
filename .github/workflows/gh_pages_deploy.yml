@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/hydrogen'
+          node-version: 'lts/krypton'
 
       - name: Install dependencies
         working-directory: ./website
