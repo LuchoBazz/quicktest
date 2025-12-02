@@ -23,8 +23,8 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          rustc: 1.79
-          cargo: 1.79
+          rustc: 1.91
+          cargo: 1.91
           components: rustfmt, clippy
 
       - name: Updated list of packages
