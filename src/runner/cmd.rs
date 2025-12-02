@@ -11,7 +11,7 @@ use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
 use process_control::{ChildExt, Control};
-use rand::distributions::{Distribution, Uniform};
+use rand_distr::{Distribution, Uniform};
 
 use super::types::{CPStatus, StatusResponse};
 
@@ -51,8 +51,8 @@ pub fn execute_program(
         // Only for generator file
 
         // Initialize random generator
-        let mut rng = rand::thread_rng();
-        let die = Uniform::from(0..(i32::MAX / 2));
+        let mut rng = rand::rng();
+        let die = Uniform::new(0, i32::MAX / 2).unwrap();
 
         // add seed and test case
         cmd.args(&[die.sample(&mut rng).to_string(), testcase.to_string()]);

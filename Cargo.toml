@@ -17,26 +17,27 @@ include = ["**/*.rs", "Cargo.toml"]
 
 [dependencies]
 clap = "4.5"
-colored = "2.1.0"
+colored = "3.0.0"
 difference = "2.0.0"
 exitcode = "1.1.2"
 exitfailure = "0.5.1"
 failure = "0.1.8"
-glob = "0.3.1"
+glob = "0.3.3"
 pad = "0.1.6"
-process_control = "4.0.3"
-rand = "0.8.5"
-regex = "1.11.0"
-shellexpand = "3.1.0"
+process_control = "5.2.0"
+rand = "0.9.2"
+rand_distr = "0.5"
+regex = "1.12.2"
+shellexpand = "3.1.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_yaml = "0.9"
 separator = "0.4.1"
 structopt = "0.3"
 yaml-rust = "0.4"
-async-std = "1.13.0"
+async-std = "1.13.2"
 futures = "0.3.31"
-tokio = { version = "1.40.0", features = ["full"] }
+tokio = { version = "1.48.0", features = ["full"] }
 
 [dev-dependencies]
 assert_cmd = "2.0.16"
