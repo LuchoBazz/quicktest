@@ -14,7 +14,7 @@ quicktest example --run
 quicktest example --setup
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 qt example --stress
@@ -34,10 +34,10 @@ qt example --setup
     
     **Flags**
     
-    * `--check`   Show examples of the check subcommand
-    * `--cmp`     Show examples of the cmp subcommand
-    * `--stress`  Show examples of the stress subcommand
-    * `--run`     Show examples of the run subcommand
-    * `--setup`   Show examples of the setup subcommand
+    * `--check`   Shows examples for the check subcommand.
+    * `--cmp`     Shows examples for the cmp subcommand.
+    * `--stress`  Shows examples for the stress subcommand.
+    * `--run`     Shows examples for the run subcommand.
+    * `--setup`   Shows examples for the setup subcommand.
     
-    **Nota:** can only use one flag at a time
+    **Note:** Only one flag can be used at a time.

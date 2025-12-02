@@ -4,9 +4,9 @@ title: Cmp Examples
 sidebar_label: Cmp
 ---
 
-## Run Examples
+## Running Examples
 
-* ### cpp examples
+* ### C++ Examples
     ```shell
     git clone https://github.com/LuchoBazz/quicktest.git
 
@@ -17,13 +17,13 @@ sidebar_label: Cmp
     quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     qt cmp -t main.cpp -c correct.cpp -g gen.cpp --tc 500 --tout 1000
     ```
 
-* ### python examples
+* ### Python Examples
     ```shell
     git clone https://github.com/LuchoBazz/quicktest.git
 
@@ -34,7 +34,7 @@ sidebar_label: Cmp
     quicktest cmp --target-file=main.py --correct-file=correct.py --gen-file=gen.py --test-cases=200 --timeout=1000
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     qt cmp -t main.py -c correct.py -g gen.py --tc 200 --tc 1000
@@ -42,11 +42,11 @@ sidebar_label: Cmp
 
 ## Save Test Cases
 
-you can use the following flags
-* `--save-all`   Save all test cases
-* `--save-bad`   Save only bad cases with WA, TLE or RTE states
+You can use the following flags:
+* `--save-all`   Saves all test cases.
+* `--save-bad`   Saves only bad cases (WA, TLE, or RTE).
 
-for example
+For example:
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --save-bad
@@ -60,15 +60,15 @@ quicktest cmp -t main.cpp -c correct.cpp -g gen.cpp --tc 500 --tout 1000 --save-
 
 ## Run Saved Test Cases
 
-you can use the following flags
+You can use the following flags:
 
-* `--run-ac`     Run test cases Accepted
-* `--run-all`    Run all test cases
-* `--run-rte`    Run test cases Run Time Error
-* `--run-tle`    Run test cases Time Limited Exceeded
-* `--run-wa`     Run test cases Wrong Answer
+* `--run-ac`     Runs Accepted test cases.
+* `--run-all`    Runs all test cases.
+* `--run-rte`    Runs Run Time Error test cases.
+* `--run-tle`    Runs Time Limit Exceeded test cases.
+* `--run-wa`     Runs Wrong Answer test cases.
 
-for example
+For example:
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp --test-cases=500 --timeout=1000 --run-wa

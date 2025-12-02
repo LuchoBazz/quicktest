@@ -4,9 +4,9 @@ title: Stress Examples
 sidebar_label: Stress
 ---
 
-## Run Examples
+## Running Examples
 
-* ### cpp examples
+* ### C++ Examples
     ```shell
     git clone https://github.com/LuchoBazz/quicktest.git
 
@@ -17,14 +17,14 @@ sidebar_label: Stress
     quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     quicktest stress -t main.cpp -g gen.cpp --tc 15 --tout 1000
     ```
 
 
-* ### python examples
+* ### Python Examples
     ```shell
     git clone https://github.com/LuchoBazz/quicktest.git
 
@@ -35,7 +35,7 @@ sidebar_label: Stress
     quicktest stress --target-file=main.py --gen-file=gen.py --test-cases=15 --timeout=1000
     ```
 
-    or shorter
+    Or using the shorter alias:
 
     ```shell
     quicktest stress -t main.py -t gen.py --tc 15 --tout 1000
@@ -44,17 +44,17 @@ sidebar_label: Stress
 
 ## Save Test Cases
 
-you can use the following flags
-* `--save-all`   Save all test cases
-* `--save-bad`   Save only bad cases with WA, TLE or RTE states
+You can use the following flags:
+* `--save-all`   Saves all test cases.
+* `--save-bad`   Saves only bad cases (WA, TLE, or RTE).
 
-for example
+For example:
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --save-bad
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 quicktest stress --t main.cpp -g gen.cpp --tc 15 --tout 1000 --save-bad
@@ -62,21 +62,21 @@ quicktest stress --t main.cpp -g gen.cpp --tc 15 --tout 1000 --save-bad
 
 ## Run Saved Test Cases
 
-you can use the following flags
+You can use the following flags:
 
-* `--run-ac`     Run test cases Accepted
-* `--run-all`    Run all test cases
-* `--run-rte`    Run test cases Run Time Error
-* `--run-tle`    Run test cases Time Limited Exceeded
-* `--run-wa`     Run test cases Wrong Answer
+* `--run-ac`     Runs Accepted test cases.
+* `--run-all`    Runs all test cases.
+* `--run-rte`    Runs Run Time Error test cases.
+* `--run-tle`    Runs Time Limit Exceeded test cases.
+* `--run-wa`     Runs Wrong Answer test cases.
 
-for example
+For example:
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp --test-cases=15 --timeout=1000 --run-tle
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 quicktest stress -t main.cpp -g gen.cpp --tc 15 --tout 1000 --run-tle

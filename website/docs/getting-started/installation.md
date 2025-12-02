@@ -4,9 +4,9 @@ title: Installation
 sidebar_label: Installation
 ---
 
-Quick Test CLI works on Linux, Windows, and macOS. Quick Test CLI is a single binary executable. It has no external dependencies.
+Quick Test CLI works on Linux, Windows, and macOS. It is a single binary executable with no external dependencies.
 
-[quicktest_install](https://github.com/LuchoBazz/quicktest/tree/main/website/static/install) provides convenience scripts to download and install the binary.
+[quicktest_install](https://github.com/LuchoBazz/quicktest/tree/main/website/static/install) provides convenient scripts to download and install the binary.
 
 ### Linux
 
@@ -16,7 +16,7 @@ Using Shell:
 curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | sh
 ```
 
-Please open a new terminal, or run the following in the existing one `source ~/.bashrc` or `source ~/.zshrc` as appropriate
+Please open a new terminal, or run the following in the existing one: `source ~/.bashrc` or `source ~/.zshrc` as appropriate.
 
 ### Windows
 
@@ -34,18 +34,18 @@ Using Shell:
 curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | v=1.0.7  sh
 ```
 
-Please open a new terminal, or run the following in the existing one `source ~/.zshrc` or `source ~/.bashrc` as appropriate
+Please open a new terminal, or run the following in the existing one: `source ~/.zshrc` or `source ~/.bashrc` as appropriate.
 
-### Linux, Windows or Mac OS
-If you already have Rust on your system:
+### Linux, Windows, or macOS
+If you already have Rust installed on your system:
 
 ```sh
 cargo install quicktest
 ```
 
-If you don't have rust installed on your system, the following command will install Rust and the CLI at once:
+If you don't have Rust installed on your system, the following command will install both Rust and the CLI:
 
-### Linux or Mac OS
+### Linux or macOS
 
 Shell:
 
@@ -69,4 +69,4 @@ During the `install.sh` process, `unzip` is used to extract the zip archive.
 
 **How can this issue be fixed?**
 
-You can install unzip via `brew install unzip` on MacOS or `apt-get install unzip -y` on Linux.
+You can install `unzip` via `brew install unzip` on macOS or `apt-get install unzip -y` on Linux.

@@ -8,11 +8,14 @@
 :root {
   --ifm-color-primary: #4285f4;
   --ifm-code-font-size: 95%;
+  --search-local-modal-width: 480px;
+  --search-local-highlight-color: #5468ff;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-primary: #4285f4;
+  --search-local-highlight-color: #d23669;
   /*background-color: #00192f;*/
 }
 

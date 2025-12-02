@@ -26,7 +26,7 @@ sidebar_label: Supported Languages
 | GNU C     | `gcc -std=gnu11  -lm main.c -o .qt/main`                                                                                                                                      | `./.qt/main`             |
 | Kotlin    | `kotlinc main.kt -include-runtime -d .qt/main.jar`                                                                                                                            | `java -jar .qt/main.jar` |
 
-## Configurations File
+## Configuration File
 
 ### Rust Lang
 

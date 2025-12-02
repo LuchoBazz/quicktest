@@ -6,7 +6,7 @@ sidebar_label: Setup
 
 ### `quicktest setup config | qt setup config`
 
-The list of accepted tags can be found by executing the following command
+To view the complete list of accepted configuration tags, run the following command:
 
 `quicktest setup config --help`
 
@@ -16,7 +16,7 @@ quicktest setup config --label="Language::Cpp.STANDARD" --value="-std=c++17"
 quicktest setup config --label="Language::Python.PROGRAM" --value="python"
 ```
 
-or shorter
+Or using the shorter alias:
 
 ```shell
 qt setup config -l "Language::Cpp.PROGRAM" -v="g++"
@@ -34,9 +34,9 @@ qt setup config -l "Language::Python.PROGRAM" -v="python"
 
     **Subcommand**
 
-    * `config` Subcommand that allows to change C++ settings
+    * `config` Subcommand for modifying C++ configuration settings.
 
         **Options**
 
-        * `-l=<value> | --label=<value>` Label with the path of the configuration that you want to change
-        * `-v=<value> | --value=<value>` value you want to change a selected label to
+        * `-l=<value> | --label=<value>` The configuration label path to modify.
+        * `-v=<value> | --value=<value>` The new value for the selected label.
