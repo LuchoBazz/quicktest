@@ -31,7 +31,7 @@ iwr https://luchobazz.github.io/quicktest/install/install.ps1 -useb | iex
 Using Shell:
 
 ```shell
-curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | v=1.0.7  sh
+curl -fsSL https://luchobazz.github.io/quicktest/install/install.sh | v=1.0.8  sh
 ```
 
 Please open a new terminal, or run the following in the existing one: `source ~/.zshrc` or `source ~/.bashrc` as appropriate.
