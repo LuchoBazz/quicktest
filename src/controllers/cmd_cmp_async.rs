@@ -76,8 +76,8 @@ impl CmpController {
             current_case: None,
             state_counter: StateCounter::default(),
             file_in: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
-            file_out: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
-            file_expected: format!("{}/{}", &root[..], QTEST_INPUT_FILE),
+            file_out: format!("{}/{}", &root[..], QTEST_OUTPUT_FILE),
+            file_expected: format!("{}/{}", &root[..], QTEST_EXPECTED_FILE),
         }
     }
 
