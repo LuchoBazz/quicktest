@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite our preprint as below."
+authors:
+- family-names: "Báez Aponte"
+  given-names: "Luis Miguel"
+  orcid: "https://orcid.org/0009-0008-7515-457X"
+title: "Quick Test CLI"
+version: 1.0.10
+date-released: 2025-12-02
+url: "https://github.com/LuchoBazz/quicktest"
+
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Báez Aponte"
+    given-names: "Luis Miguel"
+  doi: "10.5281/zenodo.XXXXXXX"
+  journal: "Zenodo"
+  title: "Quick Test CLI: A Cross-Platform for Automated Testing in Competitive Programming"
+  year: 2025
