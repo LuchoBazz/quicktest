@@ -3,6 +3,10 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.9 / 2025.12.02
+
+- chore(versions): Update Rust Toolchain, CI Configurations, and Project Dependencies to Latest Stable Versions (#163)
+
 ### 1.0.8 / 2025.12.02
 
 - Fix: Use correct output and expected files for test comparison (#154)
