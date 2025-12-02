@@ -3,6 +3,15 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.8 / 2025.12.02
+
+- Fix: Use correct output and expected files for test comparison (#154)
+- docs: Improve README.md documentation and grammar (#157)
+- docs: Improve README.md documentation and grammar part 2 (#158)
+- chore: upgrade Docusaurus from 2.0.0-beta.21 to 3.9.2 (#159)
+- chore(dependencies): Upgrade versions (#160)
+- feat: add local search functionality to documentation website (#161)
+
 ### 1.0.7 / 2024.10.22
 
 - chore: add GitHub actions configuration for windows (#146)
