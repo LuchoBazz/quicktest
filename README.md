@@ -8,7 +8,7 @@
 
 <h2 align="center">📖 <a href="https://luchobazz.github.io/quicktest/docs/intro">Docs</a></h2>
 
-[![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuchoBazz/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuchoBazz/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuchoBazz/quicktest)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17803503.svg)](https://doi.org/10.5281/zenodo.17803503) [![Current Crates.io Version](https://img.shields.io/crates/v/quicktest.svg)](https://crates.io/crates/quicktest) [![Quick Test](https://circleci.com/gh/LuchoBazz/quicktest.svg?style=shield)](https://app.circleci.com/pipelines/github/LuchoBazz/quicktest) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com/LuchoBazz/quicktest)
 
 ## Demo
 ![cmp gif](./website/static/gif/main.gif)
