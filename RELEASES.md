@@ -3,6 +3,10 @@
 Binary releases can be downloaded manually at:
 https://github.com/LuchoBazz/quicktest/releases
 
+### 1.0.10 / 2025.12.03
+
+- chore(citation): Add Formal Citation Metadata via CITATION.cff (#165)
+
 ### 1.0.9 / 2025.12.02
 
 - chore(versions): Update Rust Toolchain, CI Configurations, and Project Dependencies to Latest Stable Versions (#163)
