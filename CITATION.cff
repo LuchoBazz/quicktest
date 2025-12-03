@@ -12,7 +12,7 @@ url: "https://github.com/LuchoBazz/quicktest"
 license: MIT
 
 preferred-citation:
-  type: article
+  type: misc
   authors:
   - family-names: "Báez Aponte"
     given-names: "Luis Miguel"
