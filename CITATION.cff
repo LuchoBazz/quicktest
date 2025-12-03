@@ -17,7 +17,7 @@ preferred-citation:
   - family-names: "Báez Aponte"
     given-names: "Luis Miguel"
     orcid: "https://orcid.org/0009-0008-7515-457X"
-  doi: "https://doi.org/10.5281/zenodo.17803503"
+  doi: "10.5281/zenodo.17803503"
   journal: "Zenodo"
   title: "Quick Test CLI: A Cross-Platform for Automated Testing in Competitive Programming"
   year: 2025
