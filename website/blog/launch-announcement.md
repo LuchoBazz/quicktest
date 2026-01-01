@@ -6,9 +6,9 @@ authors: [LuchoBazz]
 tags: [stress-testing, testing, cp-tool, tool]
 ---
 
-Hi Competitive Programming Community!!
+Hi, Competitive Programming community!
 
-I want to share with the entire competitive programming community my latest project: [Quick Test CLI](https://github.com/LuchoBazz/quicktest), which is a multiplatform open source tool to perform stress testing in competitive programming and that was inspired after watching the following screencasts: [1v1 Coding | 2020 Lockout Championship](https://www.youtube.com/watch?v=uABbBGtEWks&t=1434s) and [How to test your solution in Competitive Programming, on Linux?](https://www.youtube.com/watch?v=JXTVOyQpSGM) Made by [Errichto](https://codeforces.com/profile/Errichto) some time ago.
+I want to share my latest project with the competitive programming community: [Quick Test CLI](https://github.com/LuchoBazz/quicktest). It is a multi-platform, open-source tool for stress testing in competitive programming. I got the idea after watching these screencasts by [Errichto](https://codeforces.com/profile/Errichto): [1v1 Coding | 2020 Lockout Championship](https://www.youtube.com/watch?v=uABbBGtEWks&t=1434s) and [How to test your solution in Competitive Programming, on Linux?](https://www.youtube.com/watch?v=JXTVOyQpSGM).
 
 📦**Source Code:** [https://github.com/LuchoBazz/quicktest](https://github.com/LuchoBazz/quicktest)
 
@@ -16,24 +16,24 @@ I want to share with the entire competitive programming community my latest proj
 
 🚀 **Installation:** [https://luchobazz.github.io/quicktest/docs/getting-started/installation](https://luchobazz.github.io/quicktest/docs/getting-started/installation)
 
-### What Quick Test CLI provides vs. the traditional way of performing stress testing?
+### What does Quick Test CLI provide compared to the traditional way of stress testing?
 
 - Multi-platform
 - Supports several languages
 - Friendly user interface
-- You don't have to create or use tedious bash scripts
-- It can be a standard for the community
-- It is a collaborative project that can continue to grow for the benefit of the competitive programming community.
+- You don't need to create or use long bash scripts
+- It can become a standard for the community
+- It is a collaborative project that can keep growing for the benefit of the competitive programming community
 
 #### _Quick Test CLI supports several types of tests:_
 
-![main gif](/gif/main.gif)
+![main gif](https://luchobazz.github.io/quicktest/assets/images/main-ae92a1400e70a721b7e82c2cbc321538.gif)
 
 
 ### `quicktest cmp | qt cmp`
 
 
-It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.
+It checks if the algorithm is correct by comparing it with a brute force solution. The brute force solution is usually very slow, but it should always give the correct answer.
 
 ```shell
 quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp
@@ -41,11 +41,11 @@ quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.c
 qt cmp -t main.cpp -c correct.cpp -g gen.cpp
 ```
 
-![cmp gif](/gif/cmp.gif)
+![cmp gif](https://luchobazz.github.io/quicktest/assets/images/cmp-bede9089330a526710da91805355db68.gif)
 
 ### `quicktest check | qt check`
 
-In some problems more than one answer is accepted, so the quicktest cmp command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.
+In some problems, more than one answer is accepted. In that case, the `quicktest cmp` command may not work well. Instead, you can use a checker script to verify the solution.
 
 ```shell
 quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp
@@ -53,14 +53,14 @@ quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen
 qt check -t main.cpp -c check.cpp -g gen.cpp
 ```
 
-![check gif](/gif/check.gif)
+![check gif](https://luchobazz.github.io/quicktest/assets/images/check-e947f099ca199e2c4fa30a6208980be5.gif)
 
 
 ### `quicktest stress | qt stress`
 
-Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.
+Checks that the running time does not exceed the time limit, using a random generator for many test cases.
 
-Note: In this scenario there is no slower solution with which to compare the correction.
+Note: In this scenario, there is no (slow) correct solution to compare against.
 
 ```shell
 quicktest stress --target-file=main.cpp --gen-file=gen.cpp
@@ -68,17 +68,17 @@ quicktest stress --target-file=main.cpp --gen-file=gen.cpp
 qt stress -t main.cpp -g gen.cpp
 ```
 
-![stress gif](/gif/stress.gif)
+![stress gif](https://luchobazz.github.io/quicktest/assets/images/stress-5b3f4114f5d04d7541ee4714c4115da5.gif)
 
 ### Future Updates
 
-Feature for testing interactive problems is planned to be implemented in future versions
+A feature for testing interactive problems is planned for future versions.
 
 ---
 
 
-I will be grateful to receive feedback, requests for new features and requests for improvements
+I would be grateful for feedback, feature requests, and suggestions for improvements.
 
-Don't forget to give it ⭐in the [Github](https://github.com/LuchoBazz/quicktest) repository
+Don't forget to give it a ⭐ on the [GitHub](https://github.com/LuchoBazz/quicktest) repository.
 
 Thanks!
