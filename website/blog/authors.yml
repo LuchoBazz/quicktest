@@ -1,9 +1,9 @@
 LuchoBazz:
-  name: Luis Miguel Báez Aponte
-  title: Software Engineer
+  name: Luis Miguel Báez
+  title: Systems and Computer Engineer at UNAL and ACM-ICPC contestant
   url: https://github.com/LuchoBazz
-  image_url: https://github.com/LuchoBazz.png
-
-anonymous:
-  name: Anonymous
-  title: Software Engineer
+  image_url: https://avatars.githubusercontent.com/u/22530481
+  socials:
+    github: LuchoBazz
+    linkedin: luismiguelbaez
+    x: luchobazz
