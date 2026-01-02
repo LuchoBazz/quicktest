@@ -12,44 +12,44 @@
         <id>https://luchobazz.github.io/quicktest/blog/Launch Announcement</id>
         <link href="https://luchobazz.github.io/quicktest/blog/Launch Announcement"/>
         <updated>2022-05-30T00:00:00.000Z</updated>
-        <summary type="html"><![CDATA[Hi Competitive Programming Community!!]]></summary>
-        <content type="html"><![CDATA[<p>Hi Competitive Programming Community!!</p>
-<p>I want to share with the entire competitive programming community my latest project: <a href="https://github.com/LuchoBazz/quicktest" target="_blank" rel="noopener noreferrer" class="">Quick Test CLI</a>, which is a multiplatform open source tool to perform stress testing in competitive programming and that was inspired after watching the following screencasts: <a href="https://www.youtube.com/watch?v=uABbBGtEWks&amp;t=1434s" target="_blank" rel="noopener noreferrer" class="">1v1 Coding | 2020 Lockout Championship</a> and <a href="https://www.youtube.com/watch?v=JXTVOyQpSGM" target="_blank" rel="noopener noreferrer" class="">How to test your solution in Competitive Programming, on Linux?</a> Made by <a href="https://codeforces.com/profile/Errichto" target="_blank" rel="noopener noreferrer" class="">Errichto</a> some time ago.</p>
+        <summary type="html"><![CDATA[Hi, Competitive Programming community!]]></summary>
+        <content type="html"><![CDATA[<p>Hi, Competitive Programming community!</p>
+<p>I want to share my latest project with the competitive programming community: <a href="https://github.com/LuchoBazz/quicktest" target="_blank" rel="noopener noreferrer" class="">Quick Test CLI</a>. It is a multi-platform, open-source tool for stress testing in competitive programming. I got the idea after watching these screencasts by <a href="https://codeforces.com/profile/Errichto" target="_blank" rel="noopener noreferrer" class="">Errichto</a>: <a href="https://www.youtube.com/watch?v=uABbBGtEWks&amp;t=1434s" target="_blank" rel="noopener noreferrer" class="">1v1 Coding | 2020 Lockout Championship</a> and <a href="https://www.youtube.com/watch?v=JXTVOyQpSGM" target="_blank" rel="noopener noreferrer" class="">How to test your solution in Competitive Programming, on Linux?</a>.</p>
 <p>📦<strong>Source Code:</strong> <a href="https://github.com/LuchoBazz/quicktest" target="_blank" rel="noopener noreferrer" class="">https://github.com/LuchoBazz/quicktest</a></p>
 <p>📖<strong>Docs:</strong> <a href="https://luchobazz.github.io/quicktest" target="_blank" rel="noopener noreferrer" class="">https://luchobazz.github.io/quicktest</a></p>
 <p>🚀 <strong>Installation:</strong> <a href="https://luchobazz.github.io/quicktest/docs/getting-started/installation" target="_blank" rel="noopener noreferrer" class="">https://luchobazz.github.io/quicktest/docs/getting-started/installation</a></p>
-<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-quick-test-cli-provides-vs-the-traditional-way-of-performing-stress-testing">What Quick Test CLI provides vs. the traditional way of performing stress testing?<a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#what-quick-test-cli-provides-vs-the-traditional-way-of-performing-stress-testing" class="hash-link" aria-label="Direct link to What Quick Test CLI provides vs. the traditional way of performing stress testing?" title="Direct link to What Quick Test CLI provides vs. the traditional way of performing stress testing?" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-does-quick-test-cli-provide-compared-to-the-traditional-way-of-stress-testing">What does Quick Test CLI provide compared to the traditional way of stress testing?<a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#what-does-quick-test-cli-provide-compared-to-the-traditional-way-of-stress-testing" class="hash-link" aria-label="Direct link to What does Quick Test CLI provide compared to the traditional way of stress testing?" title="Direct link to What does Quick Test CLI provide compared to the traditional way of stress testing?" translate="no">​</a></h3>
 <ul>
 <li class="">Multi-platform</li>
 <li class="">Supports several languages</li>
 <li class="">Friendly user interface</li>
-<li class="">You don't have to create or use tedious bash scripts</li>
-<li class="">It can be a standard for the community</li>
-<li class="">It is a collaborative project that can continue to grow for the benefit of the competitive programming community.</li>
+<li class="">You don't need to create or use long bash scripts</li>
+<li class="">It can become a standard for the community</li>
+<li class="">It is a collaborative project that can keep growing for the benefit of the competitive programming community</li>
 </ul>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="quick-test-cli-supports-several-types-of-tests"><em>Quick Test CLI supports several types of tests:</em><a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#quick-test-cli-supports-several-types-of-tests" class="hash-link" aria-label="Direct link to quick-test-cli-supports-several-types-of-tests" title="Direct link to quick-test-cli-supports-several-types-of-tests" translate="no">​</a></h4>
-<p><img decoding="async" loading="lazy" alt="main gif" src="https://luchobazz.github.io/quicktest/assets/images/main-ae92a1400e70a721b7e82c2cbc321538.gif" width="1640" height="812" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://luchobazz.github.io/quicktest/assets/images/main-ae92a1400e70a721b7e82c2cbc321538.gif" alt="main gif" class="img_ev3q"></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quicktest-cmp--qt-cmp"><code>quicktest cmp | qt cmp</code><a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#quicktest-cmp--qt-cmp" class="hash-link" aria-label="Direct link to quicktest-cmp--qt-cmp" title="Direct link to quicktest-cmp--qt-cmp" translate="no">​</a></h3>
-<p>It checks the correctness of the algorithm we want to verify by comparing it with a brute force solution which is usually very slow, but is 100% sure to provide the correct solution.</p>
+<p>It checks if the algorithm is correct by comparing it with a brute force solution. The brute force solution is usually very slow, but it should always give the correct answer.</p>
 <div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">quicktest cmp --target-file=main.cpp --correct-file=correct.cpp --gen-file=gen.cpp</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Or shorter:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">qt cmp -t main.cpp -c correct.cpp -g gen.cpp</span><br></span></code></pre></div></div>
-<p><img decoding="async" loading="lazy" alt="cmp gif" src="https://luchobazz.github.io/quicktest/assets/images/cmp-bede9089330a526710da91805355db68.gif" width="2051" height="983" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://luchobazz.github.io/quicktest/assets/images/cmp-bede9089330a526710da91805355db68.gif" alt="cmp gif" class="img_ev3q"></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quicktest-check--qt-check"><code>quicktest check | qt check</code><a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#quicktest-check--qt-check" class="hash-link" aria-label="Direct link to quicktest-check--qt-check" title="Direct link to quicktest-check--qt-check" translate="no">​</a></h3>
-<p>In some problems more than one answer is accepted, so the quicktest cmp command would not work correctly, in this case a script checker is used to verify the correctness of the algorithm.</p>
+<p>In some problems, more than one answer is accepted. In that case, the <code>quicktest cmp</code> command may not work well. Instead, you can use a checker script to verify the solution.</p>
 <div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">quicktest check --target-file=main.cpp --checker-file=correct.cpp --gen-file=gen.cpp</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Or shorter:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">qt check -t main.cpp -c check.cpp -g gen.cpp</span><br></span></code></pre></div></div>
-<p><img decoding="async" loading="lazy" alt="check gif" src="https://luchobazz.github.io/quicktest/assets/images/check-e947f099ca199e2c4fa30a6208980be5.gif" width="2051" height="983" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://luchobazz.github.io/quicktest/assets/images/check-e947f099ca199e2c4fa30a6208980be5.gif" alt="check gif" class="img_ev3q"></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quicktest-stress--qt-stress"><code>quicktest stress | qt stress</code><a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#quicktest-stress--qt-stress" class="hash-link" aria-label="Direct link to quicktest-stress--qt-stress" title="Direct link to quicktest-stress--qt-stress" translate="no">​</a></h3>
-<p>Verify that the code execution time does not exceed what is allowed, using a random generator for multiple test cases.</p>
-<p>Note: In this scenario there is no slower solution with which to compare the correction.</p>
+<p>Checks that the running time does not exceed the time limit, using a random generator for many test cases.</p>
+<p>Note: In this scenario, there is no (slow) correct solution to compare against.</p>
 <div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">quicktest stress --target-file=main.cpp --gen-file=gen.cpp</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Or shorter:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">qt stress -t main.cpp -g gen.cpp</span><br></span></code></pre></div></div>
-<p><img decoding="async" loading="lazy" alt="stress gif" src="https://luchobazz.github.io/quicktest/assets/images/stress-5b3f4114f5d04d7541ee4714c4115da5.gif" width="2051" height="983" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" src="https://luchobazz.github.io/quicktest/assets/images/stress-5b3f4114f5d04d7541ee4714c4115da5.gif" alt="stress gif" class="img_ev3q"></p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="future-updates">Future Updates<a href="https://luchobazz.github.io/quicktest/blog/Launch%20Announcement#future-updates" class="hash-link" aria-label="Direct link to Future Updates" title="Direct link to Future Updates" translate="no">​</a></h3>
-<p>Feature for testing interactive problems is planned to be implemented in future versions</p>
+<p>A feature for testing interactive problems is planned for future versions.</p>
 <hr>
-<p>I will be grateful to receive feedback, requests for new features and requests for improvements</p>
-<p>Don't forget to give it ⭐in the <a href="https://github.com/LuchoBazz/quicktest" target="_blank" rel="noopener noreferrer" class="">Github</a> repository</p>
+<p>I would be grateful for feedback, feature requests, and suggestions for improvements.</p>
+<p>Don't forget to give it a ⭐ on the <a href="https://github.com/LuchoBazz/quicktest" target="_blank" rel="noopener noreferrer" class="">GitHub</a> repository.</p>
 <p>Thanks!</p>]]></content>
         <author>
-            <name>Luis Miguel Báez Aponte</name>
+            <name>Luis Miguel Báez</name>
             <uri>https://github.com/LuchoBazz</uri>
         </author>
         <category label="stress-testing" term="stress-testing"/>
