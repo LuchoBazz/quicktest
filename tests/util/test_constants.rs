@@ -90,6 +90,7 @@ int main() {
 
 pub const MLE_C: &str = r#"
 #include <stdio.h>
+#include <stdlib.h>
 int * a[100000];
 int main() {
     int n = 1000000000;

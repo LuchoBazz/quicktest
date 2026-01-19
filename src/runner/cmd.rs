@@ -6,6 +6,8 @@
 
 use std::fs::File;
 use std::io::Write;
+#[cfg(target_os = "macos")]
+use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -43,6 +45,16 @@ pub fn execute_program(
         cmd.args(&commands[1..]);
     }
 
+    #[cfg(target_os = "macos")]
+    {
+        // On macOS, process_control's memory_limit is a no-op.
+        // We use setrlimit via a pre_exec hook to set the memory limit.
+        cmd.pre_exec(move || {
+            rlimit::setrlimit(rlimit::Resource::AS, memory_limit, memory_limit)
+                .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))
+        });
+    }
+
     if let Some(file) = &stdin {
         // set output file, only exists
         let input = File::open(file.to_str().unwrap()).unwrap();
@@ -78,6 +90,8 @@ pub fn execute_program(
     #[cfg(target_os = "macos")]
     let response = child_output
         .controlled_with_output()
+        // memory_limit is a no-op on macOS
+        .memory_limit(memory_limit as usize)
         .time_limit(Duration::from_millis(timeout as u64))
         .terminate_for_timeout()
         .wait();
@@ -109,7 +123,10 @@ pub fn execute_program(
     } else {
         #[cfg(unix)]
         match output.status.signal() {
-            Some(6) => res_status = CPStatus::MLE, // SIGABRT: 6
+            // SIGABRT: 6
+            Some(6) => res_status = CPStatus::MLE,
+            // SIGKILL: 9
+            Some(9) if cfg!(target_os = "macos") => res_status = CPStatus::MLE,
             _ => res_status = CPStatus::RTE,
         }
 

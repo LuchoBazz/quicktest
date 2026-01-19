@@ -13,33 +13,28 @@ use predicates::prelude::predicate;
 
 use crate::util::{
     test_command_handler::execute_command_stress_with_timeout,
-    test_constants::{BINARY, FOLDER_STRESS, GEN_FILE_CPP, MLE_CPP, TARGET_FILE_CPP},
+    test_constants::{
+        BINARY, FOLDER_STRESS, GEN_FILE_C, MLE_C, TARGET_FILE_C,
+    },
     test_utilities::create_files_tle,
 };
 
-use super::codes::{GEN_CPP_STRESS, TARGET_CPP_STRESS};
+use super::codes::{GEN_C_STRESS, TARGET_C_STRESS};
 
 #[test]
-fn cmd_stress_target_mle_cpp() -> Result<(), Box<dyn Error>> {
-    let folder = "stress_mle_cpp";
+fn cmd_stress_target_mle_c() -> Result<(), Box<dyn Error>> {
+    let folder = "stress_mle_c";
     create_files_tle(
-        TARGET_FILE_CPP,
-        GEN_FILE_CPP,
-        MLE_CPP,
-        GEN_CPP_STRESS,
+        TARGET_FILE_C,
+        GEN_FILE_C,
+        MLE_C,
+        GEN_C_STRESS,
         folder,
     )?;
     let cases: usize = 3;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_stress_with_timeout(
-        &mut cmd,
-        TARGET_FILE_CPP,
-        GEN_FILE_CPP,
-        cases,
-        5000usize,
-        folder,
-    );
+    execute_command_stress_with_timeout(&mut cmd, TARGET_FILE_C, GEN_FILE_C, cases, 5000usize, folder);
 
     cmd.assert()
         .failure()
@@ -49,26 +44,19 @@ fn cmd_stress_target_mle_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-fn cmd_stress_gen_mle_cpp() -> Result<(), Box<dyn Error>> {
-    let folder = "stress_mle_cpp_gen";
+fn cmd_stress_gen_mle_c() -> Result<(), Box<dyn Error>> {
+    let folder = "stress_mle_c_gen";
     create_files_tle(
-        TARGET_FILE_CPP,
-        GEN_FILE_CPP,
-        TARGET_CPP_STRESS,
-        MLE_CPP,
+        TARGET_FILE_C,
+        GEN_FILE_C,
+        TARGET_C_STRESS,
+        MLE_C,
         folder,
     )?;
     let cases: usize = 3;
 
     let mut cmd = Command::new(BINARY);
-    execute_command_stress_with_timeout(
-        &mut cmd,
-        TARGET_FILE_CPP,
-        GEN_FILE_CPP,
-        cases,
-        5000usize,
-        folder,
-    );
+    execute_command_stress_with_timeout(&mut cmd, TARGET_FILE_C, GEN_FILE_C, cases, 5000usize, folder);
 
     cmd.assert()
         .failure()

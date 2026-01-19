@@ -64,3 +64,50 @@ A.sort()
 print(n)
 print(*A)
 "#;
+
+pub const GEN_C_STRESS: &str = r#"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int random_int(int min, int max) {
+    return min + rand() % (max - min + 1);
+}
+
+int main() {
+    srand(time(NULL));
+    int n = random_int(100000, 200000);
+    printf("%d\n", n);
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", random_int(1, 1000000000));
+    }
+    printf("\n");
+    return 0;
+}
+"#;
+
+pub const TARGET_C_STRESS: &str = r#"
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare(const void *a, const void *b) {
+    return (*(int *)a - *(int *)b);
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    int *A = (int *)malloc(n * sizeof(int));
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &A[i]);
+    }
+    qsort(A, n, sizeof(int), compare);
+    printf("%d\n", n);
+    for (int i = 0; i < n; ++i) {
+        printf("%d ", A[i]);
+    }
+    printf("\n");
+    free(A);
+    return 0;
+}
+"#;

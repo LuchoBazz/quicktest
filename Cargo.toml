@@ -16,6 +16,7 @@ exclude = ["docs/*", "examples/*", "*.md", "website/*"]
 include = ["**/*.rs", "Cargo.toml"]
 
 [dependencies]
+rlimit = "0.10.1"
 clap = "4.5"
 colored = "3.0.0"
 difference = "2.0.0"

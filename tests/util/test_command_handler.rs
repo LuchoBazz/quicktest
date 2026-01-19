@@ -11,7 +11,14 @@ use crate::util::test_constants::{FOLDER, FOLDER_CHECK, FOLDER_CMP, FOLDER_STRES
 use super::test_constants::FOLDER_OUTPUT;
 
 pub fn execute_command_stress(cmd: &mut Command, target_file: &str, gen_file: &str, cases: usize) {
-    execute_command_stress_with_timeout(cmd, target_file, gen_file, cases, 1000usize);
+    execute_command_stress_with_timeout(
+        cmd,
+        target_file,
+        gen_file,
+        cases,
+        1000usize,
+        FOLDER_STRESS,
+    );
 }
 
 pub fn execute_command_stress_with_timeout(
@@ -20,12 +27,13 @@ pub fn execute_command_stress_with_timeout(
     gen_file: &str,
     cases: usize,
     timeout: usize,
+    folder: &str,
 ) {
     cmd.arg("stress")
         .arg("--target-file")
-        .arg(format!("{}/{}/{}", FOLDER, FOLDER_STRESS, target_file))
+        .arg(format!("{}/{}/{}", FOLDER, folder, target_file))
         .arg("--gen-file")
-        .arg(format!("{}/{}/{}", FOLDER, FOLDER_STRESS, gen_file))
+        .arg(format!("{}/{}/{}", FOLDER, folder, gen_file))
         .arg(format!("--timeout={}", timeout))
         .arg(format!("--test-cases={}", cases));
 }
