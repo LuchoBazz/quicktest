@@ -146,6 +146,11 @@ dist
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+bun-error.log
+package-lock.json
 
 # Yarn Lock
 yarn.lock
+
+# Local files
+*.local.*
