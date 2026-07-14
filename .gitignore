@@ -25,5 +25,8 @@ Cargo.lock
 # VsCode
 .vscode
 
-# Mac OSß
+# Mac OS
 .DS_Store
+
+# Local files
+*.local.*

@@ -1,50 +1,57 @@
 # Website
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ## Quick Start
 
-First, ensure you're using the correct Node.js version:
+Requires [Bun](https://bun.sh/) (`>= 1.0.0`). Install it via:
 
 ```bash
-nvm install
-nvm use
+curl -fsSL https://bun.sh/install | bash
+```
+
+Or with `asdf`/`mise` — the repo's `.tool-versions` pins the exact version:
+
+```bash
+asdf install
+# or
+mise install
 ```
 
 ### Installation
 
-```
-npm install
+```bash
+bun install
 ```
 
 ### Local Development
 
-```
-npm start
+```bash
+bun run start
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+Starts a local development server and opens a browser window. Most changes are reflected live without restarting.
 
 ### Build
 
-```
-npm run build
+```bash
+bun run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+Generates static content into the `build` directory.
 
 ### Deployment
 
 Using SSH:
 
-```
-USE_SSH=true npm run deploy
+```bash
+USE_SSH=true bun run deploy
 ```
 
 Not using SSH:
 
-```
-GIT_USER=<Your GitHub username> npm run deploy
+```bash
+GIT_USER=<Your GitHub username> bun run deploy
 ```
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+If you are using GitHub Pages for hosting, this command builds the website and pushes to the `gh-pages` branch.
