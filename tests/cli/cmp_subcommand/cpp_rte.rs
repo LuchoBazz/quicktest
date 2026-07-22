@@ -22,7 +22,6 @@ use super::codes::{CORRECT_CPP_CMP, GEN_CPP_CMP, TARGET_CPP_CMP};
 
 // CHECK RTE in Subcommand cmp
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_cmp_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,
@@ -52,7 +51,7 @@ fn cmd_cmp_target_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
+#[cfg(not(target_os = ""))] // TODO: Fix this test when possible
 fn cmd_cmp_correct_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,
@@ -82,7 +81,7 @@ fn cmd_cmp_correct_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
+#[cfg(not(target_os = ""))] // TODO: Fix this test when possible
 fn cmd_cmp_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_CPP,

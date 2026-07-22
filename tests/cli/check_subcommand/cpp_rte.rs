@@ -21,7 +21,6 @@ use crate::util::{
 use super::codes::{CHECKER_CPP_CHECK, GEN_CPP_CHECK, TARGET_CPP_CHECK};
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_check_target_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
@@ -51,7 +50,6 @@ fn cmd_check_target_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_check_checker_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,
@@ -81,7 +79,6 @@ fn cmd_check_checker_rte_cpp() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))] // TODO: Fix this test when possible
 fn cmd_check_gen_rte_cpp() -> Result<(), Box<dyn Error>> {
     create_files_check(
         TARGET_FILE_CPP,

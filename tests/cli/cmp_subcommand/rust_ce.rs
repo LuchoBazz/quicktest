@@ -51,7 +51,6 @@ fn cmd_cmp_target_ce_rust() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_cmp_correct_ce_rust() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_RUST,
@@ -81,7 +80,6 @@ fn cmd_cmp_correct_ce_rust() -> Result<(), Box<dyn Error>> {
 }
 
 #[test]
-#[cfg(not(target_os = "macos"))]
 fn cmd_cmp_gen_ce_rust() -> Result<(), Box<dyn Error>> {
     create_files_cmp(
         TARGET_FILE_RUST,
